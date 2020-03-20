@@ -104,8 +104,14 @@
                 <div class="form-group">
                   <label for="category_ids">Categories</label>
                   <select class="form-control select2" id="category_ids" name="categories[]" multiple style="width: 100%" data-placeholder="Select Categories">
-                    @foreach(App\Category::latest()->get() as $category)
-                    <option value="{{$category->id}}">{{$category->name}}</option>
+                    @foreach(App\ProductCategory::whereNull('product_category_id')->latest()->get() as $category)
+                      @if(count($category->children))
+                        <optgroup label="{{$category->name}}">
+                        @foreach($category->children as $child_cat)
+                          <option value="{{$child_cat->id}}">{{$child_cat->name}}</option>
+                        @endforeach
+                        </optgroup>
+                      @endif
                     @endforeach
                   </select>
                 </div>

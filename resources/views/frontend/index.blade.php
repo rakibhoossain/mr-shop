@@ -83,10 +83,10 @@
             <div class="product is-gray">
               <div class="image d-flex align-items-center justify-content-center">@if($product->image) <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid">@endif
                 <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="{{route('product.publicView', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
+                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
                 </div>
               </div>
-              <div class="title"><a href="{{route('product.publicView', $product->slug)}}">
+              <div class="title"><a href="{{route('product.single', $product->slug)}}">
                   <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">${{$product->price}}</span></div>
             </div>
           </div>

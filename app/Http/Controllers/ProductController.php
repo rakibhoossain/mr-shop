@@ -110,10 +110,6 @@ class ProductController extends Controller
     {
         return $product;
     }
-    public function publicView(Product $product){
-        return view('frontend.product.single', compact('product'));
-    }
-
     /**
      * Show the form for editing the specified resource.
      *

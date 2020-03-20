@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
 
-class Size extends Model
+class ProductCategory extends Model
 {
     use SoftDeletes;
     use Sluggable;
-
-    protected $fillable = ['name', 'description'];
 
   /*
   |--------------------------------------------------------------------------
@@ -32,8 +30,21 @@ class Size extends Model
     return 'slug';
   }
 
+  protected $fillable = ['name', 'image', 'description', 'product_category_id'];
+  protected $table = 'product_categories';
+
   public function products()
-  {
-    return $this->belongsToMany(Product::class, 'product_size');
-  } 
+	{
+  	return $this->belongsToMany(Product::class, 'product_category_product');
+	}
+  public function parent(){
+    return $this->belongsTo(ProductCategory::class);
+  }
+  public function children(){
+    return $this->hasMany(ProductCategory::class);
+  }
+  public function isolate(){
+    return $this->whereNull('product_category_id');
+  }
+
 }

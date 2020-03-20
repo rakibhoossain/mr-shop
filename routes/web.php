@@ -25,7 +25,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/product/{product}', 'ProductController@publicView')->name('product.publicView');
+Route::get('/shop', 'HomeController@shop')->name('shop');
+Route::match(['get', 'post'], '/filter', 'HomeController@filter')->name('shop.filter');
+Route::get('/product/{product}', 'HomeController@singleProduct')->name('product.single');
 
 
 //Dashboard Routes

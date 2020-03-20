@@ -59,7 +59,7 @@ class Product extends Model
 
   public function categories()
   {
-    return $this->morphToMany(Category::class, 'categoryable');
+    return $this->belongsToMany(ProductCategory::class, 'product_category_product');
   }
   public function images()
   {

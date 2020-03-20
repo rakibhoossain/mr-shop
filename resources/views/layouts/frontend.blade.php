@@ -80,14 +80,8 @@
           <!-- Navbar Collapse -->
           <div id="navbarCollapse" class="collapse navbar-collapse">
             <ul class="navbar-nav mx-auto">
-              <li class="nav-item dropdown"><a id="navbarHomeLink" href="index-2.html" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link active">Home<i class="fa fa-angle-down"></i></a>
-                <ul aria-labelledby="navbarDropdownHomeLink" class="dropdown-menu">
-                  <li><a href="index-2.html" class="dropdown-item">Classic Home</a></li>
-                  <li><a href="index2.html" class="dropdown-item">Parallax sections</a></li>
-                  <li><a href="index3.html" class="dropdown-item">Video background                     </a></li>
-                </ul>
-              </li>
-              <li class="nav-item"><a href="category.html" class="nav-link">Shop</a>
+              <li class="nav-item"><a href="{{route('home')}}" class="nav-link active">Home</a>
+              <li class="nav-item"><a href="{{route('shop')}}" class="nav-link">Shop</a>
               </li>
               <!-- Megamenu-->
               <li class="nav-item dropdown menu-large"><a href="#" data-toggle="dropdown" class="nav-link">Template<i class="fa fa-angle-down"></i></a>
@@ -388,11 +382,29 @@
               $grid.masonry();
           });
       })
+
+      $(document).ready(function(){
+        $('body').on('click', '.product_popup', function(e){
+          e.preventDefault();
+          let url = $(this).data('url');
+          $.ajax({
+            type: 'GET',
+            url,
+            success: function(response){
+              if (response.success) {
+                $('#productPopupModal .modal-body').html(response.html);
+                $('#productPopupModal').modal('show');                
+              }
+            }
+          })
+        })
+      })
       
       
     </script>
     <!-- Main Template File-->
     <script src="{{asset('js/front.js')}}"></script>
+    @stack('scripts')
   </body>
 
 </html>

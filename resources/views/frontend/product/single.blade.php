@@ -14,11 +14,6 @@
               <li class="breadcrumb-item active">Loose Oversized Shirt</li>
             </ul>
           </div>
-          @if($product->brand)
-          <div class="col-lg-3 text-right order-1 order-lg-2">
-            Brand: {{$product->brand->name}}
-          </div>
-          @endif
         </div>
       </div>
     </section>
@@ -55,6 +50,11 @@
                 </ul><span class="text-muted">5 reviews</span>
               </div>
             </div>
+            @if($product->brand)
+            <div class="d-flex flex-column flex-sm-row">
+              <b>Brand:</b> <span class="ml-1">{{$product->brand->name}}</span>
+            </div>
+            @endif
             <p>{{$product->sort_description}}</p>
             <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
               <div class="quantity d-flex align-items-center">
@@ -62,12 +62,13 @@
                 <input type="text" value="1" class="quantity-no">
                 <div class="inc-btn">+</div>
               </div>
+              @if(count($product->sizes))
               <select id="product-size" class="bs-select">
-                <option value="small">Small</option>
-                <option value="meduim">Medium</option>
-                <option value="large">Large</option>
-                <option value="x-large">X-Large</option>
+                @foreach($product->sizes as $size)
+                <option value="{{$size->id}}">{{$size->name}}</option>
+                @endforeach
               </select>
+              @endif
             </div>
             <ul class="CTAs list-inline">
               <li class="list-inline-item"><a href="#" class="btn btn-template wide"> <i class="icon-cart"></i>Add to Cart</a></li>
@@ -160,133 +161,37 @@
         </div>
       </div>
     </section>
+
+    @if(count($relatedProducts))
     <section class="related-products">
       <div class="container">
         <header class="text-center">
           <h2><small>Similar Items</small>You may also like</h2>
         </header>
         <div class="row">
-          <!-- item-->
+
+
+          @foreach($relatedProducts as $product)
           <div class="item col-lg-3">
             <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/hoodie-woman-1.png" alt="..." class="img-fluid">
+              <div class="image d-flex align-items-center justify-content-center">
+                @if($product->image)
+                  <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid">
+                @endif
                 <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
+                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
                 </div>
               </div>
-              <div class="title"><a href="#">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Gray</h3></a><span class="price">$40.00</span></div>
+              <div class="title"><a href="{{route('product.single', $product->slug)}}">
+                <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price">${{$product->price}}</span></div>
             </div>
           </div>
-          <!-- item-->
-          <div class="item col-lg-3">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/hoodie-woman-2.png" alt="..." class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="#">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Black</h3></a><span class="price">$40.00</span></div>
-            </div>
-          </div>
-          <!-- item-->
-          <div class="item col-lg-3">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/hoodie-woman-3.png" alt="..." class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="#">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Blue</h3></a><span class="price">$40.00</span></div>
-            </div>
-          </div>
-          <!-- item-->
-          <div class="item col-lg-3">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/hoodie-woman-4.png" alt="..." class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="#">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Lake</h3></a><span class="price">$40.00</span></div>
-            </div>
-          </div>
+          @endforeach
+
+
+
         </div>
       </div>
     </section>
-    <!-- Overview Popup    -->
-    <div id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade overview">
-      <div role="document" class="modal-dialog">
-        <div class="modal-content">
-          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="icon-close"></i></span></button>
-          <div class="modal-body"> 
-            <div class="ribbon-primary text-uppercase">Sale</div>
-            <div class="row d-flex align-items-center">
-              <div class="image col-lg-5"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/shirt.png" alt="..." class="img-fluid d-block"></div>
-              <div class="details col-lg-7">
-                <h2>Lose Oversized Shirt</h2>
-                <ul class="price list-inline">
-                  <li class="list-inline-item current">$65.00</li>
-                  <li class="list-inline-item original">$90.00</li>
-                </ul>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco</p>
-                <div class="d-flex align-items-center">
-                  <div class="quantity d-flex align-items-center">
-                    <div class="dec-btn">-</div>
-                    <input type="text" value="1" class="quantity-no">
-                    <div class="inc-btn">+</div>
-                  </div>
-                  <select id="size" class="bs-select">
-                    <option value="small">Small</option>
-                    <option value="meduim">Medium</option>
-                    <option value="large">Large</option>
-                    <option value="x-large">X-Large</option>
-                  </select>
-                </div>
-                <ul class="CTAs list-inline">
-                  <li class="list-inline-item"><a href="#" class="btn btn-template wide"> <i class="fa fa-shopping-cart"></i>Add to Cart</a></li>
-                  <li class="list-inline-item"><a href="#" class="visit-product active btn btn-template-outlined wide"> <i class="icon-heart"></i>Add to wishlist</a></li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    @endif
 @endsection
-
-<!-- 
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/jquery/jquery.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/jquery.cookie/jquery.cookie.js"> </script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/owl.carousel/owl.carousel.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/owl.carousel2.thumbs/owl.carousel2.thumbs.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/nouislider/nouislider.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/jquery-countdown/jquery.countdown.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/masonry-layout/masonry.pkgd.min.js"></script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-    <script>
-      $(function(){
-          var $grid = $('.masonry-wrapper').masonry({
-              itemSelector: '.item',
-              columnWidth: '.item',
-              percentPosition: true,
-              transitionDuration: 0,
-          });
-      
-          $grid.imagesLoaded().progress( function() {
-              $grid.masonry();
-          });
-      })
-      
-      
-    </script>
-    <script src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/js/front.js"></script>
-  </body>
-
-</html> -->

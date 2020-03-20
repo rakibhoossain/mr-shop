@@ -8,8 +8,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Category extends Model
 {
-    use SoftDeletes;
-    use Sluggable;
+  use SoftDeletes;
+  use Sluggable;
 
   /*
   |--------------------------------------------------------------------------
