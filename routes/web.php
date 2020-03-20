@@ -18,17 +18,18 @@ Route::get('/', function () {
 });
 
 
-Route::get('/frontend', function () {
-    return view('frontend.index');
-});
+// Route::get('/frontend', function () {
+//     return view('frontend.index');
+// });
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/product/{product}', 'ProductController@publicView')->name('product.publicView');
 
 
 //Dashboard Routes
-Route::prefix('admin')->group(function () {
+Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
     Route::get('/', 'DashboardController@index')->name('admin');
     //All product routes
     Route::prefix('/product')->group(function () {

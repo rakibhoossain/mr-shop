@@ -22,6 +22,8 @@ class CreateProductsTable extends Migration
             $table->decimal('purchase_price', 20, 2)->nullable();
             $table->integer('alert_quantity')->default(1)->nullable();
             $table->text('description')->nullable();
+            $table->text('excerpt')->nullable();
+            $table->text('meta')->nullable();
             $table->unsignedInteger('brand_id')->nullable();
             $table->unsignedInteger('user_id');
             $table->softDeletes();

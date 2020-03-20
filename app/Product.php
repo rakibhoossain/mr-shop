@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Str;
 
 class Product extends Model
 {
@@ -52,9 +53,9 @@ class Product extends Model
     return 'slug';
   }
 
-  protected $fillable = ['name', 'price', 'brand_id', 'purchase_price', 'alert_quantity', 'description'];
+  protected $fillable = ['name', 'price', 'brand_id', 'purchase_price', 'alert_quantity', 'description', 'excerpt', 'meta'];
 
-  protected $with = ['categories', 'images', 'sizes'];
+  protected $with = ['categories', 'images', 'sizes', 'tags'];
 
   public function categories()
   {
@@ -72,9 +73,20 @@ class Product extends Model
   public function sizes()
   {
     return $this->belongsToMany(Size::class, 'product_size');
+  }  
+
+  public function tags()
+  {
+    return $this->belongsToMany(ProductTag::class, 'product_tag_product');
   }
+
   public function brand()
   {
     return $this->belongsTo(Brand::class);
   }
+
+  public function getSortDescriptionAttribute(){
+    return ($this->excerpt)? $this->excerpt : ($this->description)? Str::words(strip_tags($this->description), 15, '...') : '';
+  }
+
 }

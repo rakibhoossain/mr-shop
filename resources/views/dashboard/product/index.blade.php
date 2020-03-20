@@ -32,6 +32,7 @@
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
                 <th>Sizes</th>
+                <th>Categories</th>
                 <th>Brand</th>
                 <th>Action</th>
               </tr>
@@ -45,8 +46,15 @@
               <td>{{$product->purchase_price}}</td>
               <td>{{$product->price}}</td>
               <td>@if(count($product->sizes)){{$product->sizes->implode('name', ',')}}@endif</td>
+              <td>@if(count($product->categories)){{$product->categories->implode('name', ',')}}@endif</td>
               <td>@if($product->brand){{$product->brand->name}}@endif</td>
-              <td><span class="tag tag-success">Approved</span></td>
+              <td>
+                <ul class='nav'>
+                  <li><a href="{{route('admin.product.show', $product->slug)}}"><i class='fa fa-eye' aria-hidden='true'></i></a></li>
+                  <li><a href="{{route('admin.product.edit', $product->slug)}}"><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>
+                  <li><a href='#' data-url="{{route('admin.product.destroy', $product->slug)}}" class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>
+                </ul>
+              </td>
             </tr>
             @endforeach
           </tbody>

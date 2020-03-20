@@ -7,6 +7,7 @@ use App\Category;
 use App\Image;
 
 use App\Product;
+use App\ProductTag;
 use App\Post;
 
 class DatabaseSeeder extends Seeder
@@ -23,6 +24,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(SizesTableSeeder::class);
         // factory(Category::class, 10)->create();
         // factory(Image::class, 10)->create();
+      
+        // factory(ProductTag::class, 10)->create();
 
 
 		// factory(Product::class, 100)->create()->each(function ($product) {

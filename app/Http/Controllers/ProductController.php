@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Image;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -55,28 +56,47 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $input = $request->except(['description']);
-        if($request->description){
-            $detail=$request->input('description');
-            $dom = new \DomDocument();
-            $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
-            $images = $dom->getElementsByTagName('img');
-            foreach($images as $k => $img){
-                $data = $img->getAttribute('src');
-                list($type, $data) = explode(';', $data);
-                list(, $data)      = explode(',', $data);
-                $data = base64_decode($data);
-                $image_name= "/images/" . time().$k.'.png';
-                $path = public_path() . $image_name;
-                file_put_contents($path, $data);
-                $img->removeAttribute('src');
-                $img->setAttribute('src', $image_name);
+
+        $input = $request->except(['description', 'meta']);
+
+        $keys = $request->keys;
+        $values = $request->values;
+        if ($keys && $values) {
+            $data = [];
+            foreach($keys as $k => $key){
+                if(is_null($key) || is_null($values[$k]) ) continue;
+                array_push($data, ['key' => $key, 'value' => $values[$k]]);
             }
-            $input['description'] = $dom->saveHTML();
+            if(count($data)) $input['meta'] = json_encode(compact('data'));
         }
 
+        //Product Description
+        if($request->description){
+            $input['description'] = $this->productDetail($request->input('description'));
+        }
         $product = auth()->user()->products()->create($input);
-        return $product;
+        if($product){
+            if($request->images){
+                $image_ids = $this->uploadProductImages($request->images);
+                if(count($image_ids)) $product->images()->attach($image_ids);
+            }        
+
+            if($request->sizes){
+                $product->sizes()->attach($request->sizes);
+            }        
+            if($request->categories){
+                $product->categories()->attach($request->categories);
+            }
+
+            if($product->tags){
+                $product->tags()->attach($request->tags);
+            }
+
+            return $product;
+        }else{
+            dd('Something went wrong!');
+        }
+
 
     }
 
@@ -88,7 +108,10 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        return $product;
+    }
+    public function publicView(Product $product){
+        return view('frontend.product.single', compact('product'));
     }
 
     /**
@@ -123,5 +146,54 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+
+    private function productDetail($detail){
+        $dom = new \DomDocument();
+        $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
+        $images = $dom->getElementsByTagName('img');
+        foreach($images as $k => $img){
+            $data = $img->getAttribute('src');
+            list($type, $data) = explode(';', $data);
+            list(, $data)      = explode(',', $data);
+            $data = base64_decode($data);
+            $image_name= "/images/" . time().$k.'.png';
+            $path = public_path() . $image_name;
+            file_put_contents($path, $data);
+            $img->removeAttribute('src');
+            $img->setAttribute('src', $image_name);
+        }
+        return $dom->saveHTML();
+    }
+
+    private function uploadProductImages($images){
+        $img_ids = [];
+        foreach($images as $image){
+        // if a base64 was sent, store it in the db
+            if (!is_null($image) && strpos($image, 'data:image') == 0){
+                list($type, $image) = explode(';', $image);
+                list(, $image)      = explode(',', $image);
+                $data = base64_decode($image);
+                $image_name= time().'.png';
+                $location = '/images/'.$image_name;
+
+                $path = public_path() . $location;
+                file_put_contents($path, $data);
+
+                $image_db = Image::create(['image' => $location]);
+                if($image_db) array_push($img_ids, $image_db->id);
+
+                // Image::make($image)->save( public_path($location) );
+
+                //Delete old feature image
+                // if($feature->image) {
+                //     $old_image = public_path($feature->image);
+                //     if ( file_exists($old_image) ) unlink($old_image);
+                // }
+            }
+        }
+        return $img_ids;
+
     }
 }

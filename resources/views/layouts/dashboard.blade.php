@@ -12,7 +12,12 @@
   <!-- IonIcons -->
   <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Editor -->
-  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">  
+  <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
+
+  <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
+  
+  <link rel="stylesheet" href="{{asset('css/cropper.min.css')}}">
 
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('css/AdminLTE.css')}}">
@@ -155,10 +160,10 @@ to get the desired effect
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="{{route('home')}}" class="brand-link">
       <img src="{{asset('img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
            style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+      <span class="brand-text font-weight-light">Mr. Shop</span>
     </a>
 
     <!-- Sidebar -->
@@ -169,10 +174,9 @@ to get the desired effect
           <img src="{{asset('img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">Rakib Hossain</a>
         </div>
       </div>
-
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -717,6 +721,9 @@ to get the desired effect
 
 <script src="{{asset('plugins/jquery-validation/jquery.validate.min.js')}}"></script>
 <script src="{{asset('plugins/jquery-validation/additional-methods.min.js')}}"></script>
+
+<script src="{{asset('js/cropper.min.js')}}"></script>
+<script src="{{asset('js/select2.min.js')}}"></script>
 
 
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
