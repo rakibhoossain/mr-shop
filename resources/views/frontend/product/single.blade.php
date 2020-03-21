@@ -162,11 +162,6 @@
       </div>
     </section>
 
-
-{{dd($product->variation_values)}}
-
-
-
     @if(count($relatedProducts))
     <section class="related-products">
       <div class="container">
