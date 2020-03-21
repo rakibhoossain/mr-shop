@@ -62,6 +62,10 @@
                 <input type="text" value="1" class="quantity-no">
                 <div class="inc-btn">+</div>
               </div>
+
+<h1>Kaj ace</h1>
+{{--
+
               @if(count($product->sizes))
               <select id="product-size" class="bs-select">
                 @foreach($product->sizes as $size)
@@ -69,6 +73,9 @@
                 @endforeach
               </select>
               @endif
+
+--}}
+
             </div>
             <ul class="CTAs list-inline">
               <li class="list-inline-item"><a href="#" class="btn btn-template wide"> <i class="icon-cart"></i>Add to Cart</a></li>

@@ -30,7 +30,7 @@ class HomeController extends Controller
     }
 
     public function shop(Request $request){
-        $sizes = Size::has('products')->latest()->get();
+        // $sizes = Size::has('products')->latest()->get();
         $brands = Brand::has('products')->latest()->get();
 
         $query = Product::query();
@@ -46,13 +46,13 @@ class HomeController extends Controller
             $brand_ids = Brand::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
             $query->whereIn('brand_id',  $brand_ids);
         }
-        if(!empty($_GET['size'])){
-            $slugs = explode(',', $_GET['size']);
-            $size_ids = Size::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
-            $query->whereHas('sizes', function($q) use($size_ids){
-                $q->whereIn('size_id',  $size_ids);
-            });
-        }
+        // if(!empty($_GET['size'])){
+        //     $slugs = explode(',', $_GET['size']);
+        //     $size_ids = Size::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
+        //     $query->whereHas('sizes', function($q) use($size_ids){
+        //         $q->whereIn('size_id',  $size_ids);
+        //     });
+        // }
 
         if(!empty($_GET['sortBy'])){
             if($_GET['sortBy'] == 'newest'){
@@ -79,7 +79,7 @@ class HomeController extends Controller
 
 
         $products = $query->paginate(10);
-        return view('frontend.shop', compact('products', 'sizes', 'brands'));
+        return view('frontend.shop', compact('products', 'brands'));
     }
     public function singleProduct(Request $request, Product $product){
 

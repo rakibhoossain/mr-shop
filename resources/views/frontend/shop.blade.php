@@ -63,14 +63,18 @@
             </div>
             <div class="block"> 
               <h6 class="text-uppercase">Size </h6>
+
+              <h1>kaj ace</h1>
               <!-- <form action="#">   -->
 
+{{--
                 @foreach($sizes as $size)
                 <div class="form-group mb-1">
                   <input id="size{{$loop->index}}" type="radio" name="size" value="{{$size->slug}}" @if( !empty($_GET['size']) && $_GET['size'] == $size->slug ) checked @endif  onchange="this.form.submit();" class="radio-template">
                   <label for="size{{$loop->index}}">{{$size->name}}</label>
                 </div>
                 @endforeach
+--}}
 
               <!-- </form> -->
             </div>

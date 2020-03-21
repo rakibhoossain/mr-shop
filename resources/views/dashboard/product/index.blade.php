@@ -31,7 +31,6 @@
                 <th>Image</th>
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
-                <th>Sizes</th>
                 <th>Categories</th>
                 <th>Brand</th>
                 <th>Type</th>
@@ -46,7 +45,6 @@
               <td>@if($product->image)<img src="{{asset($product->image)}}" width="50" height="50">@endif</td>
               <td>{{$product->purchase_price}}</td>
               <td>{{$product->price}}</td>
-              <td>@if(count($product->sizes)){{$product->sizes->implode('name', ',')}}@endif</td>
               <td>@if(count($product->categories)){{$product->categories->implode('name', ',')}}@endif</td>
               <td>@if($product->brand){{$product->brand->name}}@endif</td>
               <td>{{$product->type}}</td>

@@ -94,14 +94,6 @@
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="size_ids">Sizes</label>
-                  <select class="form-control select2" id="size_ids" name="sizes[]" multiple style="width: 100%" data-placeholder="Select Sizes">
-                    @foreach(App\Size::latest()->get() as $size)
-                    <option value="{{$size->id}}">{{$size->name}}</option>
-                    @endforeach
-                  </select>
-                </div>
-                <div class="form-group">
                   <label for="category_ids">Categories</label>
                   <select class="form-control select2" id="category_ids" name="categories[]" multiple style="width: 100%" data-placeholder="Select Categories">
                     @foreach(App\ProductCategory::whereNull('product_category_id')->latest()->get() as $category)

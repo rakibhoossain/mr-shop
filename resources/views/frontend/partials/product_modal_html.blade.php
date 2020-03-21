@@ -19,6 +19,9 @@
         <div class="inc-btn">+</div>
       </div>
 
+      
+<h1>Kaj ace</h1>
+{{--
       @if(count($product->sizes))
       <select id="size" class="bs-select">
         @foreach($product->sizes as $size)
@@ -26,6 +29,9 @@
         @endforeach
       </select>
       @endif
+--}}
+
+
     </div>
     <ul class="CTAs list-inline">
       <li class="list-inline-item"><a href="#" class="btn btn-template wide"> <i class="fa fa-shopping-cart"></i>Add to Cart</a></li>

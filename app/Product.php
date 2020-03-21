@@ -55,7 +55,7 @@ class Product extends Model
 
   protected $fillable = ['name', 'price', 'brand_id', 'purchase_price', 'alert_quantity', 'description', 'excerpt', 'meta'];
 
-  protected $with = ['categories', 'images', 'sizes', 'tags', 'variation_values'];
+  protected $with = ['categories', 'images', 'tags', 'variation_values'];
 
   public function categories()
   {
@@ -69,12 +69,6 @@ class Product extends Model
   {
     return (count($this->images))? $this->images[0]->image : null;
   }
-
-  public function sizes()
-  {
-    return $this->belongsToMany(Size::class, 'product_size');
-  }  
-
   public function tags()
   {
     return $this->belongsToMany(ProductTag::class, 'product_tag_product');

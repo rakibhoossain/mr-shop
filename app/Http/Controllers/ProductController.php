@@ -79,11 +79,7 @@ class ProductController extends Controller
             if($request->images){
                 $image_ids = $this->uploadProductImages($request->images);
                 if(count($image_ids)) $product->images()->attach($image_ids);
-            }        
-
-            if($request->sizes){
-                $product->sizes()->attach($request->sizes);
-            }        
+            }       
             if($request->categories){
                 $product->categories()->attach($request->categories);
             }
