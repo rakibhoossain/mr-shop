@@ -34,6 +34,7 @@
                 <th>Sizes</th>
                 <th>Categories</th>
                 <th>Brand</th>
+                <th>Type</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -48,6 +49,7 @@
               <td>@if(count($product->sizes)){{$product->sizes->implode('name', ',')}}@endif</td>
               <td>@if(count($product->categories)){{$product->categories->implode('name', ',')}}@endif</td>
               <td>@if($product->brand){{$product->brand->name}}@endif</td>
+              <td>{{$product->variation_values}}</td>
               <td>
                 <ul class='nav'>
                   <li><a href="{{route('admin.product.show', $product->slug)}}"><i class='fa fa-eye' aria-hidden='true'></i></a></li>

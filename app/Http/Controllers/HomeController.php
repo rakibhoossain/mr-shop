@@ -7,6 +7,9 @@ use App\Product;
 use App\Size;
 use App\Brand;
 
+
+use App\Variation;
+
 class HomeController extends Controller
 {
     /**
@@ -26,6 +29,13 @@ class HomeController extends Controller
      */
     public function index()
     {
+
+
+        $product = Product::find(101);
+
+        return $product->variation_values;
+
+
         return view('frontend.index');
     }
 

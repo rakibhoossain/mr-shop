@@ -55,7 +55,7 @@ class Product extends Model
 
   protected $fillable = ['name', 'price', 'brand_id', 'purchase_price', 'alert_quantity', 'description', 'excerpt', 'meta'];
 
-  protected $with = ['categories', 'images', 'sizes', 'tags'];
+  //protected $with = ['categories', 'images', 'sizes', 'tags']; //, 'variation_values'
 
   public function categories()
   {
@@ -78,6 +78,22 @@ class Product extends Model
   public function tags()
   {
     return $this->belongsToMany(ProductTag::class, 'product_tag_product');
+  }  
+
+  public function variation_values()
+  {
+    // return $this->belongsToMany(VariationValue::class , 'product_variations');
+    return $this->belongsToMany(VariationValue::class , 'product_variation_value')->withPivot('price', 'purchase_price', 'sell_price', 'image')->withTimestamps();
+  }
+
+  public function getIsVariableAttribute()
+  {
+    return (count($this->variation_values))? true : false;
+  }
+
+  public function getTypeAttribute()
+  {
+    return ($this->getIsVariableAttribute)? 'Variable' : 'Normal';
   }
 
   public function brand()
