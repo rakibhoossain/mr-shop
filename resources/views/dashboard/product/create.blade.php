@@ -87,83 +87,11 @@
 
                   </div>
                   <!-- /.card-header -->
-                  <div class="card-body" id="varient_field_area">
-                    @foreach(App\Variation::latest()->get() as $variation)
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-striped table-condensed">
-                        <thead>
-                          <tr>
-                            <th>Variation</th>
-                            <th>Variation Values</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td class="varient_title"><b>{{$variation->name}}</b></td>
-                            <td>
-                              <table class="table table-bordered table-striped table-condensed-inner">
-                                <thead>
-                                  <tr>
-                                    <th>Name</th>
-                                    <th>Purchase Price</th>
-                                    <th>Sell Price</th>
-                                    <th>Offer Price</th>
-                                    <th>Image</th>
-                                    <th>Data</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  @forelse($variation->values as $value)
-                                  <tr>
-                                    <td   @if($value->type == 'color') style="color: {{$value->data}}" @endif ><input type="hidden" name="variations[{{$variation->id}}][{{$value->id}}]" value="{{$value->id}}"><b>{{$value->name}}</b></td>
-                                    <td><input type="text" name="varient_purchase_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="1"></td>
-                                    <td><input type="text" name="varient_sell_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="2"></td>
-                                    <td><input type="text" name="varient_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="3"></td>
-                                    <td>
-                                      <label>
-                                        <input type="file" data-id="{{$value->id}}" class="varient_image_btn">
-                                      <img src="{{asset('img/thumb_icon.png')}}" id="varient_image_preview_{{$value->id}}" width="50" height="50">
-                                      </label>
-
-                                      <input type="hidden" id="varient_image_{{$value->id}}" name="varient_images[{{$variation->id}}][{{$value->id}}]" class="form-control varient_image_input"></td>
-                                    <td></td>
-                                  </tr>
-                                  @empty
-                                  <h1>no data</h1>
-
-                                  @endforelse  
-                                </tbody>
-                              </table>
-                            </td>
-                          </tr>
-
-                        </tbody>
-                      </table>
-                    </div>
-                    @endforeach
-                  </div>
+                  <div class="card-body" id="varient_field_area"></div>
                   <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
                 @endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
               </div>
 
               <div class="col-sm-12 col-md-3">
@@ -510,12 +438,20 @@ $(document).ready(function () {
       url,
       data: {varient_create: val},
       success: function(response){
-
-        console.log(response);
+        if(response.success){
+          $('#varient_field_area').html(response.html);
+        }
       }
     })
+  })
 
-
+  $(document).on('click', '.remove_varients', function(e){
+    e.preventDefault();
+    $(this).parents('.varient_table').remove();
+  })  
+  $(document).on('click', '.remove_varient', function(e){
+    e.preventDefault();
+    $(this).parents('.varient_row').remove();
   })
 
 

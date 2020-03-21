@@ -12424,6 +12424,12 @@ body.sidebar-collapse:not(.sidebar-mini-md):not(.sidebar-mini) .main-header::bef
   display: none;
 }
 
+.table.table-condensed thead th,
+.table.table-condensed-inner thead th {
+  vertical-align: middle;
+  text-align: center;
+}
+
 .table.table-condensed td,
 .table.table-condensed-inner td {
   padding: 0;

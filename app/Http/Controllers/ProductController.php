@@ -49,7 +49,20 @@ class ProductController extends Controller
 
     public function varientField(Request $request)
     {
-        
+        if($request->ajax()){
+            if($request->varient_create && $request->varient_create == 'varient'){
+                return response()->json([
+                    'success' => true,
+                    'html' => view('dashboard.product.varient_field_create')->render()
+                ]);
+            }else{
+                return response()->json([
+                    'success' => true,
+                    'html' => ''
+                ]); 
+            }
+
+        }
         return view('dashboard.product.create');
     }
 
@@ -92,25 +105,27 @@ class ProductController extends Controller
                 $product->tags()->attach($request->tags);
             }
 
-            foreach($request->variations as $k => $variation){
-                foreach($variation as $id){
-                    $purchase_price = $request->varient_purchase_prices[$k][$id];
-                    $sell_price = $request->varient_sell_prices[$k][$id];
-                    $offer_price = $request->varient_prices[$k][$id];
+            if($request->variations){
+                foreach($request->variations as $k => $variation){
+                    foreach($variation as $id){
+                        $purchase_price = $request->varient_purchase_prices[$k][$id];
+                        $sell_price = $request->varient_sell_prices[$k][$id];
+                        $offer_price = $request->varient_prices[$k][$id];
 
-                    $image = $request->varient_images[$k][$id];
+                        $image = $request->varient_images[$k][$id];
+                        $varient_image = ($image)? $this->uploadVarientImages($image) : null;
 
-
-
-                    $product->variation_values()->attach($id, [
-                        'price' => $offer_price,
-                        'sell_price' => $sell_price,
-                        'purchase_price' => $purchase_price,
-                        'purchase_price' => $purchase_price,
-                        'image' => $image,
-                    ]);
+                        $product->variation_values()->attach($id, [
+                            'price' => $offer_price,
+                            'sell_price' => $sell_price,
+                            'purchase_price' => $purchase_price,
+                            'purchase_price' => $purchase_price,
+                            'image' => $varient_image,
+                        ]);
+                    }
                 }
             }
+
 
             return $product;
         }else{
@@ -210,6 +225,20 @@ class ProductController extends Controller
             }
         }
         return $img_ids;
+    }
+    private function uploadVarientImages($image){
+        // if a base64 was sent, store it in the db
+        if (!is_null($image) && strpos($image, 'data:image') == 0){
+            list($type, $image) = explode(';', $image);
+            list(, $image)      = explode(',', $image);
+            $data = base64_decode($image);
+            $image_name= time().'.png';
+            $location = '/images/'.$image_name;
 
+            $path = public_path() . $location;
+            file_put_contents($path, $data);
+
+            return $location;
+        }
     }
 }

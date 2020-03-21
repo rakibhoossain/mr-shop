@@ -90,10 +90,14 @@ class HomeController extends Controller
     }
     public function singleProduct(Request $request, Product $product){
 
+        $varients = $product->variation_values()->get()->groupBy(function($d) {
+            return $d->variation->id;
+        });
+
         if($request->ajax()){
             return response()->json([
                 'success' => true,
-                'html' => view('frontend.partials.product_modal_html', compact('product'))->render()
+                'html' => view('frontend.partials.product_modal_html', compact('product', 'varients'))->render()
             ]);
         }
 
@@ -101,7 +105,8 @@ class HomeController extends Controller
         $relatedProducts = Product::whereHas('categories', function ($q) use ($categories) {
             $q->whereIn('product_categories.id', $categories);
         })->where('id', '<>', $product->id)->get();
-        return view('frontend.product.single', compact('product','relatedProducts'));
+
+        return view('frontend.product.single', compact('product','relatedProducts', 'varients'));
     }
 
     public function filter(Request $request)

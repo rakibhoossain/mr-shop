@@ -63,18 +63,14 @@
                 <div class="inc-btn">+</div>
               </div>
 
-<h1>Kaj ace</h1>
-{{--
-
-              @if(count($product->sizes))
-              <select id="product-size" class="bs-select">
-                @foreach($product->sizes as $size)
-                <option value="{{$size->id}}">{{$size->name}}</option>
+              @foreach($varients as $k => $varientcollection)
+              <select id="varient-{{$k}}" class="bs-select">
+                <option>Select {{ App\Variation::find($k)->name }}</option>
+                @foreach($varientcollection as $varient)
+                <option value="{{$varient->id}}" data-price="{{$varient->pivot->price}}">{{$varient->name}}</option>
                 @endforeach
               </select>
-              @endif
-
---}}
+              @endforeach
 
             </div>
             <ul class="CTAs list-inline">
