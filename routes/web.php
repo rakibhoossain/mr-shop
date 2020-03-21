@@ -36,6 +36,8 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
     //All product routes
     Route::prefix('/product')->group(function () {
 	    Route::resource('/product', 'ProductController', ['as' => 'admin']);
+        Route::post('/request/fields', 'ProductController@varientField')->name('admin.varient.field');
+        
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
 	    Route::resource('/size', 'SizeController', ['as' => 'admin.product']);
     });   

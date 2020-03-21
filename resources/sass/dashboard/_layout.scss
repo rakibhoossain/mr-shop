@@ -610,3 +610,23 @@ body:not(.sidebar-mini-md) {
     transition: none !important;
   }
 }
+
+.varient_image_btn{
+  display: none;
+}
+.table{
+  &.table-condensed,
+  &.table-condensed-inner{
+    td{
+      padding: 0;
+      vertical-align: middle;
+      text-align: center;
+    }
+  }
+  &.table-condensed-inner{
+    margin: 0;
+    label{
+      margin:0;
+    }
+  }
+}

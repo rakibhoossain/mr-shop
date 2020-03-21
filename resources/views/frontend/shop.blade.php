@@ -26,16 +26,22 @@
             <div class="block">
               <h6 class="text-uppercase">Product Categories</h6>
               <ul class="list-unstyled">
-                @foreach(App\ProductCategory::has('children')->has('products')->latest()->get() as $category)
-                <li @if($loop->index == 0) class="active" @endif ><a href="#" class="d-flex justify-content-between align-items-center"><span>{{$category->name}}</span><small>{{$category->products()->count()}}</small></a>
+                @foreach(App\ProductCategory::whereNull('product_category_id')->has('products')->latest()->get() as $category)
+
+
+                <li @if($loop->index == 0) class="active" @endif >
+                  <a href="#" class="d-flex justify-content-between align-items-center"><span>{{$category->name}}</span><small>{{$category->total}}</small></a>
                   @if(count($category->children))
                   <ul class="list-unstyled">
                     @foreach($category->children()->has('products')->get() as $child_category)
-                    <li> <a href="#">{{$child_category->name}}</a></li>
+                    <li> <a href="#" class="d-flex justify-content-between align-items-center"><span>{{$child_category->name}}</span><small>{{$child_category->total}}</small></a></li>
                     @endforeach
                   </ul>
                   @endif
                 </li>
+
+
+
                 @endforeach
               </ul>
             </div>
@@ -61,23 +67,40 @@
                 @endforeach
               
             </div>
-            <div class="block"> 
-              <h6 class="text-uppercase">Size </h6>
 
-              <h1>kaj ace</h1>
+             @if(!empty($_GET['varient'])) @php $filter_varient = explode(',', $_GET['varient']); @endphp @endif
+            @foreach(App\Variation::has('variation_values')->get() as $variation)
+            <div class="block"> 
+              
+                <h6 class="text-uppercase">{{$variation->name}}</h6>
+                @foreach($variation->values()->has('products')->get() as $value)
+                <div class="form-group mb-1">
+                  <input id="{{$value->name}}{{$loop->index}}" type="checkbox" name="varient[]" value="{{$value->id}}" @if(!empty($filter_varient) && in_array($value->id, $filter_varient)) checked @endif onchange="this.form.submit();" class="checkbox-template">
+                  <label for="{{$value->name}}{{$loop->index}}">{{$value->name}} <small>({{$value->products()->count()}})</small></label>
+                </div>
+                @endforeach
+              
+
+
               <!-- <form action="#">   -->
 
 {{--
+
+
+                  <input id="{{$value->name}}{{$loop->index}}" type="radio" name="{{$variation->slug}}" value="{{$value->id}}" class="radio-template">
+                  <label for="{{$value->name}}{{$loop->index}}">{{$value->name}}</label>
+
                 @foreach($sizes as $size)
                 <div class="form-group mb-1">
-                  <input id="size{{$loop->index}}" type="radio" name="size" value="{{$size->slug}}" @if( !empty($_GET['size']) && $_GET['size'] == $size->slug ) checked @endif  onchange="this.form.submit();" class="radio-template">
-                  <label for="size{{$loop->index}}">{{$size->name}}</label>
+                  <input id="{{$value->name}}{{$loop->index}}" type="radio" name="size" value="{{$size->slug}}" @if( !empty($_GET['size']) && $_GET['size'] == $size->slug ) checked @endif  onchange="this.form.submit();" class="radio-template">
+                  <label for="{{$value->name}}{{$loop->index}}">{{$size->name}}</label>
                 </div>
                 @endforeach
 --}}
 
               <!-- </form> -->
             </div>
+            @endforeach
           </div>
           <!-- /Sidebar end-->
           <!-- Grid -->

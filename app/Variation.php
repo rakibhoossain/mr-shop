@@ -34,4 +34,10 @@ class Variation extends Model
 	{
 	    return $this->hasMany(VariationValue::class);
 	}
+
+
+	public function variation_values()
+  	{
+    	return $this->hasManyThrough(ProductVariation::class, VariationValue::class);
+  	}
 }

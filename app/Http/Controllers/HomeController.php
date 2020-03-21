@@ -39,7 +39,14 @@ class HomeController extends Controller
         //     $slugs = explode(',', $_GET['category']);
         //     $cat_ids = Category::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
         //     $products->whereIn('category_id',  $cat_ids);
-        // }
+        // }        
+
+        if(!empty($_GET['varient'])){
+            $ids = explode(',', $_GET['varient']);
+            $query->whereHas('variation_values', function($q) use($ids){
+                $q->whereIn('variation_values.id',  $ids);
+            });
+        }
 
         if(!empty($_GET['brand'])){
             $slugs = explode(',', $_GET['brand']);
@@ -121,6 +128,17 @@ class HomeController extends Controller
                     $brandURL .= ','.$brand;
                 }
             }
+        }        
+
+        $varientURL = '';
+        if(!empty($data['varient'])){
+            foreach($data['varient'] as $varient){
+                if(empty($varientURL)){
+                    $varientURL .= '&varient='.$varient;
+                }else{
+                    $varientURL .= ','.$varient;
+                }
+            }
         }
 
         $sortByURL = '';
@@ -142,6 +160,6 @@ class HomeController extends Controller
         if(!empty($data['price_range'])){
             $price_range_URL .= '&price='.$data['price_range'];
         }
-        return redirect()->route('shop',$catURL.$brandURL.$price_range_URL.$showURL.$sizeURL.$sortByURL);
+        return redirect()->route('shop',$catURL.$brandURL.$price_range_URL.$showURL.$sizeURL.$varientURL.$sortByURL);
     }
 }

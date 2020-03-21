@@ -43,8 +43,11 @@ class ProductCategory extends Model
   public function children(){
     return $this->hasMany(ProductCategory::class);
   }
-  public function isolate(){
-    return $this->whereNull('product_category_id');
+  public function getTotalProductAttribute(){
+    return $this->products->count();
+  }
+  public function getTotalAttribute(){
+    return (count($this->children))? $this->children->sum('total_product') : $this->total_product;
   }
 
 }

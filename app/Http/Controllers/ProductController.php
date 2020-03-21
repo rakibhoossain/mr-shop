@@ -47,6 +47,12 @@ class ProductController extends Controller
         return view('dashboard.product.create');
     }
 
+    public function varientField(Request $request)
+    {
+        
+        return view('dashboard.product.create');
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -55,8 +61,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
-
         $input = $request->except(['description', 'meta']);
 
         $keys = $request->keys;
@@ -86,6 +90,26 @@ class ProductController extends Controller
 
             if($product->tags){
                 $product->tags()->attach($request->tags);
+            }
+
+            foreach($request->variations as $k => $variation){
+                foreach($variation as $id){
+                    $purchase_price = $request->varient_purchase_prices[$k][$id];
+                    $sell_price = $request->varient_sell_prices[$k][$id];
+                    $offer_price = $request->varient_prices[$k][$id];
+
+                    $image = $request->varient_images[$k][$id];
+
+
+
+                    $product->variation_values()->attach($id, [
+                        'price' => $offer_price,
+                        'sell_price' => $sell_price,
+                        'purchase_price' => $purchase_price,
+                        'purchase_price' => $purchase_price,
+                        'image' => $image,
+                    ]);
+                }
             }
 
             return $product;

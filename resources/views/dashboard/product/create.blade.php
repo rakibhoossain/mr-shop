@@ -29,6 +29,7 @@
                   <label for="excerpt">Excerpt</label>
                   <textarea class="form-control" id="excerpt" name="excerpt" placeholder="Excerpt ..."></textarea>
                 </div>
+
                 <div class="card">
                   <div class="card-header">
                     <h3 class="card-title">Additional Information</h3>
@@ -69,6 +70,100 @@
                   <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
+
+
+              @if(App\Variation::count())
+                <!-- variable product -->
+                <div class="card">
+                  <div class="card-header d-flex justify-content-between align-items-center">
+                    <div>
+                      <h3 class="card-title">Product Type</h3>
+                    </div>
+
+                     <select class="form-control col-md-3" id="product_add_varient" data-url="{{route('admin.varient.field')}}">
+                        <option value="single">Single</option>
+                        <option value="varient">Varient</option>
+                      </select>                       
+
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body" id="varient_field_area">
+                    @foreach(App\Variation::latest()->get() as $variation)
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-striped table-condensed">
+                        <thead>
+                          <tr>
+                            <th>Variation</th>
+                            <th>Variation Values</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="varient_title"><b>{{$variation->name}}</b></td>
+                            <td>
+                              <table class="table table-bordered table-striped table-condensed-inner">
+                                <thead>
+                                  <tr>
+                                    <th>Name</th>
+                                    <th>Purchase Price</th>
+                                    <th>Sell Price</th>
+                                    <th>Offer Price</th>
+                                    <th>Image</th>
+                                    <th>Data</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  @forelse($variation->values as $value)
+                                  <tr>
+                                    <td   @if($value->type == 'color') style="color: {{$value->data}}" @endif ><input type="hidden" name="variations[{{$variation->id}}][{{$value->id}}]" value="{{$value->id}}"><b>{{$value->name}}</b></td>
+                                    <td><input type="text" name="varient_purchase_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="1"></td>
+                                    <td><input type="text" name="varient_sell_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="2"></td>
+                                    <td><input type="text" name="varient_prices[{{$variation->id}}][{{$value->id}}]" class="form-control" value="3"></td>
+                                    <td>
+                                      <label>
+                                        <input type="file" data-id="{{$value->id}}" class="varient_image_btn">
+                                      <img src="{{asset('img/thumb_icon.png')}}" id="varient_image_preview_{{$value->id}}" width="50" height="50">
+                                      </label>
+
+                                      <input type="hidden" id="varient_image_{{$value->id}}" name="varient_images[{{$variation->id}}][{{$value->id}}]" class="form-control varient_image_input"></td>
+                                    <td></td>
+                                  </tr>
+                                  @empty
+                                  <h1>no data</h1>
+
+                                  @endforelse  
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                    @endforeach
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
 
               <div class="col-sm-12 col-md-3">
@@ -103,6 +198,8 @@
                           <option value="{{$child_cat->id}}">{{$child_cat->name}}</option>
                         @endforeach
                         </optgroup>
+                      @else
+                        <option value="{{$category->id}}">{{$category->name}}</option>
                       @endif
                     @endforeach
                   </select>
@@ -119,7 +216,7 @@
                   <label for="upload_product_image">Product Images</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="upload_product_image">
+                      <input type="file" class="custom-file-input" id="upload_product_image" data-crop="product">
                       <label class="custom-file-label" for="upload_product_image">Choose Image</label>
                     </div>
                   </div>
@@ -141,7 +238,7 @@
 <!-- /.content -->
 
 
-<!-- Modal -->
+<!-- Modal Product Image -->
 <div class="modal fade" id="UploadImageModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -164,6 +261,7 @@
     </div>
   </div>
 </div>
+
 
 <style type="text/css">
 .preview {
@@ -209,10 +307,20 @@ $(document).ready(function () {
   var image = document.getElementById('image_prev');
   var cropper;
 
-  $("body").on("change", "#upload_product_image", function(e) {
+  $("body").on("change", "#upload_product_image, .varient_image_btn", function(e) {
+
+    let btn_id = ($(this).data('crop'))? 'crop' : 'varient_crop';
+    let id = ($(this).data('id'))? `data-id='${$(this).data('id')}'` : '';
+    let modal_btn = `
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      <button type="button" class="btn btn-primary" ${id} id="${btn_id}">Crop</button>
+    `;
+
+
       var files = e.target.files;
       var done = function(url) {
           image.src = url;
+          $modal.find('.modal-footer').html(modal_btn);
           $modal.modal('show');
       };
       var reader;
@@ -245,36 +353,53 @@ $(document).ready(function () {
       cropper = null;
   });
 
-  $("#crop").click(function() {
-      canvas = cropper.getCroppedCanvas({
-          width: 160,
-          height: 160,
-      });
-
-      canvas.toBlob(function(blob) {
-          url = URL.createObjectURL(blob);
-          var reader = new FileReader();
-          reader.readAsDataURL(blob);
-          reader.onloadend = function() {
-              var base64data = reader.result;
-              $('#images').append(`
-                <div class='preview_single'>
-                <input type="hidden" name="images[]" value="${base64data}">
-                <img src="${base64data}" width="100" height="100">
-                <div class="remove_img"><i class="fas fa-trash"></i></div>
-                </div>
-                `);
-              $modal.modal('hide');
-          }
-      });
+  $(document).on('click', '#crop', function() {
+    canvas = cropper.getCroppedCanvas({
+        width: 160,
+        height: 160,
+    });
+    canvas.toBlob(function(blob) {
+        url = URL.createObjectURL(blob);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+            var base64data = reader.result;
+            $('#images').append(`
+              <div class='preview_single'>
+              <input type="hidden" name="images[]" value="${base64data}">
+              <img src="${base64data}" width="100" height="100">
+              <div class="remove_img"><i class="fas fa-trash"></i></div>
+              </div>
+              `);
+            $modal.modal('hide');
+        }
+    });
   })
 
   $(document).on('click', '.remove_img', function() {
-  $(this).parent('.preview_single').remove();
+    $(this).parent('.preview_single').remove();
   })
 
-
-
+  $(document).on('click', '#varient_crop', function(e) {
+    e.preventDefault();
+    let id = `#varient_image_${$(this).data('id')}`;
+    let preview_id = `#varient_image_preview_${$(this).data('id')}`;
+    canvas = cropper.getCroppedCanvas({
+        width: 160,
+        height: 160,
+    });
+    canvas.toBlob(function(blob) {
+        url = URL.createObjectURL(blob);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = function() {
+            var base64data = reader.result;
+            $(id).val(base64data);
+            $(preview_id).attr('src', base64data);
+            $modal.modal('hide');
+        }
+    });
+  })
 
     //Info field Add
   $(document).on('click', '.add-row-info', function(e){
@@ -325,6 +450,74 @@ $(document).ready(function () {
       $("#additional_info_table .checkbox").prop("checked", 'false').trigger("click");
       $("#checkall").prop("checked", 'false').trigger("click");
   });
+
+
+
+  //Form validate
+  // $.validator.setDefaults({
+  //   submitHandler: function () {
+  //     // alert( "Form successful submitted!" );
+  //   }
+  // });
+  $('#product_form').validate({
+    rules: {
+      name: {
+        required: true,
+      },
+      // description: {
+      //   required: true,
+      // },
+      // purchase_price: {
+      //   required: true
+      // },      
+      // price: {
+      //   required: true
+      // },
+      // description: {
+      //   required: true
+      // }
+    },
+    // messages: {
+    //   email: {
+    //     required: "Please enter a email address",
+    //     email: "Please enter a vaild email address"
+    //   },
+    //   password: {
+    //     required: "Please provide a password",
+    //     minlength: "Your password must be at least 5 characters long"
+    //   },
+    //   terms: "Please accept our terms"
+    // },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+      error.addClass('invalid-feedback');
+      element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    }
+  });
+
+  $(document).on('change', '#product_add_varient', function(e){
+    e.preventDefault();
+    let url = $(this).data('url');
+    let val = $(this).val();
+    $.ajax({
+      type: 'POST',
+      url,
+      data: {varient_create: val},
+      success: function(response){
+
+        console.log(response);
+      }
+    })
+
+
+  })
+
 
 })
 </script>

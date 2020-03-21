@@ -6,6 +6,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>AdminLTE 3 | Dashboard 3</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
@@ -729,6 +730,15 @@ to get the desired effect
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
 <!-- AdminLTE -->
 <script src="{{asset('js/AdminLTE.js')}}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+  })
+</script>
 @stack('scripts')
 </body>
 </html>
