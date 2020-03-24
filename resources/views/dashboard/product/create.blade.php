@@ -23,7 +23,7 @@
                 </div>
                 <div class="form-group">
                   <label for="description">Product Description</label>
-                  <textarea class="form-control textarea" id="description" name="description" placeholder="Product Description ..."></textarea>
+                  <textarea class="form-control textarea summernote" id="description" name="description" placeholder="Product Description ..."></textarea>
                 </div>
                 <div class="form-group">
                   <label for="excerpt">Excerpt</label>
@@ -144,7 +144,7 @@
                   <label for="upload_product_image">Product Images</label>
                   <div class="input-group">
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="upload_product_image" data-crop="product">
+                      <input type="file" accept=".png, .jpg, .jpeg" class="custom-file-input" id="upload_product_image" data-crop="product">
                       <label class="custom-file-label" for="upload_product_image">Choose Image</label>
                     </div>
                   </div>
@@ -174,7 +174,7 @@
         <div class="img-container">
             <div class="row">
                 <div class="col-md-8">
-                    <img id="image_prev" src="https://via.placeholder.com/460x460.png?text=No+Photo" height="400">
+                    <img id="image_prev" src="https://via.placeholder.com/460x460.png?text=No+Photo" class="img-fluid">
                 </div>
                 <div class="col-md-4">
                     <div class="preview"></div>
@@ -235,7 +235,8 @@ $(document).ready(function () {
   var image = document.getElementById('image_prev');
   var cropper;
 
-  $("body").on("change", "#upload_product_image, .varient_image_btn", function(e) {
+  $(document).on("change", "#upload_product_image, .varient_image_btn", function(e) {
+    e.preventDefault();
 
     let btn_id = ($(this).data('crop'))? 'crop' : 'varient_crop';
     let id = ($(this).data('id'))? `data-id='${$(this).data('id')}'` : '';
@@ -268,24 +269,25 @@ $(document).ready(function () {
               reader.readAsDataURL(file);
           }
       }
+      $(this).val('');
   });
 
   $modal.on('shown.bs.modal', function() {
       cropper = new Cropper(image, {
-          aspectRatio: 1,
+          aspectRatio: .9,
           viewMode: 3,
           preview: '.preview'
       });
   }).on('hidden.bs.modal', function() {
       cropper.destroy();
       cropper = null;
-      img.src = 'https://via.placeholder.com/460x460.png?text=No+Photo';
+      image.src = 'https://via.placeholder.com/460x460.png?text=No+Photo';
   });
 
   $(document).on('click', '#crop', function() {
     canvas = cropper.getCroppedCanvas({
-        width: 160,
-        height: 160,
+        width: 1200,
+        height: 1080,
     });
     canvas.toBlob(function(blob) {
         url = URL.createObjectURL(blob);
@@ -314,8 +316,8 @@ $(document).ready(function () {
     let id = `#varient_image_${$(this).data('id')}`;
     let preview_id = `#varient_image_preview_${$(this).data('id')}`;
     canvas = cropper.getCroppedCanvas({
-        width: 160,
-        height: 160,
+        width: 1200,
+        height: 1080,
     });
     canvas.toBlob(function(blob) {
         url = URL.createObjectURL(blob);

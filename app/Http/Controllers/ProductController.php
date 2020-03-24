@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Variation;
 use App\VariationValue;
-use App\Image;
+use App\Image as ImageModel;
 use Illuminate\Http\Request;
+use Storage;
+use Image;
 
 class ProductController extends Controller
 {
@@ -88,65 +90,62 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $input = $request->except(['description', 'meta']);
-
-        $keys = $request->keys;
-        $values = $request->values;
-        if ($keys && $values) {
-            $data = [];
-            foreach($keys as $k => $key){
-                if(is_null($key) || is_null($values[$k]) ) continue;
-                array_push($data, ['key' => $key, 'value' => $values[$k]]);
+        try {
+            $input = $request->except(['description', 'meta']);
+            $keys = $request->keys;
+            $values = $request->values;
+            if ($keys && $values) {
+                $data = [];
+                foreach($keys as $k => $key){
+                    if(is_null($key) || is_null($values[$k]) ) continue;
+                    array_push($data, ['key' => $key, 'value' => $values[$k]]);
+                }
+                if(count($data)) $input['meta'] = json_encode(compact('data'));
             }
-            if(count($data)) $input['meta'] = json_encode(compact('data'));
-        }
-
-        //Product Description
-        if($request->description){
-            $input['description'] = $this->productDetail($request->input('description'));
-        }
-        $product = auth()->user()->products()->create($input);
-        if($product){
-            if($request->images){
-                $image_ids = $this->uploadProductImages($request->images);
-                if(count($image_ids)) $product->images()->attach($image_ids);
-            }       
-            if($request->categories){
-                $product->categories()->attach($request->categories);
+            //Product Description
+            if($request->description){
+                $input['description'] = $this->productDetail($request->input('description'));
             }
+            $product = auth()->user()->products()->create($input);
+            if($product){
+                if($request->images){
+                    $image_ids = $this->uploadProductImages($request->images);
+                    if(count($image_ids)) $product->images()->attach($image_ids);
+                }       
+                if($request->categories){
+                    $product->categories()->attach($request->categories);
+                }
 
-            if($product->tags){
-                $product->tags()->attach($request->tags);
-            }
+                if($product->tags){
+                    $product->tags()->attach($request->tags);
+                }
+                if($request->variations){
+                    foreach($request->variations as $k => $variation){
+                        foreach($variation as $id){
+                            $purchase_price = $request->varient_purchase_prices[$k][$id];
+                            $sell_price = $request->varient_sell_prices[$k][$id];
+                            $offer_price = $request->varient_prices[$k][$id];
 
-            if($request->variations){
-                foreach($request->variations as $k => $variation){
-                    foreach($variation as $id){
-                        $purchase_price = $request->varient_purchase_prices[$k][$id];
-                        $sell_price = $request->varient_sell_prices[$k][$id];
-                        $offer_price = $request->varient_prices[$k][$id];
+                            $image = $request->varient_images[$k][$id];
+                            $varient_image = ($image)? $this->uploadVarientImages($image) : null;
 
-                        $image = $request->varient_images[$k][$id];
-                        $varient_image = ($image)? $this->uploadVarientImages($image) : null;
-
-                        $product->variation_values()->attach($id, [
-                            'price' => $offer_price,
-                            'sell_price' => $sell_price,
-                            'purchase_price' => $purchase_price,
-                            'purchase_price' => $purchase_price,
-                            'image' => $varient_image,
-                        ]);
+                            $product->variation_values()->attach($id, [
+                                'price' => $offer_price,
+                                'sell_price' => $sell_price,
+                                'purchase_price' => $purchase_price,
+                                'purchase_price' => $purchase_price,
+                                'image' => $varient_image,
+                            ]);
+                        }
                     }
                 }
+                return $product;
+            }else{
+                throw new \Exception('Invalid action!');
             }
-
-
-            return $product;
-        }else{
-            dd('Something went wrong!');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
         }
-
-
     }
 
     /**
@@ -195,19 +194,27 @@ class ProductController extends Controller
 
 
     private function productDetail($detail){
-        $dom = new \DomDocument();
-        $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);    
+        $dom = new \DOMDocument();
+        $dom->loadHtml($detail, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $images = $dom->getElementsByTagName('img');
         foreach($images as $k => $img){
-            $data = $img->getAttribute('src');
-            list($type, $data) = explode(';', $data);
-            list(, $data)      = explode(',', $data);
-            $data = base64_decode($data);
-            $image_name= "/images/" . time().$k.'.png';
-            $path = public_path() . $image_name;
-            file_put_contents($path, $data);
-            $img->removeAttribute('src');
-            $img->setAttribute('src', $image_name);
+            $image = $img->getAttribute('src');
+            // if a base64 was sent, store it in the db
+            if (!is_null($image) && preg_match('/data:image/', $image)){
+                $post_image = \Image::make($image)->encode('jpg', 95);
+                $post_image_location = 'posts/'.md5($image.time()).'.jpg';
+                Storage::disk('public')->put($post_image_location, $post_image->stream());
+
+                // list($type, $image) = explode(';', $image);
+                // list(, $image)      = explode(',', $image);
+                // $data = base64_decode($image);
+                // $image_name= time().$k.'.png';
+                // $location = '/images/'.$image_name;
+                // $path = public_path() . $location;
+                // file_put_contents($path, $data);
+                $img->removeAttribute('src');
+                $img->setAttribute('src', 'storage/'.$post_image_location);
+            }
         }
         return $dom->saveHTML();
     }
@@ -216,43 +223,26 @@ class ProductController extends Controller
         $img_ids = [];
         foreach($images as $image){
         // if a base64 was sent, store it in the db
-            if (!is_null($image) && strpos($image, 'data:image') == 0){
-                list($type, $image) = explode(';', $image);
-                list(, $image)      = explode(',', $image);
-                $data = base64_decode($image);
-                $image_name= time().'.png';
-                $location = '/images/'.$image_name;
+            if (!is_null($image) && preg_match('/data:image/', $image)){
+                $lg_image = \Image::make($image)->encode('jpg', 95);
+                $lg_image_location = 'products/'.md5($image.time()).'.jpg';
+                Storage::disk('public')->put($lg_image_location, $lg_image->stream());
 
-                $path = public_path() . $location;
-                file_put_contents($path, $data);
-
-                $image_db = Image::create(['image' => $location]);
+                $image_db = ImageModel::create(['image' => 'storage/'.$lg_image_location]);
                 if($image_db) array_push($img_ids, $image_db->id);
 
                 // Image::make($image)->save( public_path($location) );
-
-                //Delete old feature image
-                // if($feature->image) {
-                //     $old_image = public_path($feature->image);
-                //     if ( file_exists($old_image) ) unlink($old_image);
-                // }
             }
         }
         return $img_ids;
     }
     private function uploadVarientImages($image){
         // if a base64 was sent, store it in the db
-        if (!is_null($image) && strpos($image, 'data:image') == 0){
-            list($type, $image) = explode(';', $image);
-            list(, $image)      = explode(',', $image);
-            $data = base64_decode($image);
-            $image_name= time().'.png';
-            $location = '/images/'.$image_name;
-
-            $path = public_path() . $location;
-            file_put_contents($path, $data);
-
-            return $location;
+        if (!is_null($image) && preg_match('/data:image/', $image)){
+            $lg_image = \Image::make($image)->encode('jpg', 95);
+            $lg_image_location = 'products/'.md5($image.time()).'.jpg';
+            Storage::disk('public')->put($lg_image_location, $lg_image->stream());
+            return 'storage/'.$lg_image_location;
         }
     }
 }

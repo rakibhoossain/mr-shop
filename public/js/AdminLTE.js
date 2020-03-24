@@ -767,8 +767,8 @@ var Custom = function ($) {
       $(match_url).parents('.has-treeview').children('.nav-link').removeClass('active').addClass('active');
     }
 
-    if ($('.textarea').length) {
-      $('.textarea').summernote({
+    if ($('.textarea.summernote').length) {
+      $('.textarea.summernote').summernote({
         height: 300
       });
     }
@@ -777,6 +777,12 @@ var Custom = function ($) {
       $('.select2').select2({
         theme: 'bootstrap4',
         allowClear: true
+      });
+    }
+
+    if ($('form').length) {
+      $('form').each(function () {
+        if ($(this).data('validator')) $(this).data('validator').settings.ignore = ".textarea.summernote *";
       });
     }
   });

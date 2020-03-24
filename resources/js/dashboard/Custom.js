@@ -162,8 +162,8 @@ $(function () {
     $(match_url).parents('.has-treeview').children('.nav-link').removeClass('active').addClass('active');  
   }
 
-  if($('.textarea').length){
-    $('.textarea').summernote({
+  if($('.textarea.summernote').length){
+    $('.textarea.summernote').summernote({
       height: 300
     })
   }
@@ -174,6 +174,12 @@ $(function () {
     });
   }
 
+  if($('form').length){
+    $('form').each(function () {
+      if ($(this).data('validator'))
+      $(this).data('validator').settings.ignore = ".textarea.summernote *";
+    });  
+  }
 
 
 
