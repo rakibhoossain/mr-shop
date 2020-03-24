@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Variation;
+use App\VariationValue;
 use App\Image;
 use Illuminate\Http\Request;
 
@@ -53,7 +55,21 @@ class ProductController extends Controller
             if($request->varient_create && $request->varient_create == 'varient'){
                 return response()->json([
                     'success' => true,
-                    'html' => view('dashboard.product.varient_field_create')->render()
+                    'html' => view('dashboard.product.varient.create')->render()
+                ]);
+            }elseif($request->variation){
+                $variation = Variation::find($request->variation);
+                if($variation) return response()->json([
+                    'success' => true,
+                    'id' => $variation->id,
+                    'html' => view('dashboard.product.varient.select', compact('variation'))->render()
+                ]);
+            }elseif($request->varient){
+                $value = VariationValue::find($request->varient);
+                if($value) return response()->json([
+                    'success' => true,
+                    'id' => $value->id,
+                    'html' => view('dashboard.product.varient.field', compact('value'))->render()
                 ]);
             }else{
                 return response()->json([
@@ -61,9 +77,7 @@ class ProductController extends Controller
                     'html' => ''
                 ]); 
             }
-
         }
-        return view('dashboard.product.create');
     }
 
     /**

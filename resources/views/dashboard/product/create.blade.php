@@ -174,7 +174,7 @@
         <div class="img-container">
             <div class="row">
                 <div class="col-md-8">
-                    <img id="image_prev" src="https://via.placeholder.com/460x460.png?text=No+Photo">
+                    <img id="image_prev" src="https://via.placeholder.com/460x460.png?text=No+Photo" height="400">
                 </div>
                 <div class="col-md-4">
                     <div class="preview"></div>
@@ -279,6 +279,7 @@ $(document).ready(function () {
   }).on('hidden.bs.modal', function() {
       cropper.destroy();
       cropper = null;
+      img.src = 'https://via.placeholder.com/460x460.png?text=No+Photo';
   });
 
   $(document).on('click', '#crop', function() {
@@ -440,6 +441,48 @@ $(document).ready(function () {
       success: function(response){
         if(response.success){
           $('#varient_field_area').html(response.html);
+        }
+      }
+    })
+  })
+
+  $(document).on('change', '#variation_selection', function(e){
+    e.preventDefault();
+    let url = $(this).data('url');
+    let val = $(this).val();
+    $.ajax({
+      type: 'POST',
+      url,
+      data: {variation: val},
+      success: function(response){
+        if(response.success){
+          $('#variation_selection_body').html(response.html);
+        }
+      }
+    })
+  })  
+
+  $(document).on('change', '#varient_select', function(e){
+    e.preventDefault();
+
+    let current_val = $(this).val();
+    let i = 0;
+    let find_val = $('.varient_row').each(function(){
+        if($(this).data('id') == current_val) i++;
+    });
+    if(i) return;
+
+    let url = $(this).data('url');
+    let val = $(this).val();
+    $.ajax({
+      type: 'POST',
+      url,
+      data: {varient: val},
+      success: function(response){
+        if(response.success){
+          if($(".varient_row[data-id='"+response.id+"']").length) return;
+          $('#variation_selection_body').append(response.html);
+          $('#varient_select').val('');
         }
       }
     })
