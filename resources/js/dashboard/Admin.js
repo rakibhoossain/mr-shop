@@ -10,6 +10,7 @@ import Dropdown from './Dropdown'
 import Toasts from './Toasts'
 
 import Custom from './Custom'
+window.toastr = require('toastr');
 
 export {
   // ControlSidebar,
@@ -22,6 +23,7 @@ export {
   CardRefresh,
   Dropdown,
   Toasts,
+  // Toastr,
 
   Custom
 }

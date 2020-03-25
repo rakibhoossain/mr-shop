@@ -259,6 +259,11 @@ $(document).ready(function () {
       if (files && files.length > 0) {
           file = files[0];
 
+          if( (file.size/1000000) > 2){
+            toastr.error('Max image size 2MB.', 'Error!');
+            return;
+          };
+
           if (URL) {
               done(URL.createObjectURL(file));
           } else if (FileReader) {

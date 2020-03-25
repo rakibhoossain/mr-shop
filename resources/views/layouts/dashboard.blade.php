@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{{asset('css/cropper.min.css')}}">
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{asset('css/AdminLTE.css')}}">
+  <link rel="stylesheet" href="{{asset('css/Admin.css')}}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
@@ -729,15 +729,15 @@ to get the desired effect
 
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
 <!-- AdminLTE -->
-<script src="{{asset('js/AdminLTE.js')}}"></script>
+<script src="{{asset('js/Admin.js')}}"></script>
 <script type="text/javascript">
-  $(document).ready(function(){
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
-  })
+  // $(document).ready(function(){
+  //   $.ajaxSetup({
+  //     headers: {
+  //       'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+  //     }
+  //   });
+  // })
 </script>
 @stack('scripts')
 </body>

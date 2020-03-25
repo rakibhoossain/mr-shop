@@ -201,9 +201,13 @@ class ProductController extends Controller
             $image = $img->getAttribute('src');
             // if a base64 was sent, store it in the db
             if (!is_null($image) && preg_match('/data:image/', $image)){
-                $post_image = \Image::make($image)->encode('jpg', 95);
-                $post_image_location = 'posts/'.md5($image.time()).'.jpg';
-                Storage::disk('public')->put($post_image_location, $post_image->stream());
+                list($type, $image) = explode(';', $image);
+                list(, $image)      = explode(',', $image);
+                $data = base64_decode($image);
+
+                // $post_image = Image::make($data)->resize(1000, 1200)->encode('jpg', 95);
+                $post_image_location = 'posts/'.md5(microtime().$k).'.jpg';
+                Storage::disk('public')->put($post_image_location, $data);
 
                 // list($type, $image) = explode(';', $image);
                 // list(, $image)      = explode(',', $image);
@@ -224,9 +228,12 @@ class ProductController extends Controller
         foreach($images as $image){
         // if a base64 was sent, store it in the db
             if (!is_null($image) && preg_match('/data:image/', $image)){
-                $lg_image = \Image::make($image)->encode('jpg', 95);
-                $lg_image_location = 'products/'.md5($image.time()).'.jpg';
-                Storage::disk('public')->put($lg_image_location, $lg_image->stream());
+                list($type, $image) = explode(';', $image);
+                list(, $image)      = explode(',', $image);
+                $data = base64_decode($image);
+
+                $lg_image_location = 'products/'.md5(microtime()).'.jpg';
+                Storage::disk('public')->put($lg_image_location, $data);
 
                 $image_db = ImageModel::create(['image' => 'storage/'.$lg_image_location]);
                 if($image_db) array_push($img_ids, $image_db->id);
@@ -239,9 +246,11 @@ class ProductController extends Controller
     private function uploadVarientImages($image){
         // if a base64 was sent, store it in the db
         if (!is_null($image) && preg_match('/data:image/', $image)){
-            $lg_image = \Image::make($image)->encode('jpg', 95);
-            $lg_image_location = 'products/'.md5($image.time()).'.jpg';
-            Storage::disk('public')->put($lg_image_location, $lg_image->stream());
+            list($type, $image) = explode(';', $image);
+            list(, $image)      = explode(',', $image);
+            $data = base64_decode($image);
+            $lg_image_location = 'products/'.md5(microtime()).'.jpg';
+            Storage::disk('public')->put($lg_image_location, $data);
             return 'storage/'.$lg_image_location;
         }
     }

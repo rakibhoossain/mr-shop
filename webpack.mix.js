@@ -12,7 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-.js('resources/js/dashboard/AdminLTE.js', 'public/js')
+.js('resources/js/dashboard/Admin.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .sass('resources/sass/frontend.scss', 'public/css')
-    .sass('resources/sass/dashboard/AdminLTE.scss', 'public/css');
+    .sass('resources/sass/dashboard/Admin.scss', 'public/css');

@@ -1,7 +1,7 @@
 {
-    "/js/AdminLTE.js": "/js/AdminLTE.js",
+    "/js/Admin.js": "/js/Admin.js",
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/frontend.css": "/css/frontend.css",
-    "/css/AdminLTE.css": "/css/AdminLTE.css"
+    "/css/Admin.css": "/css/Admin.css"
 }
