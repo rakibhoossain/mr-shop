@@ -39,7 +39,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
         Route::post('/request/fields', 'ProductController@varientField')->name('admin.varient.field');
         
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
-	    Route::resource('/size', 'SizeController', ['as' => 'admin.product']);
+	    // Route::resource('/size', 'SizeController', ['as' => 'admin.product']);
     });   
 
     Route::resource('/category', 'CategoryController', ['as' => 'admin']);

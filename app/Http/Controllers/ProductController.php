@@ -19,6 +19,10 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+
+
+
+
         $products = Product::query();
         if($request->search){
             $search_string = $request->search;
@@ -28,10 +32,10 @@ class ProductController extends Controller
             ->orWhere('description', 'like', '%'.$search_string.'%' )
             ->orWhereHas('brand', function($q) use($search_string){
                 $q->where('name', 'like', '%'.$search_string.'%' );
-            })
-            ->orWhereHas('sizes', function($q) use($search_string){
-                $q->where('name', 'like', '%'.$search_string.'%' );
             });
+            // ->orWhereHas('sizes', function($q) use($search_string){
+            //     $q->where('name', 'like', '%'.$search_string.'%' );
+            // });
         }
         $products = $products->latest()->paginate(20);
         if($products){
