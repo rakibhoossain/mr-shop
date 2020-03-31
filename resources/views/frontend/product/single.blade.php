@@ -5,13 +5,13 @@
       <div class="container">
         <div class="row d-flex">
           <div class="col-lg-9 order-2 order-lg-1">
-            <h1>Loose Oversized Shirt</h1>
+            <h1>{{$product->name}}</h1>
           </div>
           <div class="col-lg-3 text-right order-1 order-lg-2">
             <ul class="breadcrumb justify-content-lg-end">
-              <li class="breadcrumb-item"><a href="index-2.html">Home</a></li>
-              <li class="breadcrumb-item"><a href="category.html">Shop</a></li>
-              <li class="breadcrumb-item active">Loose Oversized Shirt</li>
+              <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{route('shop')}}">Shop</a></li>
+              <li class="breadcrumb-item active">{{$product->name}}</li>
             </ul>
           </div>
         </div>
@@ -34,11 +34,11 @@
               @endforeach
             </div>
           </div>
-          <div class="details col-lg-6">
+          <div id="details" class="details col-lg-6" data-max="{{$product->quantity}}" data-price="{{$product->price}}" data-sell="{{$product->sell_price}}">
             <div class="d-flex align-items-center justify-content-between flex-column flex-sm-row">
               <ul class="price list-inline no-margin">
-                <li class="list-inline-item current">$65.00</li>
-                <li class="list-inline-item original">$90.00</li>
+                <li class="list-inline-item current">{{Helper::frontendItemPrice($product)}}</li>
+                <li class="list-inline-item original">{{Helper::frontendItemPrice($product, 'original')}}</li>
               </ul>
               <div class="review d-flex align-items-center">
                 <ul class="rate list-inline">
@@ -56,27 +56,32 @@
             </div>
             @endif
             <p>{{$product->sort_description}}</p>
-            <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
-              <div class="quantity d-flex align-items-center">
-                <div class="dec-btn">-</div>
-                <input type="text" value="1" class="quantity-no">
-                <div class="inc-btn">+</div>
-              </div>
-
-              @foreach($varients as $k => $varientcollection)
-              <select id="varient-{{$k}}" class="bs-select">
-                <option>Select {{ App\Variation::find($k)->name }}</option>
-                @foreach($varientcollection as $varient)
-                <option value="{{$varient->id}}" data-price="{{$varient->pivot->price}}">{{$varient->name}}</option>
+            <form action="{{route('addToCart', $product->slug)}}" method="POST">
+              @csrf
+              <div class="d-flex align-items-center justify-content-center justify-content-lg-start">
+                <div class="quantity d-flex align-items-center">
+                  <div class="dec-btn">-</div>
+                  <input type="text" value="1" name="quantity" class="quantity-no" id="quantity">
+                  <div class="inc-btn">+</div>
+                </div>
+                @foreach($varients as $k => $varientcollection)
+                <select id="varient-{{$k}}" name="varient" class="bs-select variation_select">
+                  <option value="" data-price="{{$product->price}}" data-sell_price="{{$product->sell_price}}" data-quantity="{{$product->quantity}}">Select {{ App\Variation::find($k)->name }}</option>
+                  @foreach($varientcollection as $varient)
+                  <option value="{{$varient->id}}" data-price="{{$varient->pivot->price}}" data-sell_price="{{$varient->pivot->sell_price}}" data-quantity="{{$varient->pivot->quantity}}">{{$varient->name}}</option>
+                  @endforeach
+                </select>
                 @endforeach
-              </select>
-              @endforeach
+              </div>
+              <ul class="CTAs list-inline">
+                <li class="list-inline-item">
+                  <button type="submit" class="btn btn-template wide"><i class="icon-cart"></i>Add to Cart</button>
+                  <!-- <a href="#"> </a> -->
 
-            </div>
-            <ul class="CTAs list-inline">
-              <li class="list-inline-item"><a href="#" class="btn btn-template wide"> <i class="icon-cart"></i>Add to Cart</a></li>
-              <li class="list-inline-item"><a href="#" class="btn btn-template-outlined wide"> <i class="fa fa-heart-o"></i>Add to wishlist</a></li>
-            </ul>
+                </li>
+                <li class="list-inline-item"><a href="#" class="btn btn-template-outlined wide"> <i class="fa fa-heart-o"></i>Add to wishlist</a></li>
+              </ul>
+            </form>
           </div>
         </div>
       </div>

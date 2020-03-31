@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Brand;
-use App\Size;
+// use App\Size;
 use App\Category;
 use App\ProductCategory;
 use App\Image;
@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
       
         $this->call(UsersTableSeeder::class);
         factory(Brand::class, 20)->create();
-        $this->call(SizesTableSeeder::class);
+        // $this->call(SizesTableSeeder::class);
         factory(Category::class, 10)->create();
         factory(ProductCategory::class, 10)->create();
         factory(Image::class, 10)->create();
@@ -36,14 +36,14 @@ class DatabaseSeeder extends Seeder
         factory(Product::class, 100)->create()->each(function ($product) {
             $product->images()->save(Image::all()->random());
             $product->categories()->save(ProductCategory::all()->random());
-            $product->sizes()->save(Size::all()->random());
+            // $product->sizes()->save(Size::all()->random());
         });
 
 		factory(Product::class, 10)->create()->each(function ($product) {
             $product->images()->save(Image::all()->random());
             $product->categories()->save(ProductCategory::all()->random());
-            $product->sizes()->save(Size::all()->random());
-            $product->variation_values()->save(Size::all()->random(), ['price' => rand(3, 100), 'purchase_price' => rand(1, 80)]);
+            // $product->sizes()->save(Size::all()->random());
+            // $product->variation_values()->save(Size::all()->random(), ['price' => rand(3, 100), 'purchase_price' => rand(1, 80)]);
         });
 
         factory(Post::class, 20)->create()->each(function ($post) {

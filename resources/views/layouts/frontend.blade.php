@@ -36,7 +36,7 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
   </head>
-  <body>
+  <body data-currency="{{Helper::currency()}}">
     <!-- navbar-->
     <header class="header">
       <!-- Tob Bar-->
@@ -215,21 +215,35 @@
               <div class="user"> <a id="userdetails" href="customer-login.html" class="user-link"><i class="icon-profile">                   </i></a></div>
               <!-- Cart Dropdown-->
               <div class="cart dropdown show"><a id="cartdetails" href="https://example.com/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="icon-cart"></i>
-                  <div class="cart-no">1</div></a><a href="cart.html" class="text-primary view-cart">View Cart</a>
+                  <div class="cart-no">{{Helper::totalCartItem()}}</div></a><a href="{{route('cart')}}" class="text-primary view-cart">View Cart</a>
+
                 <div aria-labelledby="cartdetails" class="dropdown-menu">
+                  @if(session('cart'))
                   <!-- cart item-->
+                  @foreach(session('cart') as $id => $details)
                   <div class="dropdown-item cart-product">
                     <div class="d-flex align-items-center">
-                      <div class="img"><img src="{{asset('img/hoodie-man-1.png')}}" alt="..." class="img-fluid"></div>
+                      <div class="img"><img src="{{asset($details['thumb'])}}" alt="..." class="img-fluid"></div>
                       <div class="details d-flex justify-content-between">
-                        <div class="text"> <a href="#"><strong>Heather Gray Hoodie</strong></a><small>Quantity: 1 </small><span class="price">$75.00 </span></div><a href="#" class="delete"><i class="fa fa-trash-o"></i></a>
+                        <div class="text"> <a href="#"><strong>{{$details['name']}}</strong></a><small>Quantity: {{$details['quantity']}} </small><span class="price">{{Helper::frontendPrice($details['quantity'] * $details['price'])}} </span></div><a href="{{route('removeFromCart', $id)}}" class="delete"><i class="fa fa-trash-o"></i></a>
                       </div>
                     </div>
                   </div>
+                  @endforeach
                   <!-- total price-->
-                  <div class="dropdown-item total-price d-flex justify-content-between"><span>Total</span><strong class="text-primary">$75.00</strong></div>
+                  <div class="dropdown-item total-price d-flex justify-content-between"><span>Total</span><strong class="text-primary">{{Helper::totalCartPrice()}}</strong></div>
                   <!-- call to actions-->
-                  <div class="dropdown-item CTA d-flex"><a href="cart.html" class="btn btn-template wide">View Cart</a><a href="checkout1.html" class="btn btn-template wide">Checkout</a></div>
+                  <div class="dropdown-item CTA d-flex"><a href="{{route('cart')}}" class="btn btn-template wide">View Cart</a><a href="checkout1.html" class="btn btn-template wide">Checkout</a></div>
+                  @else
+                  <div class="dropdown-item cart-product">
+                    <div class="d-flex align-items-center">
+                      <h2>Cart empty!</h2>
+                    </div>
+                  </div>
+                  @endif
+
+
+
                 </div>
               </div>
             </div>

@@ -19,6 +19,6 @@ class VariationValue extends Model
 
 	public function products()
 	{
-		return $this->belongsToMany(Product::class, 'product_variation_value')->withPivot('price', 'purchase_price', 'sell_price', 'image')->withTimestamps();
+		return $this->belongsToMany(Product::class, 'product_variation_value')->withPivot('price', 'purchase_price', 'sell_price', 'quantity', 'image')->withTimestamps();
 	}
 }

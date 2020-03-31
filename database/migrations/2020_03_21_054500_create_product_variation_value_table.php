@@ -17,6 +17,7 @@ class CreateProductVariationValueTable extends Migration
             $table->id();
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('variation_value_id');
+            $table->decimal('quantity', 20, 2)->nullable()->default(0);
             $table->decimal('price', 20, 2)->nullable();
             $table->decimal('sell_price', 20, 2)->nullable();
             $table->decimal('purchase_price', 20, 2)->nullable();

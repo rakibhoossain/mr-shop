@@ -53,7 +53,7 @@ class Product extends Model
     return 'slug';
   }
 
-  protected $fillable = ['name', 'price', 'brand_id', 'purchase_price', 'alert_quantity', 'description', 'excerpt', 'meta'];
+  protected $fillable = ['name', 'price', 'brand_id', 'sell_price', 'purchase_price', 'quantity', 'alert_quantity', 'description', 'excerpt', 'meta'];
 
   protected $with = ['categories', 'images', 'tags', 'variation_values'];
 
@@ -76,7 +76,7 @@ class Product extends Model
 
   public function variation_values()
   {
-    return $this->belongsToMany(VariationValue::class , 'product_variation_value')->withPivot('price', 'purchase_price', 'sell_price', 'image')->withTimestamps();
+    return $this->belongsToMany(VariationValue::class , 'product_variation_value')->withPivot('price', 'purchase_price', 'sell_price', 'quantity', 'image')->withTimestamps();
   }
 
   public function getIsVariableAttribute()

@@ -83,17 +83,133 @@ $(function () {
     // ------------------------------------------------------- //
     // Increase/Reduce product amount
     // ------------------------------------------------------ //
-    $('.dec-btn').click(function () {
+    var currency = $('body').data('currency');
+    $('.basket-body .btn-dec').click(function () {
         var siblings = $(this).siblings('input.quantity-no');
         if (parseInt(siblings.val(), 10) >= 1) {
-            siblings.val(parseInt(siblings.val(), 10) - 1);
+            var qty = parseInt(siblings.val(), 10) - 1;
+            siblings.val(qty);
+            cartSinglePrice(this, qty);
+        }
+    });
+    $('.basket-body .btn-inc').click(function () {
+        var siblings = $(this).siblings('input.quantity-no');
+        var max = parseFloat($(this).data('max')) || 0;
+
+        if ( parseFloat(siblings.val()) < max ) {
+            var qty = parseInt(siblings.val(), 10) + 1;
+            siblings.val(qty);
+            cartSinglePrice(this, qty);
+        }else{
+            console.log('Max over!');
         }
     });
 
-    $('.inc-btn').click(function () {
-        var siblings = $(this).siblings('input.quantity-no');
-        siblings.val(parseInt(siblings.val(), 10) + 1);
+    $('.basket-body .cart_qty').keyup(function(e) {
+        if(e.keyCode == 17) return;
+        var max = parseFloat($(this).data('max')) || 0;
+        var qty = parseFloat($(this).val()) || 0;
+
+        if ( qty < max ) {
+            cartSinglePrice(this, qty);
+        }else{
+            $(this).val(max)
+            console.log('Max over!');
+        }
     });
+    function cartSinglePrice(el, qty){
+        var price = parseFloat($(el).parents('.item').data('price')) || 0;
+        $(el).parents('.item').find('.cart_price').text( currency +''+(price * qty).toFixed(2) )
+    }
+
+
+
+
+
+    var detail_item_max = parseFloat($('#details').data('max')) || 0;
+    var detail_item_price = ($('#details').data('price'))? parseFloat($('#details').data('price')) || 0 :  parseFloat($('#details').data('sell')) || 0;
+    var detail_item_sell = parseFloat($('#details').data('sell')) || 0;
+    var detail_item_qty = parseFloat($('#quantity').val()) || 0;
+
+
+    //Single
+    $(document).on('click','.details .dec-btn', function () {
+        var siblings = $(this).siblings('input.quantity-no');
+        if (parseInt(siblings.val(), 10) >= 1) {
+            var qty = parseInt(siblings.val(), 10) - 1;
+            siblings.val(qty);
+            detail_item_qty = qty;
+            detailsSinglePrice(this);
+        }
+    });
+
+
+    $(document).on('click','.details .inc-btn', function () {
+        var siblings = $(this).siblings('input.quantity-no');
+        if ( parseFloat(siblings.val()) < detail_item_max ) {
+            var qty = parseInt(siblings.val(), 10) + 1;
+            siblings.val(qty);
+            detail_item_qty = qty;
+            detailsSinglePrice(this);
+        }else{
+            console.log('Max over!');
+        }
+    });
+    $(document).on('keyup','.details #quantity', function (e) {
+        if(e.keyCode == 17) return;
+        var qty = parseFloat($(this).val()) || 0;
+        if ( qty < detail_item_max ) {
+            $(this).val(qty);
+            detail_item_qty = qty;
+            detailsSinglePrice(this);
+        }else{
+            $(this).val(detail_item_max);
+            detail_item_qty = detail_item_max;
+            console.log('Max over!', detail_item_qty);
+        }
+    });
+
+    function detailsSinglePrice(el){
+        $(el).parents('.details').find('.current').text(currency+''+ (detail_item_price * detail_item_qty).toFixed(2) );
+        if(detail_item_sell>0) $(el).parents('.details').find('.original').text(currency+''+ (detail_item_sell * detail_item_qty).toFixed(2));
+    }
+
+
+
+
+
+
+    $(document).on('change', '.details .variation_select', function(){
+        singleProductPriceUpdate(this);
+    })
+
+    function singleProductPriceUpdate(el){
+        var $varient = $(el).find('option:selected');
+        var price = ($varient.data('price'))? parseFloat($varient.data('price')) || 0 : parseFloat($varient.data('sell_price')) || 0;
+        var sell_price = parseFloat($varient.data('sell_price')) || 0;
+        var quantity = parseFloat($varient.data('quantity')) || 0;
+
+        // var currency = $('body').data('currency');
+        // $(el).parents('.details').attr('data-price', price);
+        // $(el).parents('.details').attr('data-sell', sell_price);
+        // $(el).parents('.details').attr('data-max', quantity);
+        detail_item_max = quantity;
+        detail_item_price = price;
+        detail_item_sell = sell_price;
+
+        if(detail_item_qty > detail_item_max){
+          $('#quantity').val(detail_item_max);
+          detail_item_qty = detail_item_max;
+        } 
+
+        $(el).parents('.details').find('.current').text(currency+''+ (detail_item_price * detail_item_qty).toFixed(2) );
+        if(detail_item_sell>0) $(el).parents('.details').find('.original').text(currency+''+ (detail_item_sell * detail_item_qty).toFixed(2));
+    }
+
+
+
+
+
 
     // ------------------------------------------------------- //
     // Scroll to top button

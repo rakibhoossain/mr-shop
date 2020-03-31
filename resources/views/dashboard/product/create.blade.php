@@ -96,12 +96,20 @@
 
               <div class="col-sm-12 col-md-3">
                 <div class="form-group">
+                  <label for="sell_price">Sell Price</label>
+                  <input type="text" class="form-control" id="sell_price" name="sell_price" placeholder="Sell Price">
+                </div>
+                <div class="form-group">
+                  <label for="price">Offer Price</label>
+                  <input type="text" class="form-control" id="price" name="price" placeholder="Offer Price">
+                </div>
+                <div class="form-group">
                   <label for="purchase_price">Purchase Price</label>
                   <input type="text" class="form-control" id="purchase_price" name="purchase_price" placeholder="Purchase Price">
                 </div>
                 <div class="form-group">
-                  <label for="price">Sell Price</label>
-                  <input type="text" class="form-control" id="price" name="price" placeholder="Sell Price">
+                  <label for="quantity">Quantity</label>
+                  <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
                 </div>
                 <div class="form-group">
                   <label for="alert_quantity">Alert Quantity</label>

@@ -29,6 +29,10 @@ Route::get('/shop', 'HomeController@shop')->name('shop');
 Route::match(['get', 'post'], '/filter', 'HomeController@filter')->name('shop.filter');
 Route::get('/product/{product}', 'HomeController@singleProduct')->name('product.single');
 
+Route::get('/cart', 'CartController@index')->name('cart');
+Route::match(['GET', 'POST'], '/add-to-cart/{product}', 'CartController@addToCart')->name('addToCart');
+Route::get('/remove-from-cart/{code}', 'CartController@removeFromCart')->name('removeFromCart');
+
 
 //Dashboard Routes
 Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
