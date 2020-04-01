@@ -6,7 +6,7 @@
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
   <title>{{config('settings.site_name')}} | Dashboard</title>
-  <link rel="shortcut icon" href="{{config('settings.site_favicon')}}">
+  <link rel="shortcut icon" href="{{asset(config('settings.site_favicon'))}}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Font Awesome Icons -->
@@ -169,7 +169,7 @@ to get the desired effect
     <!-- Brand Logo -->
     <a href="{{route('home')}}" class="brand-link">
       @if(config('settings.site_logo'))
-        <img src="{{asset(config('settings.site_logo'))}}" alt="{{config('settings.site_name')}}" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{{asset(config('settings.site_logo'))}}" alt="{{config('settings.site_name')}}" class="brand-image elevation-3" style="opacity: .8">
       @endif
       <span class="brand-text font-weight-light">{{config('settings.site_name')}}</span>
     </a>
@@ -185,7 +185,7 @@ to get the desired effect
           <li class="nav-item">
             <a href="{{route('admin')}}" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>Dashboard<span class="right badge badge-danger">New</span></p>
+              <p>Dashboard</p>
             </a>
           </li>
           <li class="nav-item has-treeview">

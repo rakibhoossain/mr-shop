@@ -20,8 +20,17 @@ class SettingsTableSeeder extends Seeder
 	            'value'                     =>  'E-Commerce',
 	        ],
 	        [
+	            'key'                       =>  'site_tagline',
+	            'value'                     =>  'Awesome E-Commerce Shop',
+	            'type'                     	=>  'textarea',
+	        ],
+	        [
 	            'key'                       =>  'default_email_address',
 	            'value'                     =>  'admin@mail.com',
+	        ],
+	        [
+	            'key'                       =>  'default_phone',
+	            'value'                     =>  '01776217594',
 	        ],
 	        [
 	            'key'                       =>  'site_logo',
@@ -77,12 +86,26 @@ class SettingsTableSeeder extends Seeder
 	        [
 	            'key'                       =>  'seo_meta_title',
 	            'value'                     =>  '',
+	            'type'                     	=>  'textarea',
 	        ],
 	        [
 	            'key'                       =>  'seo_meta_description',
 	            'value'                     =>  '',
+	            'type'                     	=>  'textarea',
 	        ],
 	        [
+	            'key'                       =>  'google_analytics',
+	            'value'                     =>  '',
+	            'type'                     	=>  'textarea',
+	        ],
+	        [
+	            'key'                       =>  'facebook_pixels',
+	            'value'                     =>  '',
+	            'type'                     	=>  'textarea',
+	        ],
+    	],
+    	'social' => [
+	       	[
 	            'key'                       =>  'social_facebook',
 	            'value'                     =>  '',
 	        ],
@@ -93,17 +116,17 @@ class SettingsTableSeeder extends Seeder
 	        [
 	            'key'                       =>  'social_instagram',
 	            'value'                     =>  '',
-	        ],
+	        ],        
 	        [
-	            'key'                       =>  'social_linkedin',
+	            'key'                       =>  'social_pinterest',
 	            'value'                     =>  '',
 	        ],
 	        [
-	            'key'                       =>  'google_analytics',
+	            'key'                       =>  'social_youtube',
 	            'value'                     =>  '',
 	        ],
 	        [
-	            'key'                       =>  'facebook_pixels',
+	            'key'                       =>  'social_vimeo',
 	            'value'                     =>  '',
 	        ],
     	]

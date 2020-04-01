@@ -45,7 +45,7 @@
           <div class="row d-flex align-items-center">
             <div class="col-lg-6 hidden-lg-down text-col">
               <ul class="list-inline">
-                <li class="list-inline-item"><i class="icon-telephone"></i>020-800-456-747</li>
+                <li class="list-inline-item"><i class="icon-telephone"></i><a href="tel:{{config('settings.default_phone')}}">{{config('settings.default_phone')}}</a></li>
                 <li class="list-inline-item">Free shipping on orders over $300</li>
               </ul>
             </div>
@@ -76,7 +76,7 @@
         </div>
         <div class="container-fluid">  
           <!-- Navbar Header  -->
-          <a href="index-2.html" class="navbar-brand">
+          <a href="{{route('home')}}" class="navbar-brand">
           @if(config('settings.site_logo'))
             <img src="{{asset(config('settings.site_logo'))}}" alt="{{config('settings.site_name')}}">
           @else
@@ -300,14 +300,21 @@
         <div class="container">
           <div class="row">
             <div class="info col-lg-4">
-              <div class="logo"><img src="{{asset('img/logo-white.png')}}" alt="..."></div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing.</p>
+              <div class="logo">
+                @if(config('settings.site_logo'))
+                  <img src="{{asset(config('settings.site_logo'))}}" alt="{{config('settings.site_name')}}">
+                @else
+                  <h2>{{config('settings.site_name')}}</h2>
+                @endif
+              </div>
+              <p>{{config('settings.site_tagline')}}</p>
               <ul class="social-menu list-inline">
-                <li class="list-inline-item"><a href="#" target="_blank" title="twitter"><i class="fa fa-twitter"></i></a></li>
-                <li class="list-inline-item"><a href="#" target="_blank" title="facebook"><i class="fa fa-facebook"></i></a></li>
-                <li class="list-inline-item"><a href="#" target="_blank" title="instagram"><i class="fa fa-instagram"></i></a></li>
-                <li class="list-inline-item"><a href="#" target="_blank" title="pinterest"><i class="fa fa-pinterest"></i></a></li>
-                <li class="list-inline-item"><a href="#" target="_blank" title="vimeo"><i class="fa fa-vimeo"></i></a></li>
+                @if(config('settings.social_facebook'))<li class="list-inline-item"><a href="{{config('settings.social_facebook')}}" target="_blank" title="Facebook"><i class="fa fa-facebook"></i></a></li> @endif          
+                @if(config('settings.social_twitter'))<li class="list-inline-item"><a href="{{config('settings.social_twitter')}}" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a></li> @endif
+                @if(config('settings.social_instagram'))<li class="list-inline-item"><a href="{{config('settings.social_instagram')}}" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a></li> @endif
+                @if(config('settings.social_pinterest'))<li class="list-inline-item"><a href="{{config('settings.social_pinterest')}}" target="_blank" title="Pinterest"><i class="fa fa-pinterest"></i></a></li> @endif
+                @if(config('settings.social_vimeo'))<li class="list-inline-item"><a href="{{config('settings.social_vimeo')}}" target="_blank" title="vimeo"><i class="fa fa-vimeo"></i></a></li> @endif
+                @if(config('settings.social_youtube'))<li class="list-inline-item"><a href="{{config('settings.social_youtube')}}" target="_blank" title="Youtube"><i class="fa fa-youtube"></i></a></li> @endif
               </ul>
             </div>
             <div class="site-links col-lg-2 col-md-6">
@@ -347,7 +354,7 @@
         <div class="container">
           <div class="row d-flex align-items-center">
             <div class="text col-md-6">
-              <p>&copy; 2020 <a href="https://bootstrapious.com/" target="_blank">Bootstrapious</a> All rights reserved.</p>
+              {!!config('settings.footer_copyright_text')!!}
             </div>
             <div class="payment col-md-6 clearfix">
               <ul class="payment-list list-inline-item pull-right">

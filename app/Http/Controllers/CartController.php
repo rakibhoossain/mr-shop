@@ -69,6 +69,25 @@ class CartController extends Controller
         return back();
     }
 
+
+    public function cartUpdate(Request $request)
+    {
+        if($request->carts){
+            $cart = session()->get('cart');
+            foreach($request->carts as $id => $quantity){
+                if(isset($cart[$id])) {
+                    $cart[$id]['quantity'] = $quantity;
+                    session()->put('cart', $cart);
+                }
+            }
+        }
+        return back();
+    }
+
+
+
+
+
     //Remove from cart
     public function removeFromCart($code)
     {

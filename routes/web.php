@@ -29,9 +29,11 @@ Route::get('/shop', 'HomeController@shop')->name('shop');
 Route::match(['get', 'post'], '/filter', 'HomeController@filter')->name('shop.filter');
 Route::get('/product/{product}', 'HomeController@singleProduct')->name('product.single');
 
-Route::get('/cart', 'CartController@index')->name('cart');
+Route::get('/cart', ['middleware' => 'cart', 'uses' => 'CartController@index'] )->name('cart');
+
 Route::match(['GET', 'POST'], '/add-to-cart/{product}', 'CartController@addToCart')->name('addToCart');
 Route::get('/remove-from-cart/{code}', 'CartController@removeFromCart')->name('removeFromCart');
+Route::post('/cart-update', 'CartController@cartUpdate')->name('cartUpdate');
 
 
 //Dashboard Routes

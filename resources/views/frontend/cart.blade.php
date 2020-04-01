@@ -18,6 +18,8 @@
     </section>
     <!-- Shopping Cart Section-->
     <section class="shopping-cart">
+      <form action="{{route('cartUpdate')}}" method="POST">
+      @csrf
       <div class="container">
         <div class="basket">
           <div class="basket-holder">
@@ -67,8 +69,9 @@
         </div>
       </div>
       <div class="container">
-        <div class="CTAs d-flex align-items-center justify-content-center justify-content-md-end flex-column flex-md-row"><a href="{{route('shop')}}" class="btn btn-template-outlined wide">Continue Shopping</a><a href="#" class="btn btn-template wide">Update Cart</a></div>
+        <div class="CTAs d-flex align-items-center justify-content-center justify-content-md-end flex-column flex-md-row"><a href="{{route('shop')}}" class="btn btn-template-outlined wide">Continue Shopping</a><button type="submit" class="btn btn-template wide" style="margin-bottom: 10px; margin-left: 5px;">Update Cart</button></div>
       </div>
+      </form>
     </section>
     <!-- Order Details Section-->
     <section class="order-details no-padding-top"> 

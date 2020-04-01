@@ -34,7 +34,7 @@
                 <ul class="nav nav-pills flex-column" id="settingsTab" role="tablist">
                   @foreach($setting_groups as $group => $settings)
                   <li class="nav-item">
-                    <a class="nav-link @if($loop->index == 0) active @endif" id="{{$group}}-tab" data-toggle="tab" href="#{{$group}}" role="tab" aria-controls="{{$group}}" aria-selected="false">{{Str::title(str_replace('_', ' ', $group))}}</a>
+                    <a class="nav-link @if($loop->index == 0) active @endif" id="{{$group}}-tab" data-toggle="tab" href="#{{$group}}" role="tab" aria-controls="{{$group}}" aria-selected="false">{{Str::title(str_replace('_', ' ', $group))}} Settings</a>
                   </li>
                   @endforeach
                 </ul>
