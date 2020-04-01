@@ -2480,6 +2480,12 @@ section.product-description .tab-content {
   padding: 20px 0;
 }
 
+section.product-description .tab-content #description {
+  clear: both;
+  overflow: hidden;
+  position: relative;
+}
+
 section.product-description .tab-pane p {
   color: #666;
   line-height: 1.8em;

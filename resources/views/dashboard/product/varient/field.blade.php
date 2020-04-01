@@ -3,6 +3,7 @@
   <td><input type="text" name="varient_purchase_prices[{{$value->variation_id}}][{{$value->id}}]" class="form-control" value=""></td>
   <td><input type="text" name="varient_sell_prices[{{$value->variation_id}}][{{$value->id}}]" class="form-control" value=""></td>
   <td><input type="text" name="varient_prices[{{$value->variation_id}}][{{$value->id}}]" class="form-control" value=""></td>
+  <td><input type="text" name="varient_quantities[{{$value->variation_id}}][{{$value->id}}]" class="form-control" value="0"></td>
   <td>
     <label>
       <input type="file" data-id="{{$value->id}}" class="varient_image_btn">

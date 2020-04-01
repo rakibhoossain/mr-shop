@@ -33,9 +33,6 @@ class ProductController extends Controller
             ->orWhereHas('brand', function($q) use($search_string){
                 $q->where('name', 'like', '%'.$search_string.'%' );
             });
-            // ->orWhereHas('sizes', function($q) use($search_string){
-            //     $q->where('name', 'like', '%'.$search_string.'%' );
-            // });
         }
         $products = $products->latest()->paginate(20);
         if($products){
@@ -43,6 +40,15 @@ class ProductController extends Controller
         }else{
             dd();
         }
+
+
+
+
+
+    }
+
+    public function collection(){
+        return 'oh';
     }
 
     /**
@@ -138,6 +144,7 @@ class ProductController extends Controller
                                 'sell_price' => $sell_price,
                                 'purchase_price' => $purchase_price,
                                 'purchase_price' => $purchase_price,
+                                'quantity' => $request->varient_quantities[$k][$id],
                                 'image' => $varient_image,
                             ]);
                         }
@@ -170,7 +177,10 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $varients = $product->variation_values()->get()->groupBy(function($d) {
+            return $d->variation->id;
+        });
+        return view('dashboard.product.edit', compact('product', 'varients'));
     }
 
     /**
@@ -182,7 +192,97 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+
+
+        try {
+            $input = $request->except(['description', 'meta']);
+            $keys = $request->keys;
+            $values = $request->values;
+            if ($keys && $values) {
+                $data = [];
+                foreach($keys as $k => $key){
+                    if(is_null($key) || is_null($values[$k]) ) continue;
+                    array_push($data, ['key' => $key, 'value' => $values[$k]]);
+                }
+                if(count($data)) $input['meta'] = json_encode(compact('data'));
+            }
+            //Product Description
+            if($request->description){
+                $input['description'] = $this->productDetail($request->input('description'));
+            }
+            if($product->update($input)){
+                if($request->images){
+                    $image_ids = $this->uploadProductImages($request->images);
+                    if(count($image_ids)) $product->images()->attach($image_ids);
+                }
+                if($request->image_dels){
+                    $this->deleteProductImages($request->image_dels, $product);
+                }  
+                if($request->categories){
+                    $product->categories()->detach(); //Delete old categories
+                    $product->categories()->attach($request->categories);
+                }
+                if($product->tags){
+                    $product->tags()->detach(); //Delete old tags
+                    $product->tags()->attach($request->tags);
+                }
+                
+                $product->variation_values()->detach(); //Delete old variations
+
+                if($request->variations){
+                    foreach($request->variations as $k => $variation){
+                        foreach($variation as $id){
+                            $purchase_price = $request->varient_purchase_prices[$k][$id];
+                            $sell_price = $request->varient_sell_prices[$k][$id];
+                            $offer_price = $request->varient_prices[$k][$id];
+
+                            $image = $request->varient_images[$k][$id];
+                            $varient_image = ($image)? $this->uploadVarientImages($image) : $request->v_img_old[$k][$id];
+
+                            $product->variation_values()->attach($id, [
+                                'price' => $offer_price,
+                                'sell_price' => $sell_price,
+                                'purchase_price' => $purchase_price,
+                                'purchase_price' => $purchase_price,
+                                'quantity' => $request->varient_quantities[$k][$id],
+                                'image' => $varient_image,
+                            ]);
+                        }
+                    }
+                }
+                return back();
+            }else{
+                throw new \Exception('Invalid action!');
+            }
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**
@@ -257,5 +357,10 @@ class ProductController extends Controller
             Storage::disk('public')->put($lg_image_location, $data);
             return 'storage/'.$lg_image_location;
         }
+    }
+
+    private function deleteProductImages($ids, $product){
+        $images = $product->images()->whereIN('images.id', (array)$ids)->get();
+        $product->images()->detach($images);
     }
 }

@@ -1,5 +1,5 @@
 <tr>
-  <td colspan="6">
+  <td colspan="7">
     <select class="form-control" data-url="{{route('admin.varient.field')}}" id="varient_select">
     <option value="">Select varient</option>
     @foreach($variation->values as $value)

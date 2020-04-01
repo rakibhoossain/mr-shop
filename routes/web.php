@@ -43,14 +43,17 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
         Route::post('/request/fields', 'ProductController@varientField')->name('admin.varient.field');
         
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
-	    // Route::resource('/size', 'SizeController', ['as' => 'admin.product']);
+	    Route::resource('/category', 'ProductCategoryController', ['as' => 'admin.product']);
     });   
 
     Route::resource('/category', 'CategoryController', ['as' => 'admin']);
-    Route::resource('/image', 'ImageController', ['as' => 'admin']); 
+    Route::resource('/image', 'ImageController', ['as' => 'admin']);
 
     Route::prefix('/post')->group(function () {
 	    Route::resource('/post', 'PostController', ['as' => 'admin']);
     });
+
+
+    Route::resource('/settings', 'SettingController', ['as' => 'admin', 'only' => ['index', 'store']],);
 
 });

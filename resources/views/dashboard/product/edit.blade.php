@@ -7,7 +7,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{{route('admin')}}">Home</a></li>
-          <li class="breadcrumb-item active">Product Create</li>
+          <li class="breadcrumb-item active">Product Edit</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -20,27 +20,28 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <form role="form" action="{{route('admin.product.store')}}" method="POST"  enctype="multipart/form-data" id="product_form">
+          <form role="form" action="{{route('admin.product.update', $product->slug)}}" method="POST"  enctype="multipart/form-data" id="product_form">
+          @method('PUT')
           {{csrf_field()}}
           <div class="card-header">
-            <h3 class="card-title">Create Product</h3>
+            <h3 class="card-title">Edit Product</h3>
             <div class="card-tools">
-              <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Publish</button>
+              <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Update</button>
             </div>
           </div>
             <div class="card-body row">
               <div class="col-sm-12 col-md-9">
                 <div class="form-group">
                   <label for="name">Product name</label>
-                  <input type="text" class="form-control" id="name" name="name" placeholder="Product name" required>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Product name" required value="{{$product->name}}">
                 </div>
                 <div class="form-group">
                   <label for="description">Product Description</label>
-                  <textarea class="form-control textarea summernote" id="description" name="description" placeholder="Product Description ..."></textarea>
+                  <textarea class="form-control textarea summernote" id="description" name="description" placeholder="Product Description ...">{!!$product->description!!}</textarea>
                 </div>
                 <div class="form-group">
                   <label for="excerpt">Excerpt</label>
-                  <textarea class="form-control" id="excerpt" name="excerpt" placeholder="Excerpt ..."></textarea>
+                  <textarea class="form-control" id="excerpt" name="excerpt" placeholder="Excerpt ...">{{$product->excerpt}}</textarea>
                 </div>
 
                 <div class="card">
@@ -72,6 +73,21 @@
                               <input type="text" class="form-control value" name="values[]" id="additional_info_value">
                             </td>
                           </tr>
+                          @if($product->meta)
+                            @foreach(json_decode($product->meta)->data as $data)
+                              <tr>
+                                <td>
+                                  <input type="checkbox" class="checkbox" name="record">
+                                </td>
+                                <td class="editMe">
+                                  <input type="text" class="form-control Key" name="keys[]" value="{{$data->key}}">
+                                </td>
+                                <td class="editMe">
+                                  <input type="text" class="form-control value" name="values[]" value="{{$data->value}}">
+                                </td>
+                              </tr>
+                            @endforeach
+                          @endif
                         </tbody>
                       </table>
                       <div class="text-right">
@@ -92,15 +108,84 @@
                     <div>
                       <h3 class="card-title">Product Type</h3>
                     </div>
-
-                     <select class="form-control col-md-3" id="product_add_varient" data-url="{{route('admin.varient.field')}}">
-                        <option value="single">Single</option>
-                        <option value="varient">Varient</option>
+                     <select class="form-control col-md-3" name="product_type" id="product_add_varient" data-url="{{route('admin.varient.field')}}">
+                        <option value="single" @if(!$product->is_variable) selected @endif >Single</option>
+                        <option value="varient" @if($product->is_variable) selected @endif >Varient</option>
                       </select>                       
-
                   </div>
                   <!-- /.card-header -->
-                  <div class="card-body" id="varient_field_area"></div>
+                  <div class="card-body" id="varient_field_area">
+                  @if($product->is_variable)                  
+                  <div class="table-responsive varient_table">
+                    <table class="table table-bordered table-striped table-condensed">
+                      <thead>
+                        <tr>
+                          <th>Variation</th>
+                          <th class="responsive d-flex justify-content-between align-items-center">Variation Values </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @foreach($varients as $k => $varientcollection)
+                        <tr>
+                          <td class="varient_title">
+                            <select class="form-control" id="variation_selection"  data-url="{{route('admin.varient.field')}}">
+                              <option value="">Select</option>
+                              @foreach(App\Variation::latest()->get() as $variation)
+                              <option value="{{$variation->id}}" @if($variation->id == $k) selected @endif >{{$variation->name}}</option>
+                              @endforeach
+                            </select>
+                          </td>
+                          <td>
+                            <table class="table table-bordered table-striped table-condensed-inner">
+                              <thead>
+                                <tr>
+                                  <th>Name</th>
+                                  <th>Purchase Price</th>
+                                  <th>Sell Price</th>
+                                  <th>Offer Price</th>
+                                  <th>Quantity</th>
+                                  <th>Image</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody id="variation_selection_body">
+                              <tr>
+                                <td colspan="7">
+                                  <select class="form-control" data-url="{{route('admin.varient.field')}}" id="varient_select">
+                                  <option value="">Select varient</option>
+                                  @foreach(App\Variation::find($k)->values as $value)
+                                  <option @if($value->type == 'color') style="color: {{$value->data}}" @endif value="{{$value->id}}" ><b>{{$value->name}}</b></option>
+                                  @endforeach
+                                  </select>
+                                </td>
+                              </tr>
+                              @foreach($product->variation_values as $v_value)
+                              <tr class="varient_row" data-id="{{$v_value->id}}">
+                                <td @if($v_value->type == 'color') style="color: {{$v_value->data}}" @endif ><input type="hidden" name="variations[{{$v_value->variation_id}}][{{$v_value->id}}]" value="{{$v_value->id}}"><b>{{$v_value->name}}</b></td>
+                                <td><input type="text" name="varient_purchase_prices[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control" value="{{$v_value->pivot->purchase_price}}"></td>
+                                <td><input type="text" name="varient_sell_prices[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control" value="{{$v_value->pivot->sell_price}}"></td>
+                                <td><input type="text" name="varient_prices[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control" value="{{$v_value->pivot->price}}"></td>
+                                <td><input type="text" name="varient_quantities[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control" value="{{$v_value->pivot->quantity}}"></td>
+                                <td>
+                                  <label>
+                                    <input type="hidden" name="v_img_old[{{$v_value->variation_id}}][{{$v_value->id}}]" value="{{$v_value->pivot->image}}">
+                                    <input type="file" data-id="{{$v_value->id}}" class="varient_image_btn">
+                                  <img @if($v_value->pivot->image) src="{{asset($v_value->pivot->image)}}" @else src="{{asset('img/thumb_icon.png')}}" @endif id="varient_image_preview_{{$v_value->id}}" width="50" height="50">
+                                  </label>
+                                  <input type="hidden" id="varient_image_{{$v_value->id}}" name="varient_images[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control varient_image_input"></td>
+                                <td><a href="#" class="btn btn-danger btn-sm remove_varient">Remove</a></td>
+                              </tr>
+                              @endforeach
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                        @endforeach
+                      </tbody>
+                    </table>
+                  </div>
+                  @endif
+                  </div>
                   <!-- /.card-body -->
                 </div>
                 <!-- /.card -->
@@ -110,30 +195,30 @@
               <div class="col-sm-12 col-md-3">
                 <div class="form-group">
                   <label for="sell_price">Sell Price</label>
-                  <input type="text" class="form-control" id="sell_price" name="sell_price" placeholder="Sell Price">
+                  <input type="text" class="form-control" id="sell_price" name="sell_price" placeholder="Sell Price" value="{{$product->sell_price}}">
                 </div>
                 <div class="form-group">
                   <label for="price">Offer Price</label>
-                  <input type="text" class="form-control" id="price" name="price" placeholder="Offer Price">
+                  <input type="text" class="form-control" id="price" name="price" placeholder="Offer Price" value="{{$product->price}}">
                 </div>
                 <div class="form-group">
                   <label for="purchase_price">Purchase Price</label>
-                  <input type="text" class="form-control" id="purchase_price" name="purchase_price" placeholder="Purchase Price">
+                  <input type="text" class="form-control" id="purchase_price" name="purchase_price" placeholder="Purchase Price" value="{{$product->purchase_price}}">
                 </div>
                 <div class="form-group">
                   <label for="quantity">Quantity</label>
-                  <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity">
+                  <input type="text" class="form-control" id="quantity" name="quantity" placeholder="Quantity" value="{{$product->quantity}}">
                 </div>
                 <div class="form-group">
                   <label for="alert_quantity">Alert Quantity</label>
-                  <input type="text" class="form-control" id="alert_quantity" name="alert_quantity" placeholder="Alert Quantity">
+                  <input type="text" class="form-control" id="alert_quantity" name="alert_quantity" placeholder="Alert Quantity" value="{{$product->alert_quantity}}">
                 </div>
                 <div class="form-group">
                   <label for="brand_id">Brand</label>
                   <select class="form-control select2" id="brand_id" name="brand_id" style="width: 100%" data-placeholder="Select a Brand">
                     <option value="" hidden>Select a Brand</option>
                     @foreach(App\Brand::latest()->get() as $brand)
-                    <option value="{{$brand->id}}">{{$brand->name}}</option>
+                    <option value="{{$brand->id}}" @if( $product->brand_id && ($product->brand_id == $brand->id) ) selected @endif >{{$brand->name}}</option>
                     @endforeach
                   </select>
                 </div>
@@ -144,11 +229,11 @@
                       @if(count($category->children))
                         <optgroup label="{{$category->name}}">
                         @foreach($category->children as $child_cat)
-                          <option value="{{$child_cat->id}}">{{$child_cat->name}}</option>
+                          <option value="{{$child_cat->id}}" @if( in_array( $child_cat->id, $product->categories->pluck('id')->toArray() ) ) selected @endif >{{$child_cat->name}}</option>
                         @endforeach
                         </optgroup>
                       @else
-                        <option value="{{$category->id}}">{{$category->name}}</option>
+                        <option value="{{$category->id}}" @if( in_array( $category->id, $product->categories->pluck('id')->toArray() ) ) selected @endif >{{$category->name}}</option>
                       @endif
                     @endforeach
                   </select>
@@ -157,7 +242,7 @@
                   <label for="tag_ids">Tags</label>
                   <select class="form-control select2" id="tag_ids" name="tags[]" multiple style="width: 100%" data-placeholder="Select Tags">
                     @foreach(App\ProductTag::latest()->get() as $tag)
-                    <option value="{{$tag->id}}">{{$tag->name}}</option>
+                    <option value="{{$tag->id}}" @if( in_array( $tag->id, $product->tags->pluck('id')->toArray() ) ) selected @endif >{{$tag->name}}</option>
                     @endforeach
                   </select>
                 </div>
@@ -171,7 +256,14 @@
                   </div>
                 </div>
                 <!-- Image crop -->
-                <div id="images"></div>
+                <div id="images">
+                  @foreach($product->images as $image)
+                  <div class='preview_single'>
+                  <img src="{{asset($image->image)}}" width="100" height="100">
+                  <div class="remove_img" data-id="{{$image->id}}"><i class="fas fa-trash"></i></div>
+                  </div>
+                  @endforeach
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -335,6 +427,12 @@ $(document).ready(function () {
 
   $(document).on('click', '.remove_img', function() {
     $(this).parent('.preview_single').remove();
+    var id = $(this).data('id');
+    if(id){
+      $('#images').append(`
+        <input type="hidden" name="image_dels[]" value="${id}">
+      `);
+    }
   })
 
   $(document).on('click', '#varient_crop', function(e) {

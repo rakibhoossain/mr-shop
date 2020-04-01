@@ -1,0 +1,2 @@
+<label class="control-label" for="{{$setting->key}}">{{Str::title(str_replace('_', ' ', $setting->key))}}</label>
+<input class="form-control" type="text" placeholder="Enter {{Str::title(str_replace('_', ' ', $setting->key))}}" id="{{$setting->key}}" name="{{$setting->key}}" value="{{ config('settings.'.$setting->key) }}"/>

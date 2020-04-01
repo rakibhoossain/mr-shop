@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Hub - Bootstrap 4 Ecommerce Template</title>
+    <title>{{config('settings.site_name')}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -29,7 +29,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/favicon.ico">
+    <link rel="shortcut icon" href="{{config('settings.site_favicon')}}">
     <!-- Modernizr-->
     <script src="{{asset('js/modernizr.custom.79639.js')}}"></script>
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -75,7 +75,14 @@
           </div>
         </div>
         <div class="container-fluid">  
-          <!-- Navbar Header  --><a href="index-2.html" class="navbar-brand"><img src="{{asset('img/logo.png')}}" alt="..."></a>
+          <!-- Navbar Header  -->
+          <a href="index-2.html" class="navbar-brand">
+          @if(config('settings.site_logo'))
+            <img src="{{config('settings.site_logo')}}" alt="{{config('settings.site_name')}}">
+          @else
+            <h2>{{config('settings.site_name')}}</h2>
+          @endif
+          </a>
           <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler navbar-toggler-right"><i class="fa fa-bars"></i></button>
           <!-- Navbar Collapse -->
           <div id="navbarCollapse" class="collapse navbar-collapse">

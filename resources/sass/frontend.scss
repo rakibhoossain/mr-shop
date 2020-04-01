@@ -2039,6 +2039,11 @@ section {
   &.product-description {
     .tab-content {
       padding: 20px 0;
+      #description{
+        clear: both;
+        overflow: hidden;
+        position:relative;
+      }
     }
 
     .tab-pane p {

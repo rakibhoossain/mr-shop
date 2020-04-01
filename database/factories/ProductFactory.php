@@ -22,6 +22,7 @@ $factory->define(Product::class, function (Faker $faker) {
         },
         'brand_id' => function () {
             return Brand::all()->random();
-        }
+        },
+        'quantity' => rand(0, 10)
     ];
 });

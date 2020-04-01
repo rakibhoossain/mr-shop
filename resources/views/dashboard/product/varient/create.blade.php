@@ -25,6 +25,7 @@
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
                 <th>Offer Price</th>
+                <th>Quantity</th>
                 <th>Image</th>
                 <th>Action</th>
               </tr>
