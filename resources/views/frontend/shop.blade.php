@@ -71,34 +71,13 @@
              @if(!empty($_GET['varient'])) @php $filter_varient = explode(',', $_GET['varient']); @endphp @endif
             @foreach(App\Variation::has('variation_values')->get() as $variation)
             <div class="block"> 
-              
-                <h6 class="text-uppercase">{{$variation->name}}</h6>
-                @foreach($variation->values()->has('products')->get() as $value)
-                <div class="form-group mb-1">
-                  <input id="{{$value->name}}{{$loop->index}}" type="checkbox" name="varient[]" value="{{$value->id}}" @if(!empty($filter_varient) && in_array($value->id, $filter_varient)) checked @endif onchange="this.form.submit();" class="checkbox-template">
-                  <label for="{{$value->name}}{{$loop->index}}">{{$value->name}} <small>({{$value->products()->count()}})</small></label>
-                </div>
-                @endforeach
-              
-
-
-              <!-- <form action="#">   -->
-
-{{--
-
-
-                  <input id="{{$value->name}}{{$loop->index}}" type="radio" name="{{$variation->slug}}" value="{{$value->id}}" class="radio-template">
-                  <label for="{{$value->name}}{{$loop->index}}">{{$value->name}}</label>
-
-                @foreach($sizes as $size)
-                <div class="form-group mb-1">
-                  <input id="{{$value->name}}{{$loop->index}}" type="radio" name="size" value="{{$size->slug}}" @if( !empty($_GET['size']) && $_GET['size'] == $size->slug ) checked @endif  onchange="this.form.submit();" class="radio-template">
-                  <label for="{{$value->name}}{{$loop->index}}">{{$size->name}}</label>
-                </div>
-                @endforeach
---}}
-
-              <!-- </form> -->
+              <h6 class="text-uppercase">{{$variation->name}}</h6>
+              @foreach($variation->values()->has('products')->get() as $value)
+              <div class="form-group mb-1">
+                <input id="{{$value->name}}{{$loop->index}}" type="checkbox" name="varient[]" value="{{$value->id}}" @if(!empty($filter_varient) && in_array($value->id, $filter_varient)) checked @endif onchange="this.form.submit();" class="checkbox-template">
+                <label for="{{$value->name}}{{$loop->index}}">{{$value->name}} <small>({{$value->products()->count()}})</small></label>
+              </div>
+              @endforeach
             </div>
             @endforeach
           </div>

@@ -27,10 +27,22 @@
               @foreach($product->images as $image)
               <div class="item"><img src="{{asset($image->image)}}" alt="{{$product->name}}"></div>
               @endforeach
+              
+              @foreach($varients as $k => $varientcollection)
+                @foreach($varientcollection as $varient)
+                  @if($varient->pivot->image) <div class="item"><img src="{{asset($varient->pivot->image)}}" alt="{{$product->name}}"></div> @endif
+                @endforeach
+              @endforeach
             </div>
             <div data-slider-id="1" class="owl-thumbs">
               @foreach($product->images as $image)
-              <button class="owl-thumb-item"><img src="{{asset($image->image)}}" alt="{{$product->name}}"></button>
+              <button class="owl-thumb-item init-thumb-{{$loop->index}}"><img src="{{asset($image->image)}}" alt="{{$product->name}}"></button>
+              @endforeach
+
+              @foreach($varients as $k => $varientcollection)
+                @foreach($varientcollection as $varient)
+                  @if($varient->pivot->image) <button class="owl-thumb-item thumb-varient-{{$varient->id}}"><img src="{{asset($varient->pivot->image)}}" alt="{{$product->name}}"></button> @endif
+                @endforeach
               @endforeach
             </div>
           </div>
@@ -76,10 +88,7 @@
               <ul class="CTAs list-inline">
                 <li class="list-inline-item">
                   <button type="submit" class="btn btn-template wide"><i class="icon-cart"></i>Add to Cart</button>
-                  <!-- <a href="#"> </a> -->
-
                 </li>
-                <li class="list-inline-item"><a href="#" class="btn btn-template-outlined wide"> <i class="fa fa-heart-o"></i>Add to wishlist</a></li>
               </ul>
             </form>
           </div>
@@ -177,8 +186,6 @@
           <h2><small>Similar Items</small>You may also like</h2>
         </header>
         <div class="row">
-
-
           @foreach($relatedProducts as $product)
           <div class="item col-lg-3">
             <div class="product is-gray">
@@ -187,7 +194,13 @@
                   <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid">
                 @endif
                 <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
+                  <div class="CTA d-flex align-items-center justify-content-center">
+                    @if(!$product->is_variable)
+                    <a href="{{route('addToCart', $product->slug)}}" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a>
+                    @endif
+                    <a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a>
+                    <a href="#" data-url="{{route('product.single', $product->slug)}}" class="quick-view product_popup"><i class="fa fa-arrows-alt"></i></a>
+                  </div>
                 </div>
               </div>
               <div class="title"><a href="{{route('product.single', $product->slug)}}">
@@ -195,9 +208,6 @@
             </div>
           </div>
           @endforeach
-
-
-
         </div>
       </div>
     </section>

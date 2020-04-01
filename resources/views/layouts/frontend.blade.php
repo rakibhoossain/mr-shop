@@ -397,22 +397,7 @@
           });
       })
 
-      $(document).ready(function(){
-        $('body').on('click', '.product_popup', function(e){
-          e.preventDefault();
-          let url = $(this).data('url');
-          $.ajax({
-            type: 'GET',
-            url,
-            success: function(response){
-              if (response.success) {
-                $('#productPopupModal .modal-body').html(response.html);
-                $('#productPopupModal').modal('show');                
-              }
-            }
-          })
-        })
-      })
+
       
       
     </script>
