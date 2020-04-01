@@ -214,6 +214,27 @@ $(document).ready(function () {
     $(this).parents('.preview_single').find('img').attr('src', dummy_img);
     $(this).parents('.preview_single').find('.image_input').val('del');
   })
+
+  $('textarea.wysiwyg').summernote({
+    height: 150,
+    toolbar: [
+      // [groupName, [list of button]]
+      ['style', ['bold', 'italic', 'underline', 'clear']],
+      ['font', ['strikethrough', 'superscript', 'subscript']],
+      ['fontsize', ['fontsize']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['insert', ['link']],
+      ['height', ['height']],
+      ['view', ['fullscreen', 'codeview', 'help']],
+    ],
+    codemirror: {
+      mode: 'text/html',
+      htmlMode: true,
+      lineNumbers: true,
+      theme: 'monokai'
+    }
+  });
   
 })
 </script>

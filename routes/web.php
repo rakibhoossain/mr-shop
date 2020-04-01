@@ -44,6 +44,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
         
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
 	    Route::resource('/category', 'ProductCategoryController', ['as' => 'admin.product']);
+        Route::get('/stocks', 'ProductController@stocks')->name('admin.stocks');
     });   
 
     Route::resource('/category', 'CategoryController', ['as' => 'admin']);

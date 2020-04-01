@@ -35,7 +35,7 @@ class SettingsTableSeeder extends Seeder
 	        ],
 	        [
 	            'key'                       =>  'footer_copyright_text',
-	            'value'                     =>  'Develop by Rakib Hossain',
+	            'value'                     =>  '<span style="font-weight: bolder; color: rgb(134, 144, 153);">Copyright © 2019-2020&nbsp;<a href="#">Mr. Shop</a>.</span><span style="color: rgb(134, 144, 153);">&nbsp;All rights reserved.</span>',
 	            'type'						=> 	'wysiwyg',
 	        ],
     	],

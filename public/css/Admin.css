@@ -20171,6 +20171,15 @@ html.maximized-card {
   padding-right: 1.5rem;
 }
 
+.tbl_btns {
+  justify-content: space-between;
+}
+
+.tbl_btns a {
+  background: #c2c7d04a;
+  padding: 3px;
+}
+
 .carousel-control.left,
 .carousel-control.right {
   background-image: none;

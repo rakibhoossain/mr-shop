@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/products', 'ProductController@collection')->name('api.product.collection');
+Route::get('/stocks', 'ProductController@stockCollection')->name('api.stock.collection');

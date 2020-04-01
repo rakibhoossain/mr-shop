@@ -9,6 +9,7 @@ use App\Image as ImageModel;
 use Illuminate\Http\Request;
 use Storage;
 use Image;
+use App\Http\Resources\ProductResource;
 
 class ProductController extends Controller
 {
@@ -19,10 +20,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-
-
-
-
         $products = Product::query();
         if($request->search){
             $search_string = $request->search;
@@ -40,15 +37,55 @@ class ProductController extends Controller
         }else{
             dd();
         }
-
-
-
-
-
     }
 
     public function collection(){
-        return 'oh';
+        return ProductResource::collection(Product::latest()->get());
+    }
+    public function stockCollection(){
+        $data = [];
+        $products = Product::latest()->get();
+
+        foreach($products as $product){
+            $brand = ($product->brand)? $product->brand->name : '';
+            $image = ($product->image)? "<img src='".asset($product->image)."' width='50' height='50'>" : '';
+            $item =  [
+                'code' => $product->code,
+                'name' => $product->name,
+                'image' => $image,
+                'purchase_price' => $product->purchase_price,
+                'sell_price' => $product->sell_price,
+                'offer_price' => $product->price,
+                'categories' => $product->categories->implode('name', ', '),
+                'brand' => $brand,
+                'type' => $product->type,
+                'quantity' => $product->quantity,
+                'created_at' => \Carbon\Carbon::parse($product->created_at)->timestamp,
+            ];
+            array_push($data, $item);
+            foreach ($product->variation_values as $value) {
+                $v_image = ($value->pivot->image)? "<img src='".asset($value->pivot->image)."' width='50' height='50'>" : $image;
+                $v_item =  [
+                    'code' => $product->code.'-'.$value->id,
+                    'name' => $product->name.' ('.$value->name.')',
+                    'image' => $v_image,
+                    'purchase_price' => ($value->pivot->purchase_price > 0)? $value->pivot->purchase_price : $product->purchase_price,
+                    'sell_price' => ($value->pivot->sell_price > 0)? $value->pivot->sell_price : $product->sell_price,
+                    'offer_price' => ($value->pivot->price > 0)? $value->pivot->price : $product->price,
+                    'categories' => $product->categories->implode('name', ', '),
+                    'brand' => $brand,
+                    'type' => $product->type,
+                    'quantity' => $value->pivot->quantity,
+                    'created_at' => \Carbon\Carbon::parse($product->created_at)->timestamp,
+                ];
+                array_push($data, $v_item);
+            }
+        }
+
+        return response()->json(['data' => $data]);
+    }
+    public function stocks(){
+        return view('dashboard.product.stocks');
     }
 
     /**
@@ -192,8 +229,6 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-
-
         try {
             $input = $request->except(['description', 'meta']);
             $keys = $request->keys;
@@ -293,7 +328,17 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        if($product->delete()){
+            return response()->json([
+                'success' => true,
+                'message' => 'Product moved to trash!'
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 
 

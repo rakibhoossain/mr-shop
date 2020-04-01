@@ -29,7 +29,7 @@
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="{{asset('css/custom.css')}}">
     <!-- Favicon-->
-    <link rel="shortcut icon" href="{{config('settings.site_favicon')}}">
+    <link rel="shortcut icon" href="{{asset(config('settings.site_favicon'))}}">
     <!-- Modernizr-->
     <script src="{{asset('js/modernizr.custom.79639.js')}}"></script>
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
@@ -78,7 +78,7 @@
           <!-- Navbar Header  -->
           <a href="index-2.html" class="navbar-brand">
           @if(config('settings.site_logo'))
-            <img src="{{config('settings.site_logo')}}" alt="{{config('settings.site_name')}}">
+            <img src="{{asset(config('settings.site_logo'))}}" alt="{{config('settings.site_name')}}">
           @else
             <h2>{{config('settings.site_name')}}</h2>
           @endif
