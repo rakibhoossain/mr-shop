@@ -19,8 +19,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-// Route::get('/products', 'ProductController@collection')->name('api.product.collection');
-// Route::get('/stocks', 'ProductController@stockCollection')->name('api.stock.collection');
+// Route::get('/products', ['middleware' => 'auth:admin-api', 'uses' => 'ProductController@collection'] )->name('api.product.collection');
+// Route::get('/stocks', ['middleware' => 'auth:admin-api', 'uses' => 'ProductController@stockCollection'] )->name('api.stock.collection');
 
-// Route::get('/users', 'UserController@collection')->name('api.user.collection');
-// Route::get('/admins', 'AdminController@collection')->name('api.admin.collection');
+// Route::get('/users', ['middleware' => 'auth:admin-api', 'uses' => 'UserController@collection'] )->name('api.user.collection');
+// Route::get('/admins', ['middleware' => 'auth:admin-api', 'uses' => 'AdminController@collection'] )->name('api.admin.collection');

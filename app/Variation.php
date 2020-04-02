@@ -26,6 +26,18 @@ class Variation extends Model
 		  	]
 		];
 	}
+
+	// protected static function boot()
+	// {
+	//     self::deleting(function($variation) {
+	//         $variation->values()->each(function($value) {
+	//         	$value->delete();
+	//         });
+ //        });
+	// }
+
+	protected $with = ['values', 'variation_values'];
+
 	public function getRouteKeyName()
 	{
 		return 'slug';

@@ -20,6 +20,7 @@
 
   <link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">  
   <link rel="stylesheet" href="{{asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/jqColor.css')}}">
 
   <link rel="stylesheet" href="{{asset('css/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/select2-bootstrap4.min.css')}}">
@@ -206,9 +207,7 @@ to get the desired effect
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-
+          <!-- Add icons to the links using the .nav-icon class with font-awesome or any other icon font library -->
           <li class="nav-item">
             <a href="{{route('admin')}}" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -264,15 +263,18 @@ to get the desired effect
                   <p>Brand</p>
                 </a>
               </li>
+
+
+
               <li class="nav-item">
-                <a href="{{route('admin.product.category.index')}}" class="nav-link">
+                <a href="{{route('admin.product.variation.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Varient</p>
+                  <p>Variation</p>
                 </a>
               </li>
 
 
-              
+
             </ul>
           </li>
           @endcan
@@ -387,6 +389,9 @@ to get the desired effect
 
 <script src="{{asset('plugins/jquery-validation/jquery.validate.min.js')}}"></script>
 <script src="{{asset('plugins/jquery-validation/additional-methods.min.js')}}"></script>
+
+<script src="{{ asset('js/color.all.min.js') }}"></script>
+<script src="{{ asset('js/jqColor.js') }}"></script>
 
 <script src="{{asset('js/cropper.min.js')}}"></script>
 <script src="{{asset('js/select2.min.js')}}"></script>

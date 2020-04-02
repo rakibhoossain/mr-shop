@@ -14,7 +14,7 @@ class VariationController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.product.variation.index');
     }
 
     /**
@@ -24,7 +24,10 @@ class VariationController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'success' => true,
+            'html' => view('dashboard.product.variation.create_modal')->render()
+        ]);
     }
 
     /**
@@ -35,7 +38,32 @@ class VariationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required'
+        ]);
+
+        $variation = Variation::create(['name' => $request->name]);
+
+        if($variation){
+            foreach ($request->names as $key => $name) {
+
+                $data = [];
+
+                $type = $request->types[$key];
+                $color = $request->datas[$key];
+
+                if($name) $data['name'] = $name;
+
+                if( $name && $color && $type && ($type == 'color') ){ 
+                    $data['type'] = 'color';
+                    $data['data'] =  $color;
+                }
+                if(!empty($data)) $variation->values()->create($data);
+            }
+
+            return redirect()->back()->with('success', 'Variation create success!');
+        }
+        return back()->with('error', 'Variation create failed!');
     }
 
     /**
@@ -57,7 +85,10 @@ class VariationController extends Controller
      */
     public function edit(Variation $variation)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'html' => view('dashboard.product.variation.edit_modal', compact('variation'))->render()
+        ]);
     }
 
     /**
@@ -80,6 +111,16 @@ class VariationController extends Controller
      */
     public function destroy(Variation $variation)
     {
-        //
+        if($variation->values()->delete() && $variation->delete()){
+            return response()->json([
+                'success' => true,
+                'message' => 'Variation moved to trash!'
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 }

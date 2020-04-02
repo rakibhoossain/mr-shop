@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  
 <!-- Mirrored from demo.bootstrapious.com/hub/1-4-3/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 19 Mar 2020 03:57:56 GMT -->
 <head>
     <meta charset="utf-8">
