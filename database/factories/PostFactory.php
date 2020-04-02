@@ -3,7 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Post;
-use App\User;
+use App\Admin;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -11,8 +11,8 @@ $factory->define(Post::class, function (Faker $faker) {
     return [
         'name' => Str::title($faker->sentence(2)),
         'description' => $faker->text,
-        'user_id' => function () {
-            return User::all()->random();
+        'admin_id' => function () {
+            return Admin::all()->random();
         },
         'image' => 'storage/products/'.rand(1, 10).'.png'
     ];

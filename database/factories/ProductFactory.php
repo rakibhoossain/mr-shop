@@ -3,7 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Product;
-use App\User;
+use App\Admin;
 use App\Brand;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -16,8 +16,8 @@ $factory->define(Product::class, function (Faker $faker) {
         'purchase_price' => $price,
         'alert_quantity' => rand(3, 10),
         'description' => $faker->text,
-        'user_id' => function () {
-            return User::all()->random();
+        'admin_id' => function () {
+            return Admin::all()->random();
             // return User::where('type', 'admin')->get()->random();
         },
         'brand_id' => function () {

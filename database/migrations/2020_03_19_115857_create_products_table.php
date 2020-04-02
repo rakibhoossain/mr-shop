@@ -27,7 +27,7 @@ class CreateProductsTable extends Migration
             $table->text('excerpt')->nullable();
             $table->text('meta')->nullable();
             $table->unsignedInteger('brand_id')->nullable();
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('admin_id');
             $table->softDeletes();
             $table->timestamps();
         });

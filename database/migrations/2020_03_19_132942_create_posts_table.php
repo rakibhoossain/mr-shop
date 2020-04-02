@@ -21,7 +21,7 @@ class CreatePostsTable extends Migration
             
             $table->string('image')->nullable();
 
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('admin_id');
             $table->softDeletes();
             $table->timestamps();
         });
