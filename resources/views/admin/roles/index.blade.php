@@ -24,7 +24,9 @@
           <div class="card-header">
             <h3 class="card-title">Roles Table</h3>
             <div class="card-tools">
+              @can('role-create')
               <a class="btn btn-success" href="{{ route('admin.role.create') }}"> Create New Role</a>
+              @endcan
             </div>
           </div>
           <div class="card-body">
@@ -45,8 +47,12 @@
                     <td>
                       <ul class="nav tbl_btns">
                         <li><a href="{{route('admin.role.show', $role->id)}}"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                        @can('role-edit')
                         <li><a href="{{route('admin.role.edit', $role->id)}}"><i class="fa fa-pencil-alt" aria-hidden="true"></i></a></li>
+                        @endcan
+                        @can('role-delete')
                         <li><a href="#" data-url="{{route('admin.role.destroy', $role->id)}}" class="sweet_confirm"><i class="fa fa-trash" aria-hidden="true"></i></a></li>
+                        @endcan
                       </ul>
                     </td>
                 </tr>

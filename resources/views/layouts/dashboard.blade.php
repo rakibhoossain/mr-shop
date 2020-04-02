@@ -215,7 +215,8 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li>
-                    
+          
+          @can('product-list')  
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -226,18 +227,25 @@ to get the desired effect
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('product-list')
               <li class="nav-item">
                 <a href="{{route('admin.product.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product List</p>
                 </a>
               </li>
+              @endcan
+              @can('product-create')
               <li class="nav-item">
                 <a href="{{route('admin.product.create')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Product Create</p>
                 </a>
               </li>
+              @endcan
+
+
+
               <li class="nav-item">
                 <a href="pages/layout/fixed-sidebar.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -262,29 +270,41 @@ to get the desired effect
                   <p>Varient</p>
                 </a>
               </li>
+
+
+              
             </ul>
           </li>
+          @endcan
 
+
+          @can('stock')
           <li class="nav-item">
             <a href="{{route('admin.stocks')}}" class="nav-link">
               <i class="nav-icon fas fa-chart-line"></i>
               <p>Stocks</p>
             </a>
           </li>
+          @endcan
+          @can('settings')
           <li class="nav-item">
             <a href="{{route('admin.settings.store')}}" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>Settings</p>
             </a>
-          </li>          
+          </li>
+          @endcan        
 
+          @can('user-list')
           <li class="nav-item">
             <a href="{{route('user.index')}}" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
               <p>User <span class="badge badge-info right">{{App\User::count()}}</span></p>
             </a>
           </li>
-          
+          @endcan
+
+          @can('admin-list')
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users-cog"></i>
@@ -295,20 +315,25 @@ to get the desired effect
               </p>
             </a>
             <ul class="nav nav-treeview">
+              @can('admin-list')
               <li class="nav-item">
                 <a href="{{route('admin.index')}}" class="nav-link">
                   <i class="nav-icon fas fa-users"></i>
                   <p>Admin List</p>
                 </a>
+                @endcan
               </li>
+              @can('role-list')
               <li class="nav-item">
                 <a href="{{route('admin.role.index')}}" class="nav-link">
                   <i class="nav-icon fas fa-tasks"></i>
                   <p>Roles</p>
                 </a>
               </li>
+              @endcan
             </ul>
           </li>
+          @endcan
 
 
 

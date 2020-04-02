@@ -62,7 +62,14 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
     //User Management
     Route::resource('role','RoleController', ['as' => 'admin']);
     Route::resource('admin','AdminController');
-    Route::resource('user','UserController');    
+    Route::resource('user','UserController');  
+
+
+
+    Route::get('/collection/admins', 'AdminController@collection')->name('api.admin.collection');
+    Route::get('/collection/products', 'ProductController@collection')->name('api.product.collection');
+    Route::get('/collection/stocks', 'ProductController@stockCollection')->name('api.stock.collection');
+    Route::get('/collection/users', 'UserController@collection')->name('api.user.collection'); 
 
 });
 
@@ -74,3 +81,4 @@ Route::group(['prefix'  =>  'admin'], function () {
     Route::post('login', 'Admin\LoginController@login')->name('admin.login.post');
     Route::post('logout', 'Admin\LoginController@logout')->name('admin.logout');
 });
+

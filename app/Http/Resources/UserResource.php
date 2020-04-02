@@ -15,8 +15,8 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $button_1 = "<li><a href=".route('user.show', $this->id)."><i class='fa fa-eye' aria-hidden='true'></i></a></li>";
-        $button_2 = "<li><a href=".route('user.edit', $this->id)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>";
-        $button_3 = "<li><a href='#' data-url=".route('user.destroy', $this->id)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>";
+        $button_2 = ( auth()->user()->can('user-edit') )? "<li><a href=".route('user.edit', $this->id)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>" : '';
+        $button_3 = ( auth()->user()->can('user-delete') )? "<li><a href='#' data-url=".route('user.destroy', $this->id)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>" : '';
         return[
           'name' => $this->name,
           'email' => $this->email,

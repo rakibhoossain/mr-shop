@@ -24,7 +24,9 @@
           <div class="card-header">
             <h3 class="card-title">Show Role</h3>
             <div class="card-tools">
+              @can('role-create')
               <a class="btn btn-success" href="{{ route('admin.role.create') }}"> Create New Role</a>
+              @endcan
             </div>
           </div>
           <div class="card-body">

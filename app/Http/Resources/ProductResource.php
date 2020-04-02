@@ -17,8 +17,8 @@ class ProductResource extends JsonResource
     $brand = ($this->brand)? $this->brand->name : '';
     $image = ($this->image)? "<img src='".asset($this->image)."' width='50' height='50'>" : '';
     $button_1 = "<li><a href=".route('admin.product.show', $this->slug)."><i class='fa fa-eye' aria-hidden='true'></i></a></li>";
-    $button_2 = "<li><a href=".route('admin.product.edit', $this->slug)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>";
-    $button_3 = "<li><a href='#' data-url=".route('admin.product.destroy', $this->slug)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>";
+    $button_2 = ( auth()->user()->can('product-edit') )? "<li><a href=".route('admin.product.edit', $this->slug)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>" : '';
+    $button_3 = ( auth()->user()->can('product-delete') )? "<li><a href='#' data-url=".route('admin.product.destroy', $this->slug)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>" : '';
 
     return[
       'code' => $this->code,

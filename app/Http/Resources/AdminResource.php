@@ -28,8 +28,8 @@ class AdminResource extends JsonResource
         }
 
         $button_1 = "<li><a href=".route('admin.show', $this->id)."><i class='fa fa-eye' aria-hidden='true'></i></a></li>";
-        $button_2 = "<li><a href=".route('admin.edit', $this->id)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>";
-        $button_3 = "<li><a href='#' data-url=".route('admin.destroy', $this->id)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>";
+        $button_2 = ( auth()->user()->can('admin-edit') )? "<li><a href=".route('admin.edit', $this->id)."><i class='fa fa-pencil-alt' aria-hidden='true'></i></a></li>" : '';
+        $button_3 = ( auth()->user()->can('admin-delete') )? "<li><a href='#' data-url=".route('admin.destroy', $this->id)." class='sweet_confirm'><i class='fa fa-trash' aria-hidden='true'></i></a></li>" : '';
 
         return[
           'name' => $this->name,

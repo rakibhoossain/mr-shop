@@ -9,6 +9,17 @@ use Str;
 
 class SettingController extends Controller
 {
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+        $this->middleware('permission:settings');
+    }
+
     /**
      * Display a listing of the resource.
      *

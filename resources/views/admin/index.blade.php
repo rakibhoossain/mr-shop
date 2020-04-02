@@ -24,7 +24,9 @@
           <div class="card-header">
             <h3 class="card-title">Admins Table</h3>
             <div class="card-tools">
+              @can('admin-create')
               <a class="btn btn-success" href="{{route('admin.create')}}"> Create New Admin</a>
+              @endcan
             </div>
           </div>
           <div class="card-body">
