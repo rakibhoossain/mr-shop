@@ -188,6 +188,11 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li>
+
+<a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
+
+
+          
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>

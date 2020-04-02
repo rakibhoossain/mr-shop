@@ -37,7 +37,7 @@ Route::post('/cart-update', 'CartController@cartUpdate')->name('cartUpdate');
 
 
 //Dashboard Routes
-Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/', 'DashboardController@index')->name('admin');
     //All product routes
     Route::prefix('/product')->group(function () {
@@ -58,5 +58,21 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
 
 
     Route::resource('/settings', 'SettingController', ['as' => 'admin', 'only' => ['index', 'store']],);
+
+});
+
+
+
+//Admin
+// Route::view('/admin/login', 'admin.login');
+Route::group(['prefix'  =>  'admin'], function () {
+
+    Route::get('login', 'Admin\LoginController@showLoginForm')->name('admin.login');
+    Route::post('login', 'Admin\LoginController@login')->name('admin.login.post');
+    Route::get('logout', 'Admin\LoginController@logout')->name('admin.logout');
+
+    // Route::get('/', function () {
+    //     return view('admin.dashboard.index');
+    // });
 
 });
