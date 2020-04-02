@@ -12,6 +12,8 @@ use App\VariationValue;
 
 use App\Post;
 
+use App\User;
+
 class DatabaseSeeder extends Seeder
 {
   /**
@@ -21,12 +23,14 @@ class DatabaseSeeder extends Seeder
    */
   public function run()
   {
+    $this->call(PermissionTableSeeder::class);
     $this->call(AdminsTableSeeder::class);
-    $this->call(UsersTableSeeder::class);
     $this->call(SettingsTableSeeder::class);
 
     $this->call(VariationSeeder::class);
   
+    factory(User::class, 100)->create();
+
     factory(Brand::class, 20)->create();
     factory(Category::class, 10)->create();
     factory(ProductCategory::class, 10)->create();

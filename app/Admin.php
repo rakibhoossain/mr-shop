@@ -4,12 +4,14 @@ namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Admin extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
     use SoftDeletes;
 
     /**

@@ -57,22 +57,20 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
     });
 
 
-    Route::resource('/settings', 'SettingController', ['as' => 'admin', 'only' => ['index', 'store']],);
+    Route::resource('/settings', 'SettingController', ['as' => 'admin', 'only' => ['index', 'store']]);
+
+    //User Management
+    Route::resource('role','RoleController', ['as' => 'admin']);
+    Route::resource('admin','AdminController');
+    Route::resource('user','UserController');    
 
 });
 
 
 
-//Admin
-// Route::view('/admin/login', 'admin.login');
+//Admin login route
 Route::group(['prefix'  =>  'admin'], function () {
-
     Route::get('login', 'Admin\LoginController@showLoginForm')->name('admin.login');
     Route::post('login', 'Admin\LoginController@login')->name('admin.login.post');
     Route::post('logout', 'Admin\LoginController@logout')->name('admin.logout');
-
-    // Route::get('/', function () {
-    //     return view('admin.dashboard.index');
-    // });
-
 });

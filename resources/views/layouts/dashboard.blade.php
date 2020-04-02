@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <title>{{config('settings.site_name')}} | Dashboard</title>
+  <title>{{config('settings.site_name')}} | @yield('title' , 'Dashboard')</title>
   <link rel="shortcut icon" href="{{asset(config('settings.site_favicon'))}}">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -215,11 +215,7 @@ to get the desired effect
               <p>Dashboard</p>
             </a>
           </li>
-
-<a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="fa fa-sign-out fa-lg"></i> Logout</a>
-
-
-          
+                    
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -279,6 +275,20 @@ to get the desired effect
             <a href="{{route('admin.settings.store')}}" class="nav-link">
               <i class="nav-icon fas fa-tools"></i>
               <p>Settings</p>
+            </a>
+          </li>          
+
+
+          <li class="nav-item">
+            <a href="{{route('admin.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-user"></i>
+              <p>Admins</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{route('admin.role.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-tasks"></i>
+              <p>Roles</p>
             </a>
           </li>
 

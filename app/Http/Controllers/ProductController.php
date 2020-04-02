@@ -293,31 +293,6 @@ class ProductController extends Controller
             dd($e->getMessage());
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     /**
