@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
+use Hash;
+use Arr;
 
 class UserController extends Controller
 {
@@ -14,7 +17,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return view('user.index');
+    }
+
+    public function collection(){
+        return UserResource::collection(User::latest()->get());
     }
 
     /**
@@ -24,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
@@ -35,7 +42,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:password_confirmation',
+        ]);
+    
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+    
+        $user = User::create($input);    
+        return redirect()->route('user.index')->with('success','User created successfully');
     }
 
     /**
@@ -46,7 +63,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -57,7 +74,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -69,7 +86,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'nullable|same:password_confirmation',
+        ]);
+
+        $input = $request->all();
+        if(!empty($input['password'])){ 
+            $input['password'] = Hash::make($input['password']);
+        }else{
+            $input = Arr::except($input,array('password'));    
+        }
+        $user->update($input);   
+        return redirect()->route('user.index')->with('success','User updated successfully');
     }
 
     /**
@@ -80,6 +110,16 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if($user->delete()){
+            return response()->json([
+                'success' => true,
+                'message' => 'User delete successfully!'
+            ]);
+        }else{
+            return response()->json([
+                'success' => true,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 }

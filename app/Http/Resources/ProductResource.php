@@ -30,7 +30,7 @@ class ProductResource extends JsonResource
       'categories' => $this->categories->implode('name', ', '),
       'brand' => $brand,
       'type' => $this->type,
-      'created_at' => \Carbon\Carbon::parse($this->created_at)->timestamp, //date('d-m-Y', strtotime($this->created_at) ),
+      'created_at' => \Carbon\Carbon::parse($this->created_at)->timestamp,
       'action' => "<ul class='nav tbl_btns'>".$button_1.$button_2.$button_3."</ul>",
     ];
   }

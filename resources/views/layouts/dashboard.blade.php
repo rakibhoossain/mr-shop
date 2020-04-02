@@ -278,19 +278,45 @@ to get the desired effect
             </a>
           </li>          
 
-
           <li class="nav-item">
-            <a href="{{route('admin.index')}}" class="nav-link">
+            <a href="{{route('user.index')}}" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
-              <p>Admins</p>
+              <p>User <span class="badge badge-info right">{{App\User::count()}}</span></p>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="{{route('admin.role.index')}}" class="nav-link">
-              <i class="nav-icon fas fa-tasks"></i>
-              <p>Roles</p>
+          
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users-cog"></i>
+              <p>
+                Admins
+                <i class="fas fa-angle-left right"></i>
+                <span class="badge badge-info right">{{App\Admin::count()}}</span>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route('admin.index')}}" class="nav-link">
+                  <i class="nav-icon fas fa-users"></i>
+                  <p>Admin List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('admin.role.index')}}" class="nav-link">
+                  <i class="nav-icon fas fa-tasks"></i>
+                  <p>Roles</p>
+                </a>
+              </li>
+            </ul>
           </li>
+
+
+
+
+
+
+
+
 
         </ul>
       </nav>

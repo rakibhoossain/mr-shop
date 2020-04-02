@@ -32,9 +32,9 @@
               <table class="table table-bordered table-hover" id="admin_table">
                 <thead>
                   <tr>
-                    <th>No</th>
+                    <th style="width: 25px;">No</th>
                     <th>Name</th>
-                    <th>Action</th>
+                    <th style="width: 110px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>

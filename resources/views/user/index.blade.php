@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Admin')
+@section('title', 'Users')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -8,7 +8,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{{route('admin')}}">Home</a></li>
-          <li class="breadcrumb-item active">Admins</li>
+          <li class="breadcrumb-item active">Users</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -22,9 +22,9 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Admins Table</h3>
+            <h3 class="card-title">Users Table</h3>
             <div class="card-tools">
-              <a class="btn btn-success" href="{{route('admin.create')}}"> Create New Admin</a>
+              <a class="btn btn-success" href="{{route('user.create')}}"> Create New User</a>
             </div>
           </div>
           <div class="card-body">
@@ -35,7 +35,6 @@
                     <th style="width: 25px;">No</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Roles</th>
                     <th style="width: 100px;">Action</th>
                     <th>Created at</th>
                   </tr>
@@ -86,7 +85,7 @@ $(document).ready(function() {
   });
 
   $('#admin_table').DataTable({
-    ajax: '{{route("api.admin.collection")}}',
+    ajax: '{{route("api.user.collection")}}',
     columns: [
       { "data": null,"sortable": false, 
         render: function (data, type, row, meta) {
@@ -95,15 +94,14 @@ $(document).ready(function() {
       },
       { data: 'name' },
       { data: 'email' },
-      { data: 'roles' },
       { data: 'action', 'searchable': false, 'orderable': false },
       { data: 'created_at' },
     ],
-    "order": [[ 5, "desc" ]],
+    "order": [[ 4, "desc" ]],
     "autoWidth": false,
-    // "lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
+    "lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
     'columnDefs': [
-      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [5] }
+      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [4] }
     ],
   });
 });

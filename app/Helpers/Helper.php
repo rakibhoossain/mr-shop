@@ -43,4 +43,31 @@ class Helper{
 		return ($option == 'original')? self::frontendPrice($original) : self::frontendPrice($price);
 	}
 
+
+
+
+	//Status label
+	public static function getLabelByStatus($status){
+		switch ($status) {
+			case 'pending':
+			case 'unpaid':
+			case 'due':
+				return '<span class="label label-danger">'.ucfirst($status).'</span>';
+				break;
+			case 'processing':
+				return '<span class="label label-primary">'.ucfirst($status).'</span>';
+				break;
+			case 'paid':
+			case 'completed':
+				return '<span class="label label-success">'.ucfirst($status).'</span>';
+				break;
+			case 'decline':
+				return '<span class="label label-info">'.ucfirst($status).'</span>';
+				break;
+			default:
+				return '<span class="label label-default">'.ucfirst($status).'</span>';
+				break;
+		}
+	}
+
 }

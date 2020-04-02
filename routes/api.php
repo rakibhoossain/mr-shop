@@ -21,3 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/products', 'ProductController@collection')->name('api.product.collection');
 Route::get('/stocks', 'ProductController@stockCollection')->name('api.stock.collection');
+
+Route::get('/users', 'UserController@collection')->name('api.user.collection');
+Route::get('/admins', 'AdminController@collection')->name('api.admin.collection');

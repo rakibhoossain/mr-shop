@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Admin;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use App\Http\Resources\AdminResource;
 use Hash;
 use Arr;
 
@@ -15,12 +16,14 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $admins = Admin::latest()->paginate(20);
-        return view('admin.index',compact('admins'))->with('i', ($request->input('page', 1) - 1) * 20);
+        return view('admin.index');
     }
 
+    public function collection(){
+        return AdminResource::collection(Admin::latest()->get());
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -64,7 +67,7 @@ class AdminController extends Controller
      */
     public function show(Admin $admin)
     {
-        return view('admin.show',compact('admin'));
+        return view('admin.show', compact('admin'));
     }
 
     /**
@@ -77,7 +80,7 @@ class AdminController extends Controller
     {
         $roles = Role::pluck('name','name')->all();
         $userRole = $admin->roles->pluck('name','name')->all();
-        return view('admin.edit',compact('admin', 'roles', 'userRole'));
+        return view('admin.edit', compact('admin', 'roles', 'userRole'));
     }
 
     /**
@@ -89,7 +92,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, Admin $admin)
     {
-         $this->validate($request, [
+        $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:admins,email,'.$admin->id,
             'password' => 'nullable|same:password_confirmation',
