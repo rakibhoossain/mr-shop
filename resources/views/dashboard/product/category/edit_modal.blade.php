@@ -1,4 +1,5 @@
-<form action="{{route('admin.product.brand.store')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('admin.product.productCategory.update', $productCategory->slug)}}" method="POST" enctype="multipart/form-data">
+	@method('PUT')
 	@csrf
 	<div class="modal-header">
 		<h5 class="modal-title">Edit Product Category</h5>
@@ -18,7 +19,7 @@
 				<label for="category_image">Category Image</label>
 				<div class="input-group">
 					<div class="custom-file">
-						<input type="file" accept=".png, .jpg, .jpeg" class="custom-file-input" name="image" id="category_image" required>
+						<input type="file" accept=".png, .jpg, .jpeg" class="custom-file-input" name="image" id="category_image">
 						<label class="custom-file-label" for="category_image">Choose Image</label>
 					</div>
 				</div>
@@ -34,7 +35,7 @@
 		<div class="col-12">
 			<div class="form-group">
 				<label for="category_description">Description</label>
-				<textarea id="category_description" class="form-control" placeholder="Category Description" name="description">{{$productCategory->name}}</textarea>
+				<textarea id="category_description" class="form-control" placeholder="Category Description" name="description">{{$productCategory->description}}</textarea>
 			</div>
 		</div>
 		<div class="col-12">

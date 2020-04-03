@@ -1,4 +1,4 @@
-<form action="{{route('admin.product.brand.store')}}" method="POST" enctype="multipart/form-data">
+<form action="{{route('admin.product.productCategory.store')}}" method="POST" enctype="multipart/form-data">
 	@csrf
 	<div class="modal-header">
 		<h5 class="modal-title">Add Product Category</h5>

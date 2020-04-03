@@ -37,7 +37,7 @@
                     <th style="width: 25px;">No</th>
                     <th>Name</th>
                     <th>Values</th>
-                    <th style="width: 80px;">Action</th>
+                    <th style="width: 55px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -208,6 +208,8 @@ $(document).ready(function() {
       	var is_checked = $(this).is(":checked");
       	$("#variantTable .checkbox").prop("checked", !is_checked).trigger("click");
     });
+    
+    $('#variation_table').dataTable();
 
 });
 </script>

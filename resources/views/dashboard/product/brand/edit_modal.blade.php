@@ -26,7 +26,11 @@
       </div>
     </div>
     <div class="col-2" id="brand_image_preview">
+      @if($brand->image)
       <img src="{{asset($brand->image)}}" width="50" height="50" alt="{{$brand->name}}">
+      @else
+      <img src="{{asset('img/thumb_icon.png')}}" width="50" height="50" style="display: none;">
+      @endif
     </div>
     <div class="col-12">
       <div class="form-group">

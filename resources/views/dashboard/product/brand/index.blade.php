@@ -38,7 +38,7 @@
                     <th>Name</th>
                     <th style="width: 60px">Image</th>
                     <th>Description</th>
-                    <th style="width: 80px;">Action</th>
+                    <th style="width: 55px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -146,19 +146,17 @@ $(document).ready(function() {
 
   $(document).on('change', '#brand_image', function(e){
     e.preventDefault();
-
     let _this = this;
-    // let html = $('#image_upload_clone').html();
     if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          $('#brand_image_preview img').attr('src', e.target.result).show();
-        }
-        reader.readAsDataURL(_this.files[0]);
-        // $('.image_upload').last().after(html);
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $('#brand_image_preview img').attr('src', e.target.result).show();
+      }
+      reader.readAsDataURL(_this.files[0]);
     }
-
   })
+
+  $('#brand_table').dataTable();
 
 });
 </script>

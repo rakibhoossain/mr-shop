@@ -39,7 +39,7 @@
                     <th style="width: 60px">Image</th>
                     <th>Description</th>
                     <th>Sub Categories</th>
-                    <th style="width: 80px;">Action</th>
+                    <th style="width: 50px;">Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -134,13 +134,6 @@ $(document).ready(function() {
     });    
   })
 
-
-
-
-
-
-
-
   $(document).on('click', '#product_category_table .category_edit', function(e){
     e.preventDefault();
     let url = $(this).data('url');
@@ -151,6 +144,11 @@ $(document).ready(function() {
         if (response.success) {
           $modal.find('.modal-content').html(response.html);
           $modal.modal('show');
+          $modal.find('.sub_category.select-2').select2({
+            theme: 'bootstrap4',
+            placeholder: "Select Sub Category",
+            allowClear: true
+          });
         } else {
           Swal.fire('Error!', 'Something went wrong!','error');
         }
@@ -160,18 +158,17 @@ $(document).ready(function() {
 
   $(document).on('change', '#category_image', function(e){
     e.preventDefault();
-
     let _this = this;
-    // let html = $('#image_upload_clone').html();
     if (this.files && this.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          $('#category_image_preview img').attr('src', e.target.result).show();
-        }
-        reader.readAsDataURL(_this.files[0]);
-        // $('.image_upload').last().after(html);
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        $('#category_image_preview img').attr('src', e.target.result).show();
+      }
+      reader.readAsDataURL(_this.files[0]);
     }
   })
+
+  $('#product_category_table').dataTable();
 
 });
 </script>
