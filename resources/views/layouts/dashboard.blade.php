@@ -218,7 +218,7 @@ to get the desired effect
           @can('product-list')  
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
+              <i class="nav-icon fab fa-product-hunt"></i>
               <p>
                 Product
                 <i class="fas fa-angle-left right"></i>
@@ -229,7 +229,7 @@ to get the desired effect
               @can('product-list')
               <li class="nav-item">
                 <a href="{{route('admin.product.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-list nav-icon"></i>
                   <p>Product List</p>
                 </a>
               </li>
@@ -237,39 +237,43 @@ to get the desired effect
               @can('product-create')
               <li class="nav-item">
                 <a href="{{route('admin.product.create')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-plus-circle nav-icon"></i>
                   <p>Product Create</p>
                 </a>
               </li>
               @endcan
 
-
-
+              @can('barcode')
               <li class="nav-item">
-                <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                <a href="{{route('admin.barcode.index')}}" class="nav-link">
+                  <i class="fa fa-barcode nav-icon"></i>
                   <p>Barcode</p>
                 </a>
               </li>
-
-
-
-              
-
+              @endcan
+    
               @can('product-category')
               <li class="nav-item">
                 <a href="{{route('admin.product.productCategory.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fa fa-th nav-icon"></i>
                   <p>Categories</p>
+                </a>
+              </li>
+              @endcan              
+
+              @can('product-tags')
+              <li class="nav-item">
+                <a href="{{route('admin.product.productTag.index')}}" class="nav-link">
+                  <i class="fas fa-tags nav-icon"></i>
+                  <p>Tags</p>
                 </a>
               </li>
               @endcan
 
-
               @can('product-brand')
               <li class="nav-item">
                 <a href="{{route('admin.product.brand.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-gem nav-icon"></i>
                   <p>Brand</p>
                 </a>
               </li>
@@ -277,7 +281,7 @@ to get the desired effect
               @can('product-varient')
               <li class="nav-item">
                 <a href="{{route('admin.product.variation.index')}}" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
+                  <i class="fas fa-cubes nav-icon"></i>
                   <p>Variation</p>
                 </a>
               </li>
@@ -301,7 +305,7 @@ to get the desired effect
           @can('settings')
           <li class="nav-item">
             <a href="{{route('admin.settings.store')}}" class="nav-link">
-              <i class="nav-icon fas fa-tools"></i>
+              <i class="nav-icon fas fa-cog"></i>
               <p>Settings</p>
             </a>
           </li>

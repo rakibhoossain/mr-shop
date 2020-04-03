@@ -43,11 +43,15 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
     Route::prefix('/product')->group(function () {
 	    Route::resource('/product', 'ProductController', ['as' => 'admin']);
         Route::post('/request/fields', 'ProductController@varientField')->name('admin.varient.field');
-        
 
+
+
+
+        Route::get('/request/label-print', 'ProductController@labelPrint')->name('admin.barcode.index');
 
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
 	    Route::resource('/productCategory', 'ProductCategoryController', ['as' => 'admin.product']);
+        Route::resource('/productTag', 'ProductTagController', ['as' => 'admin.product']);
         Route::resource('/variation', 'VariationController', ['as' => 'admin.product']);
 
 

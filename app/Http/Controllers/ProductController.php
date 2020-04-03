@@ -27,6 +27,7 @@ class ProductController extends Controller
         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
 
         $this->middleware('permission:stock', ['only' => ['stocks', 'stockCollection']]);
+        $this->middleware('permission:barcode', ['only' => ['labelPrint']]);
     }
 
     /**
@@ -104,6 +105,9 @@ class ProductController extends Controller
         return view('dashboard.product.stocks');
     }
 
+    public function labelPrint(Request $request){
+        return view('dashboard.product.barcode.index');
+    }
     /**
      * Show the form for creating a new resource.
      *
