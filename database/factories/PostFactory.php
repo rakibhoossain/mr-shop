@@ -14,6 +14,8 @@ $factory->define(Post::class, function (Faker $faker) {
         'admin_id' => function () {
             return Admin::all()->random();
         },
+        // 'image' => $faker->image('storage/products/',640,480, null, false),
         'image' => 'storage/products/'.rand(1, 10).'.png'
+
     ];
 });

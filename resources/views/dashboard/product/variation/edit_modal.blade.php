@@ -29,26 +29,25 @@
             </tr>
 	        </thead>
 	        <tbody>
-
 	        @foreach($variation->values as $value)
-            <tr>
+            <tr data-id="{{$value->id}}">
                 <td>
                   <input type="checkbox" class="checkbox" name="record">
                 </td>
                 <td class="editMe">
-                  <input type="text" class="form-control" name="names[]" value="{{$value->name}}">
+                  <input type="text" class="form-control" name="old_names[{{$value->id}}]" value="{{$value->name}}" required>
                 </td>
                 <td class="editMe">
-                  <select class="form-control varient_type" name="types[]">
+                  <select class="form-control varient_type" name="old_types[{{$value->id}}]">
                     <option value="normal" @if($value->type == 'normal') selected @endif >Normal</option>
                     <option value="color" @if($value->type == 'color') selected @endif >Color</option>
                   </select>
                 </td>
                 <td class="editMe" style="width: 100px;">
                 @if($value->type == 'color')
-                  	<input type="text" class="form-control varient_data color_v" value="{{$value->data}}" name="datas[]" style="background-color: {{$value->data}};" >
+                  	<input type="text" class="form-control varient_data color_v" value="{{$value->data}}" name="old_datas[{{$value->id}}]" style="background-color: {{$value->data}};" >
                 @else
-                	<input type="text" class="form-control varient_data" disabled name="datas[]">
+                	<input type="text" class="form-control varient_data" disabled name="old_datas[{{$value->id}}]" value="">
                 @endif
                 </td>
             </tr>

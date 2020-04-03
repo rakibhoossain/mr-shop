@@ -34,7 +34,7 @@
 			                    <input type="checkbox" class="checkbox" name="record">
 			                </td>
 			                <td class="editMe">
-			                    <input type="text" class="form-control" name="names[]">
+			                    <input type="text" class="form-control" name="names[]" required>
 			                </td>
 			                <td class="editMe">
 			                    <select class="form-control varient_type" name="types[]">

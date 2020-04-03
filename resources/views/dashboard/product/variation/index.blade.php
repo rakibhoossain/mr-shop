@@ -162,7 +162,7 @@ $(document).ready(function() {
         <input type="checkbox" class="checkbox" name="record">
       </td>
       <td class="editMe">
-        <input type="text" class="form-control" name="names[]">
+        <input type="text" class="form-control" name="names[]" required>
       </td>
       <td class="editMe">
         <select class="form-control varient_type" name="types[]">
@@ -180,16 +180,18 @@ $(document).ready(function() {
     $(document).on('click', '#variationModal .delete-row', function(){
         $("#variantTable tbody").find('input[name="record"]').each(function(){
             if($(this).is(":checked")){
-                $(this).parents("tr").remove();
+              var v_id = $(this).parents("tr").data('id');
+              if(v_id){
+                $('#variation_fields').append(`
+                  <input type="hidden" name="v_dels[]" value="${v_id}">
+                `);
+              }
+              $(this).parents("tr").remove();
             }
         });
         $('#checkall').prop('checked', false);
 
         if(!($("#variantTable tbody tr").length)) $("#variantTable tbody").html(tr);
-
-
-
-
     });   
 
     $(document).on('click', '#variationModal .add-row', function(){

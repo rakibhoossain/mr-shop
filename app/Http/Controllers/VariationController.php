@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Variation;
+use App\VariationValue;
 use Illuminate\Http\Request;
 
 class VariationController extends Controller
@@ -39,28 +40,27 @@ class VariationController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required'
+            'name' => 'required|min:4|unique:variations,name'
         ]);
 
         $variation = Variation::create(['name' => $request->name]);
 
         if($variation){
-            foreach ($request->names as $key => $name) {
-
-                $data = [];
-
-                $type = $request->types[$key];
-                $color = $request->datas[$key];
-
-                if($name) $data['name'] = $name;
-
-                if( $name && $color && $type && ($type == 'color') ){ 
-                    $data['type'] = 'color';
-                    $data['data'] =  $color;
-                }
-                if(!empty($data)) $variation->values()->create($data);
+            if($request->names){
+                foreach ($request->names as $key => $name) {
+                    $data = [];
+                    $type = ($request->types)? $request->types[$key] : null;
+                    if($name) $data['name'] = $name;
+                    if($request->datas){
+                        $color = (isset($request->datas[$key]))? $request->datas[$key] : null;
+                        if( $name && $color && $type && ($type == 'color') ){ 
+                            $data['type'] = 'color';
+                            $data['data'] =  $color;
+                        }                    
+                    }
+                    if(!empty($data)) $variation->values()->create($data);
+                } 
             }
-
             return redirect()->back()->with('success', 'Variation create success!');
         }
         return back()->with('error', 'Variation create failed!');
@@ -100,7 +100,60 @@ class VariationController extends Controller
      */
     public function update(Request $request, Variation $variation)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|min:4|unique:variations,name,'.$variation->id
+        ]);
+
+        if($variation->update(['name' => $request->name])){
+
+            if($request->names){
+                foreach ($request->names as $key => $name) {
+                    $data = [];
+                    $type = ($request->types)? $request->types[$key] : null;
+                    if($name) $data['name'] = $name;
+                    if($request->datas){
+                        $color = (isset($request->datas[$key]))? $request->datas[$key] : null;
+                        if( $name && $color && $type && ($type == 'color') ){ 
+                            $data['type'] = 'color';
+                            $data['data'] =  $color;
+                        }                    
+                    }
+                    if(!empty($data)) $variation->values()->create($data);
+                } 
+            }
+
+            if($request->v_dels){
+                try{
+                  VariationValue::destroy($request->v_dels);  
+                }catch(\Exception $e){
+
+                }              
+            }
+
+            if($request->old_names){
+                foreach ($request->old_names as $id => $name) {
+                    $variation_update = VariationValue::find($id);
+                    if($variation_update){
+
+                        $data = [];
+                        $type = ($request->old_types)? $request->old_types[$id] : null;
+                        if($name) $data['name'] = $name;
+                        if($request->old_datas){
+                            $color = (isset($request->old_datas[$id]))? $request->old_datas[$id] : null;
+                            if( $name && $color && $type && ($type == 'color') ){ 
+                                $data['type'] = 'color';
+                                $data['data'] =  $color;
+                            }                    
+                        }
+
+                        if(!empty($data)) $variation_update->update($data);
+                    }                    
+                } 
+            }
+
+            return redirect()->back()->with('success', 'Variation update success!');
+        }
+        return back()->with('error', 'Variation update failed!');
     }
 
     /**
