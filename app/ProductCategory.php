@@ -43,6 +43,8 @@ class ProductCategory extends Model
   public function children(){
     return $this->hasMany(ProductCategory::class);
   }
+
+  //Total Product
   public function getTotalProductAttribute(){
     return $this->products->count();
   }

@@ -12,9 +12,20 @@ class ProductCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:product-category');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        //
+        $categories = ProductCategory::whereNull('product_category_id')->latest()->get();
+        return view('dashboard.product.category.index', compact('categories'));
     }
 
     /**
@@ -24,7 +35,10 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return response()->json([
+            'success' => true,
+            'html' => view('dashboard.product.category.create_modal')->render()
+        ]);
     }
 
     /**
@@ -57,7 +71,11 @@ class ProductCategoryController extends Controller
      */
     public function edit(ProductCategory $productCategory)
     {
-        //
+        $categories = ProductCategory::doesntHave('children')->whereNull('product_category_id')->get();
+        return response()->json([
+            'success' => true,
+            'html' => view('dashboard.product.category.edit_modal', compact('productCategory', 'categories'))->render()
+        ]);
     }
 
     /**

@@ -251,14 +251,17 @@ to get the desired effect
                   <p>Barcode</p>
                 </a>
               </li>
+
+              @can('product-category')
               <li class="nav-item">
-                <a href="{{route('admin.product.category.index')}}" class="nav-link">
+                <a href="{{route('admin.product.productCategory.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Categories</p>
                 </a>
               </li>
+              @endcan
 
-              
+
               @can('product-brand')
               <li class="nav-item">
                 <a href="{{route('admin.product.brand.index')}}" class="nav-link">

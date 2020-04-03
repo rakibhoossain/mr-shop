@@ -47,7 +47,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
 
 
 	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
-	    Route::resource('/category', 'ProductCategoryController', ['as' => 'admin.product']);
+	    Route::resource('/productCategory', 'ProductCategoryController', ['as' => 'admin.product']);
         Route::resource('/variation', 'VariationController', ['as' => 'admin.product']);
 
 
