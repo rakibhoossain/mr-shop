@@ -16,6 +16,8 @@
   <!-- Editor -->
   <link rel="stylesheet" href="{{asset('plugins/summernote/summernote-bs4.css')}}">
 
+  <link rel="stylesheet" href="{{asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+
   <link rel="stylesheet" href="{{asset('plugins/datatables-bs4/css/dataTables.bootstrap4.css')}}">
 
   <link rel="stylesheet" href="{{asset('css/sweetalert2.min.css')}}">  

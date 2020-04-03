@@ -27,7 +27,7 @@ class ProductController extends Controller
         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
 
         $this->middleware('permission:stock', ['only' => ['stocks', 'stockCollection']]);
-        $this->middleware('permission:barcode', ['only' => ['labelPrint']]);
+        $this->middleware('permission:barcode', ['only' => ['labelPrint', 'labelPrintPreview']]);
     }
 
     /**
@@ -106,7 +106,50 @@ class ProductController extends Controller
     }
 
     public function labelPrint(Request $request){
+        if ($request->ajax()) {
+            $search = $request->search;
+            $varient = null;
+            if(strpos($search, '-') !== false) {
+                $seperate_search = explode('-', $search);
+                $search = $seperate_search[0];
+                $varient = $seperate_search[1];
+            }
+            $product = Product::Where('name', 'like', '%'.$search.'%' )->orWhere('code', 'like', '%'.$search.'%' )->first();
+
+            if($product){
+                if($varient && $product->has('variation_values')) {
+                    $variation = $product->variation_values()->where('variation_values.id', $varient)->first();
+                    if($variation){
+                        $code = $product->code.'-'.$varient;
+                        return response()->json([
+                            'success' => true,
+                            'code'  => $code,
+                            'html' => view('dashboard.product.barcode.varient_product', compact('product', 'variation', 'code'))->render()
+                        ]);                        
+                    }
+                }
+                return response()->json([
+                    'success' => true,
+                    'code'  => $product->code,
+                    'html' => view('dashboard.product.barcode.single_product', compact('product'))->render()
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'No product matched!'
+            ]);
+
+        }
         return view('dashboard.product.barcode.index');
+    }
+    public function labelPrintPreview(Request $request){
+        $print = $request->print;
+        $barcodes = $request->barcodes;
+        return response()->json([
+            'success' => true,
+            'html' => view('dashboard.product.barcode.preview', compact('print', 'barcodes'))->render()
+        ]);
     }
     /**
      * Show the form for creating a new resource.
@@ -189,11 +232,11 @@ class ProductController extends Controller
                 if($request->variations){
                     foreach($request->variations as $k => $variation){
                         foreach($variation as $id){
-                            $purchase_price = $request->varient_purchase_prices[$k][$id];
-                            $sell_price = $request->varient_sell_prices[$k][$id];
-                            $offer_price = $request->varient_prices[$k][$id];
+                            $purchase_price = (isset($request->varient_purchase_prices[$k][$id]))? $request->varient_purchase_prices[$k][$id] : null;
+                            $sell_price = (isset($request->varient_sell_prices[$k][$id]))? $request->varient_sell_prices[$k][$id] : null;
+                            $offer_price = (isset($request->varient_prices[$k][$id]))? $request->varient_prices[$k][$id] : null;
 
-                            $image = $request->varient_images[$k][$id];
+                            $image = (isset($request->varient_images[$k][$id]))? $request->varient_images[$k][$id] : null;
                             $varient_image = ($image)? $this->uploadVarientImages($image) : null;
 
                             $product->variation_values()->attach($id, [
@@ -201,7 +244,7 @@ class ProductController extends Controller
                                 'sell_price' => $sell_price,
                                 'purchase_price' => $purchase_price,
                                 'purchase_price' => $purchase_price,
-                                'quantity' => $request->varient_quantities[$k][$id],
+                                'quantity' => (isset($request->varient_quantities[$k][$id]))? $request->varient_quantities[$k][$id] : 0,
                                 'image' => $varient_image,
                             ]);
                         }
@@ -287,19 +330,18 @@ class ProductController extends Controller
                 if($request->variations){
                     foreach($request->variations as $k => $variation){
                         foreach($variation as $id){
-                            $purchase_price = $request->varient_purchase_prices[$k][$id];
-                            $sell_price = $request->varient_sell_prices[$k][$id];
-                            $offer_price = $request->varient_prices[$k][$id];
+                            $purchase_price = (isset($request->varient_purchase_prices[$k][$id]))? $request->varient_purchase_prices[$k][$id] : $product->purchase_price;
+                            $sell_price = (isset($request->varient_sell_prices[$k][$id]))? $request->varient_sell_prices[$k][$id] : $product->sell_price;
+                            $offer_price = (isset($request->varient_prices[$k][$id]))? $request->varient_prices[$k][$id] : $product->price;
 
-                            $image = $request->varient_images[$k][$id];
-                            $varient_image = ($image)? $this->uploadVarientImages($image) : $request->v_img_old[$k][$id];
+                            $image = (isset($request->varient_images[$k][$id]))? $request->varient_images[$k][$id] : null;
+                            $varient_image = ($image)? $this->uploadVarientImages($image) : (isset($request->v_img_old[$k][$id]))? $request->v_img_old[$k][$id] : null;
 
                             $product->variation_values()->attach($id, [
                                 'price' => $offer_price,
                                 'sell_price' => $sell_price,
                                 'purchase_price' => $purchase_price,
-                                'purchase_price' => $purchase_price,
-                                'quantity' => $request->varient_quantities[$k][$id],
+                                'quantity' => (isset($request->varient_quantities[$k][$id]))? $request->varient_quantities[$k][$id] : 0,
                                 'image' => $varient_image,
                             ]);
                         }
