@@ -257,21 +257,24 @@ to get the desired effect
                   <p>Categories</p>
                 </a>
               </li>
+
+              
+              @can('product-brand')
               <li class="nav-item">
-                <a href="{{route('admin.product.category.index')}}" class="nav-link">
+                <a href="{{route('admin.product.brand.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Brand</p>
                 </a>
               </li>
-
-
-
+              @endcan
+              @can('product-varient')
               <li class="nav-item">
                 <a href="{{route('admin.product.variation.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Variation</p>
                 </a>
               </li>
+              @endcan
 
 
 

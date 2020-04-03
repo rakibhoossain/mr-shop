@@ -24,7 +24,7 @@
           <div class="card-header">
             <h3 class="card-title">Variation Table</h3>
             <div class="card-tools">
-              @can('role-create')
+              @can('product-varient')
               <a class="btn btn-success" href="#" data-url="{{route('admin.product.variation.create')}}" id="add_variation"> Create New Variation</a>
               @endcan
             </div>
@@ -54,7 +54,6 @@
                     </td>
                 </tr>
                 @endforeach
-
                 </tbody>
               </table>
             </div>
@@ -65,9 +64,6 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
-
-
-
 <!-- Modal Product Image -->
 <div class="modal fade" id="variationModal" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -75,10 +71,6 @@
 		</div>
 	</div>
 </div>
-
-
-
-
 @endsection
 @push('scripts')
 <script type="text/javascript">
@@ -149,12 +141,7 @@ $(document).ready(function() {
         }
       }
     });    
-  })
-
-	// $(document).on('click', '#add_variation', function(e){
-	//   	e.preventDefault();
-	//   	$modal.modal('show');
-	// })       
+  }) 
 
 	var tr = `
 		<tr>
