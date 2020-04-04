@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
     // $this->call(AdminsTableSeeder::class);
     // $this->call(SettingsTableSeeder::class);
 
+    // $this->call(BarcodesSeeder::class);
     // $this->call(VariationSeeder::class);
   
     // factory(User::class, 100)->create();
@@ -34,7 +35,7 @@ class DatabaseSeeder extends Seeder
     // factory(Brand::class, 20)->create();
     // factory(Category::class, 10)->create();
     // factory(ProductCategory::class, 10)->create();
-    factory(Image::class, 10)->create();
+    // factory(Image::class, 10)->create();
   
     // factory(ProductTag::class, 10)->create();
 

@@ -47,7 +47,7 @@ to get the desired effect
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light no-print">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -195,7 +195,7 @@ to get the desired effect
 
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4 no-print">
     <!-- Brand Logo -->
     <a href="{{route('home')}}" class="brand-link">
       @if(config('settings.site_logo'))
@@ -379,7 +379,7 @@ to get the desired effect
 
   @include('alert')
   <!-- Main Footer -->
-  <footer class="main-footer">
+  <footer class="main-footer no-print">
     {!!config('settings.footer_copyright_text')!!}
     <div class="float-right d-none d-sm-inline-block">
       <b>Developed by <a href="https://github.com/rakibhoossain" target="_blank">Rakib Hossain</a></b>
@@ -414,6 +414,8 @@ to get the desired effect
 
 
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
+
+<script src="{{asset('js/jQuery.print.min.js')}}"></script>
 
 <script src="{{asset('js/Admin.js')}}"></script>
 @stack('scripts')

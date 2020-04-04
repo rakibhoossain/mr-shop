@@ -1,8 +1,36 @@
 @extends('layouts.dashboard')
 @section('title', 'Print Barcode')
 @section('content')
+<style type="text/css">
+/*Css related to printing of barcode*/
+.label-border-outer{
+    border: 0.1px solid grey !important;
+}
+.sticker-border{
+    border: 0.1px dotted grey !important;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+#preview_box{
+    padding-left: 30px !important;
+}
+@media print{
+/*    .label-border-outer{
+        border: none !important;
+    }
+    .sticker-border{
+        border: none !important;
+    }*/
+    #preview_box{
+        padding-left: 0px !important;
+    }
+    #preview_body{
+		display: block !important;
+	}
+}
+</style>
 <!-- Content Header (Page header) -->
-<div class="content-header">
+<div class="content-header no-print">
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<div class="col-sm-6">
@@ -16,7 +44,7 @@
 </div>
 <!-- /.content-header -->
 <!-- Main content -->
-<div class="content">
+<div class="content no-print">
 	<form id="barcode_print_form">
 	<div class="container-fluid">
 		<div class="row">
@@ -80,7 +108,14 @@
 								</div>
 							</div>
 							<div class="col-sm-12"><hr></div>
-							<div class="col-sm-4 col-sm-offset-8">
+							<div class="col-md-8">
+                                <select class="form-control select2" name="barcode_setting" style="width: 100%" data-placeholder="Select a Barcode Setting">
+	                                @foreach(App\Barcode::orderBy('name')->get() as $barcode)
+	                                <option value="{{$barcode->id}}" @if($barcode->is_default) selected @endif >{{$barcode->name}}</option>
+	                                @endforeach
+                            	</select>
+							</div>
+							<div class="col-sm-4">
 								<button type="button" id="labels_preview" class="btn btn-primary pull-right btn-flat btn-block">Preview</button>
 							</div>
 						</div>
@@ -88,27 +123,35 @@
 				</div>
 			</div>
 
-			<div class="col-12">
-				<div class="card">
-					<div class="card-body">
-						<div class="row justify-content-md-center">
-							<div id="barcode_show_area"></div>
-
-
-
-
-							<div class="col-sm-12"><hr></div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-
-
 		</div>
 	</div><!-- /.container-fluid -->
 	</form>
+
+
+	<div><a href="#" id="print_barcode" class="btn btn-success">Print</a></div>
+
+
 </div>
+
+
+<div id="preview_box"></div>
+
+							
+
+
+
+
+
+							
+
+
+
+
+
+
+
+
+
 <!-- /.content -->
 @endsection
 @push('scripts')
@@ -150,10 +193,7 @@ $(document).ready(function() {
   })
   $('#barcode_print_form').submit(function(e){
   	e.preventDefault();
-
   })
-
-
 
   $(document).on('click', '#labels_preview', function(e){
     e.preventDefault();
@@ -165,12 +205,17 @@ $(document).ready(function() {
       data: $('form#barcode_print_form').serialize(),
       success: function(response) {
         if(response.success) {
-        	$('#barcode_show_area').html(response.html);
+        	$('#preview_box').html(response.html);
         }else {
           Swal.fire('Error!', response.message,'error');
         }
       }
     });    
+  })
+
+  $(document).on('click', '#print_barcode', function(e){
+  	e.preventDefault();
+    window.print();
   })
 
 

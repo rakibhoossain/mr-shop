@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Variation;
 use App\VariationValue;
+use App\Barcode;
 use App\Image as ImageModel;
 use Illuminate\Http\Request;
 use Storage;
@@ -146,9 +147,24 @@ class ProductController extends Controller
     public function labelPrintPreview(Request $request){
         $print = $request->print;
         $barcodes = $request->barcodes;
+        $barcode_setting = $request->barcode_setting;
+        $barcode_details = Barcode::find($barcode_setting);
+
+        $total_qty = 0;
+        foreach ($barcodes as $qty) {
+            $total_qty += $qty;
+        }
+
+        if ($barcode_details->is_continuous) {
+            $rows = ceil($total_qty/$barcode_details->stickers_in_one_row) + 0.4;
+            $barcode_details->paper_height = $barcode_details->top_margin + ($rows*$barcode_details->height) + ($rows*$barcode_details->row_distance);
+        }
+
+        $barcode_details->barcode_type = 'C128';
+
         return response()->json([
             'success' => true,
-            'html' => view('dashboard.product.barcode.preview', compact('print', 'barcodes'))->render()
+            'html' => view('dashboard.product.barcode.preview', compact('print', 'barcodes', 'barcode_details'))->render()
         ]);
     }
     /**
