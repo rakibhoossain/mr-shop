@@ -168,11 +168,11 @@
                                 <td><input type="text" name="varient_quantities[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control" value="{{$v_value->pivot->quantity}}"></td>
                                 <td>
                                   <label>
-                                    <input type="hidden" name="v_img_old[{{$v_value->variation_id}}][{{$v_value->id}}]" value="{{$v_value->pivot->image}}">
+                                    <!-- <input type="hidden" name="v_img_old[{{$v_value->variation_id}}][{{$v_value->id}}]" value="{{$v_value->pivot->image}}"> -->
                                     <input type="file" data-id="{{$v_value->id}}" class="varient_image_btn">
                                   <img @if($v_value->pivot->image) src="{{asset($v_value->pivot->image)}}" @else src="{{asset('img/thumb_icon.png')}}" @endif id="varient_image_preview_{{$v_value->id}}" width="50" height="50">
                                   </label>
-                                  <input type="hidden" id="varient_image_{{$v_value->id}}" name="varient_images[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control varient_image_input"></td>
+                                  <input type="hidden" id="varient_image_{{$v_value->id}}" name="varient_images[{{$v_value->variation_id}}][{{$v_value->id}}]" class="form-control varient_image_input" value="{{$v_value->pivot->image}}"></td>
                                 <td><a href="#" class="btn btn-danger btn-sm remove_varient">Remove</a></td>
                               </tr>
                               @endforeach

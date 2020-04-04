@@ -341,17 +341,28 @@ class ProductController extends Controller
                     $product->tags()->attach($request->tags);
                 }
                 
-                $product->variation_values()->detach(); //Delete old variations
+                
 
                 if($request->variations){
+
+                    $product->variation_values()->detach(); //Delete old variations
+
+
                     foreach($request->variations as $k => $variation){
                         foreach($variation as $id){
                             $purchase_price = (isset($request->varient_purchase_prices[$k][$id]))? $request->varient_purchase_prices[$k][$id] : $product->purchase_price;
                             $sell_price = (isset($request->varient_sell_prices[$k][$id]))? $request->varient_sell_prices[$k][$id] : $product->sell_price;
                             $offer_price = (isset($request->varient_prices[$k][$id]))? $request->varient_prices[$k][$id] : $product->price;
 
-                            $image = (isset($request->varient_images[$k][$id]))? $request->varient_images[$k][$id] : null;
-                            $varient_image = ($image)? $this->uploadVarientImages($image) : (isset($request->v_img_old[$k][$id]))? $request->v_img_old[$k][$id] : null;
+                            $image = ($request->varient_images && isset($request->varient_images[$k][$id]))? $request->varient_images[$k][$id] : null;
+
+                            
+
+
+
+
+
+                            $varient_image = ($image)? $this->uploadVarientImages($image) : null;
 
                             $product->variation_values()->attach($id, [
                                 'price' => $offer_price,
@@ -451,10 +462,11 @@ class ProductController extends Controller
             list($type, $image) = explode(';', $image);
             list(, $image)      = explode(',', $image);
             $data = base64_decode($image);
-            $lg_image_location = 'products/'.md5(microtime()).'.jpg';
-            Storage::disk('public')->put($lg_image_location, $data);
-            return 'storage/'.$lg_image_location;
+            $location = 'products/'.md5(microtime()).'.jpg';
+            Storage::disk('public')->put($location, $data);
+            return 'storage/'.$location;
         }
+       return $image;
     }
 
     private function deleteProductImages($ids, $product){
