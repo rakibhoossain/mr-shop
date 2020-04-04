@@ -109,6 +109,7 @@ class VariationController extends Controller
      */
     public function update(Request $request, Variation $variation)
     {
+
         $this->validate($request, [
             'name' => 'required|min:4|unique:variations,name,'.$variation->id
         ]);
