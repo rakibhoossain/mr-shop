@@ -1,4 +1,4 @@
-<!-- <div id="preview_body"> -->
+<div id="preview_body">
 @php
 	$loop_count = 0;
 @endphp
@@ -64,25 +64,20 @@
 	</div>
 @endif
 
-<!-- </div> -->
+</div>
 <style type="text/css">
 
 	@media print{
 		#preview_body{
 			display: block !important;
-			background: red;
 		}
 	}
 	@page {
-		size: {{$barcode_details->paper_width}}in @if($barcode_details->paper_height > 0){{$barcode_details->paper_height}}in @endif;
-
-		/*width: {{$barcode_details->paper_width}}in !important;*/
-/*		height:@if($barcode_details->paper_height != 0){{$barcode_details->paper_height}}in !important @else auto @endif;*/
+		size: {{$barcode_details->paper_width*0.64}}in @if($barcode_details->paper_height > 0){{$barcode_details->paper_height}}in @endif;
 		margin-top: 0in;
 		margin-bottom: 0in;
 		margin-left: 0in;
 		margin-right: 0in;
-		
 		@if($barcode_details->is_continuous)
 			page-break-inside : avoid !important;
 		@endif

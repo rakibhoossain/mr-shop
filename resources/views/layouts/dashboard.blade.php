@@ -415,8 +415,6 @@ to get the desired effect
 
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
 
-<script src="{{asset('js/jQuery.print.min.js')}}"></script>
-
 <script src="{{asset('js/Admin.js')}}"></script>
 @stack('scripts')
 </body>
