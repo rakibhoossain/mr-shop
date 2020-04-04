@@ -56,12 +56,12 @@ to get the desired effect
       <li class="nav-item d-none d-sm-inline-block">
         <a href="{{route('admin')}}" class="nav-link">Home</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
+<!--       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
-      </li>
+      </li> -->
     </ul>
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+<!--     <form class="form-inline ml-3">
       <div class="input-group input-group-sm">
         <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
@@ -70,10 +70,12 @@ to get the desired effect
           </button>
         </div>
       </div>
-    </form>
+    </form> -->
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
+
+      {{--
       <!-- Messages Dropdown Menu -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -159,7 +161,7 @@ to get the desired effect
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
-
+      --}}
 
       <!-- Admin Dropdown Menu -->
       <li class="nav-item dropdown">
@@ -245,11 +247,12 @@ to get the desired effect
               </li>
               @endcan
 
-              @can('barcode')
+
+              @can('label-print')
               <li class="nav-item">
-                <a href="{{route('admin.barcode.index')}}" class="nav-link">
-                  <i class="fa fa-barcode nav-icon"></i>
-                  <p>Barcode</p>
+                <a href="{{route('admin.barcode.print')}}" class="nav-link">
+                  <i class="fas fa-toilet-paper"></i>
+                  <p>Label Print</p>
                 </a>
               </li>
               @endcan
@@ -289,12 +292,18 @@ to get the desired effect
               </li>
               @endcan
 
-
+              @can('barcode')
+              <li class="nav-item">
+                <a href="{{route('admin.product.barcode.index')}}" class="nav-link">
+                  <i class="fa fa-barcode nav-icon"></i>
+                  <p>Barcode</p>
+                </a>
+              </li>
+              @endcan
 
             </ul>
           </li>
           @endcan
-
 
           @can('stock')
           <li class="nav-item">
@@ -355,8 +364,13 @@ to get the desired effect
 
 
 
-
-
+          <li class="nav-header">FRONTEND</li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-file"></i>
+              <p>Layout</p>
+            </a>
+          </li>
 
 
 

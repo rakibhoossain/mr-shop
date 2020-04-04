@@ -41,7 +41,7 @@
 			@endif
 
 			<div style="height:{{$barcode_details->height}}in !important; line-height: {{$barcode_details->height}}in; width:{{$barcode_details->width*0.97}}in !important; display: inline-block; @if(!$is_new_row) margin-left:{{$barcode_details->col_distance}}in !important; @endif @if(!$first_row)margin-top:{{$barcode_details->row_distance}}in !important; @endif" class="sticker-border text-center">
-				@include('dashboard.product.barcode.code', compact('print', 'barcode', 'product', 'variation', 'barcode_details'))
+				@include('dashboard.product.label.code', compact('print', 'barcode', 'product', 'variation', 'barcode_details'))
 			</div>
 
 		@if(!$barcode_details->is_continuous && ($loop_count % $barcode_details->stickers_in_one_sheet) == 0)

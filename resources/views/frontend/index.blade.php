@@ -83,7 +83,13 @@
             <div class="product is-gray">
               <div class="image d-flex align-items-center justify-content-center">@if($product->image) <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid">@endif
                 <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
+                  <div class="CTA d-flex align-items-center justify-content-center">
+                    @if(!$product->is_variable)
+                      <a href="{{route('addToCart', $product->slug)}}" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a>
+                    @endif
+                    <a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a>
+                    <a href="#" data-url="{{route('product.single', $product->slug)}}" class="quick-view product_popup"><i class="fa fa-arrows-alt"></i></a>
+                  </div>
                 </div>
               </div>
               <div class="title"><a href="{{route('product.single', $product->slug)}}">
@@ -118,72 +124,28 @@
         <!-- Products Slider-->
         <div class="owl-carousel owl-theme products-slider">
           <!-- item-->
+          @foreach(App\Product::limit(7)->get() as $product)
           <div class="item">
             <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-1.png')}}" alt="product" class="img-fluid">
+              <div class="image d-flex align-items-center justify-content-center">@if($product->image) <img src="{{asset($product->image)}}" alt="{{$product->name}}" class="img-fluid">@endif
                 <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
+                  <div class="CTA d-flex align-items-center justify-content-center">
+                    @if(!$product->is_variable)
+                      <a href="{{route('addToCart', $product->slug)}}" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a>
+                    @endif
+                    <a href="{{route('product.single', $product->slug)}}" class="visit-product active"><i class="icon-search"></i>View</a>
+                    <a href="#" data-url="{{route('product.single', $product->slug)}}" class="quick-view product_popup"><i class="fa fa-arrows-alt"></i></a>
+                  </div>
                 </div>
               </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Gray</h3></a><span class="price text-muted">$40.00</span></div>
+              <div class="title"><a href="{{route('product.single', $product->slug)}}">
+                  <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">${{$product->price}}</span></div>
             </div>
           </div>
-          <div class="item">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-2.png')}}" alt="product" class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Black</h3></a><span class="price text-muted">$40.00</span></div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-3.png')}}" alt="product" class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Blue</h3></a><span class="price text-muted">$40.00</span></div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-4.png')}}" alt="product" class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Lake</h3></a><span class="price text-muted">$40.00</span></div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-1.png')}}" alt="product" class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Gray</h3></a><span class="price text-muted">$40.00</span></div>
-            </div>
-          </div>
-          <div class="item">
-            <div class="product is-gray">
-              <div class="image d-flex align-items-center justify-content-center"><img src="{{asset('img/hoodie-woman-2.png')}}" alt="product" class="img-fluid">
-                <div class="hover-overlay d-flex align-items-center justify-content-center">
-                  <div class="CTA d-flex align-items-center justify-content-center"><a href="#" class="add-to-cart"><i class="fa fa-shopping-cart"></i></a><a href="detail.html" class="visit-product active"><i class="icon-search"></i>View</a><a href="#" data-toggle="modal" data-target="#exampleModal" class="quick-view"><i class="fa fa-arrows-alt"></i></a></div>
-                </div>
-              </div>
-              <div class="title"><a href="detail.html">
-                  <h3 class="h6 text-uppercase no-margin-bottom">Elegant Black</h3></a><span class="price text-muted">$40.00</span></div>
-            </div>
-          </div>
+          @endforeach
+
+
+          
         </div>
       </div>
     </section>
@@ -224,46 +186,13 @@
       <div class="container">
         <!-- Brands Slider-->
         <div class="owl-carousel owl-theme brands-slider">
+          @foreach(\App\Brand::latest()->whereNotNull('image')->get() as $brand)
           <!-- item-->
           <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-1.svg" alt="..." class="img-fluid"></div>
+            <div class="brand d-flex align-items-center"><img src="{{$brand->image}}" alt="{{$brand->name}}" class="img-fluid"></div>
           </div>
+          @endforeach
           <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-2.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-3.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-4.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-5.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-6.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-1.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-2.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-3.svg" alt="..." class="img-fluid"></div>
-          </div>
-          <!-- item-->
-          <div class="item d-flex align-items-center justify-content-center">
-            <div class="brand d-flex align-items-center"><img src="https://d19m59y37dris4.cloudfront.net/hub/1-4-3/img/brand-4.svg" alt="..." class="img-fluid"></div>
-          </div>
         </div>
       </div>
     </section>

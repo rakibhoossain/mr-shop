@@ -47,10 +47,12 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
 
 
 
-        Route::match(['GET', 'POST'], '/request/label-print', 'ProductController@labelPrint')->name('admin.barcode.index');
+        Route::match(['GET', 'POST'], '/request/label-print', 'ProductController@labelPrint')->name('admin.barcode.print');
         Route::post('/request/label-print-preview', 'ProductController@labelPrintPreview')->name('admin.barcode.preview');
+	    Route::resource('/barcode', 'BarcodeController', ['as' => 'admin.product']);
 
-	    Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
+
+        Route::resource('/brand', 'BrandController', ['as' => 'admin.product']);
 	    Route::resource('/productCategory', 'ProductCategoryController', ['as' => 'admin.product']);
         Route::resource('/productTag', 'ProductTagController', ['as' => 'admin.product']);
         Route::resource('/variation', 'VariationController', ['as' => 'admin.product']);

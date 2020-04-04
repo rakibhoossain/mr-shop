@@ -28,7 +28,7 @@ class ProductController extends Controller
         $this->middleware('permission:product-delete', ['only' => ['destroy']]);
 
         $this->middleware('permission:stock', ['only' => ['stocks', 'stockCollection']]);
-        $this->middleware('permission:barcode', ['only' => ['labelPrint', 'labelPrintPreview']]);
+        $this->middleware('permission:label-print', ['only' => ['labelPrint', 'labelPrintPreview']]);
     }
 
     /**
@@ -125,14 +125,14 @@ class ProductController extends Controller
                         return response()->json([
                             'success' => true,
                             'code'  => $code,
-                            'html' => view('dashboard.product.barcode.varient_product', compact('product', 'variation', 'code'))->render()
+                            'html' => view('dashboard.product.label.varient_product', compact('product', 'variation', 'code'))->render()
                         ]);                        
                     }
                 }
                 return response()->json([
                     'success' => true,
                     'code'  => $product->code,
-                    'html' => view('dashboard.product.barcode.single_product', compact('product'))->render()
+                    'html' => view('dashboard.product.label.single_product', compact('product'))->render()
                 ]);
             }
 
@@ -142,7 +142,7 @@ class ProductController extends Controller
             ]);
 
         }
-        return view('dashboard.product.barcode.index');
+        return view('dashboard.product.label.index');
     }
     public function labelPrintPreview(Request $request){
         $print = $request->print;
@@ -164,7 +164,7 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
-            'html' => view('dashboard.product.barcode.preview', compact('print', 'barcodes', 'barcode_details'))->render()
+            'html' => view('dashboard.product.label.preview', compact('print', 'barcodes', 'barcode_details'))->render()
         ]);
     }
     /**
@@ -341,12 +341,9 @@ class ProductController extends Controller
                     $product->tags()->attach($request->tags);
                 }
                 
-                
-
                 if($request->variations){
 
                     $product->variation_values()->detach(); //Delete old variations
-
 
                     foreach($request->variations as $k => $variation){
                         foreach($variation as $id){
@@ -355,13 +352,6 @@ class ProductController extends Controller
                             $offer_price = (isset($request->varient_prices[$k][$id]))? $request->varient_prices[$k][$id] : $product->price;
 
                             $image = ($request->varient_images && isset($request->varient_images[$k][$id]))? $request->varient_images[$k][$id] : null;
-
-                            
-
-
-
-
-
                             $varient_image = ($image)? $this->uploadVarientImages($image) : null;
 
                             $product->variation_values()->attach($id, [

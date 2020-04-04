@@ -42,6 +42,7 @@ class PermissionTableSeeder extends Seeder
       'product-category',
       'product-varient',
       'product-tags',
+      'label-print',
       'stock',
       'barcode',
 
