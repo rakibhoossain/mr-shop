@@ -15,7 +15,7 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
+            $table->string('key', 170)->unique();
             $table->text('value')->nullable();
             $table->string('group', 150)->nullable();
             $table->enum('type', ['logo', 'favicon', 'text', 'textarea', 'wysiwyg'])->default('text')->nullable();

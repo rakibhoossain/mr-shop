@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Order;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -55,6 +56,7 @@ class CartController extends Controller
             // if item not exist in cart then add to cart with quantity
             $cart[$id] = [
                 "name" => $name,
+                "slug" => $product->slug,
                 "varient_label" => $varient_label,
                 "quantity" => ($request->quantity)? $request->quantity : 1,
                 "price" => $price,
@@ -108,6 +110,69 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function checkout($step = 'step1'){
+        $invoice = session()->get('checkout_invoice');
+        $shipping = session()->get('checkout_shipping');
+        return view('frontend.checkout.'.$step, compact('invoice', 'shipping'));
+    }
+
+    public function checkoutStoreStep1(Request $request){
+        $request->validate([
+            'invoice.first_name'            => 'required|max:165',
+            'invoice.last_name'             => 'required|max:165',
+            'invoice.phone_number'          => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'invoice.alternative_number'    => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'invoice.country'               => 'required',
+            'invoice.city'                  => 'required',
+            'invoice.post_code'             => 'required|numeric',
+            'invoice.address'               => 'required',
+
+            'invoice.another' => 'nullable',
+
+            'shipping.first_name' => 'nullable|required_with:invoice.another|max:165',
+            'shipping.last_name' => 'nullable|required_with:invoice.another|max:165',
+            'shipping.phone_number' => 'nullable|required_with:invoice.another|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'shipping.alternative_number' => 'nullable|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'shipping.country' => 'nullable|required_with:invoice.another',
+            'shipping.city' => 'nullable|required_with:invoice.another',
+            'shipping.post_code' => 'nullable|required_with:invoice.another|numeric',
+            'shipping.address' => 'nullable|required_with:invoice.another',
+        ]);
+
+        if($request->invoice) {
+            session()->put('checkout_invoice', $request->invoice);
+        }
+
+        if(!empty($request->invoice['another']) && $request->shipping) {
+            session()->put('checkout_shipping', $request->shipping);
+        }else{
+            session()->put('checkout_shipping', null);
+        }
+
+        return redirect(route('checkout', 'step2'));
+    }
+
+    public function checkoutStoreStep2(Request $request){
+        return redirect(route('checkout', 'step3'));
+    }
+    public function checkoutStoreStep3(Request $request){
+        return redirect(route('checkout', 'step4'));
+    }
+    public function checkoutStoreStep4(Request $request){
+        return redirect(route('checkout', 'step5'));
+    }    
+    public function checkoutFinal(){
+        return view('frontend.checkout.final');
+    }
+
+
+
+
+
+
+
+
+
     public function create()
     {
         //

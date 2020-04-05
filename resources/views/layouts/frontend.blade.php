@@ -23,6 +23,8 @@
     <!-- owl carousel-->
     <link rel="stylesheet" href="{{asset('vendor/owl.carousel/assets/owl.carousel.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/owl.carousel/assets/owl.theme.default.css')}}">
+
+    <link rel="stylesheet" href="{{asset('css/toastr.min.css')}}">
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="{{asset('css/frontend.css')}}" id="theme-stylesheet">
     <!-- Custom stylesheet - for your changes-->
@@ -118,7 +120,7 @@
                   <!-- total price-->
                   <div class="dropdown-item total-price d-flex justify-content-between"><span>Total</span><strong class="text-primary">{{Helper::totalCartPrice()}}</strong></div>
                   <!-- call to actions-->
-                  <div class="dropdown-item CTA d-flex"><a href="{{route('cart')}}" class="btn btn-template wide">View Cart</a><a href="checkout1.html" class="btn btn-template wide">Checkout</a></div>
+                  <div class="dropdown-item CTA d-flex"><a href="{{route('cart')}}" class="btn btn-template wide">View Cart</a><a href="{{route('checkout')}}" class="btn btn-template wide">Checkout</a></div>
                   @else
                   <div class="dropdown-item cart-product">
                     <div class="d-flex align-items-center">
@@ -138,6 +140,7 @@
     </header>
     @yield('content')
     @include('frontend/partials/product_popup')
+    @include('alert')
 
     <div id="scrollTop"><i class="fa fa-long-arrow-up"></i></div>
     <!-- Footer-->
@@ -263,6 +266,7 @@
       <p><img src="{{asset('img/template-mac.png')}}" alt="" class="img-fluid"></p>
       <p class="text-muted text-small">Stylesheet switching is done via JavaScript and can cause a blink while page loads. This will not happen in your production code.</p>
     </div>
+
     <!-- JavaScript files-->
     <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -293,6 +297,7 @@
       
       
     </script>
+    <script src="{{asset('js/toastr.min.js')}}"></script>
     <!-- Main Template File-->
     <script src="{{asset('js/front.js')}}"></script>
     @stack('scripts')

@@ -29,11 +29,26 @@ Route::get('/shop', 'HomeController@shop')->name('shop');
 Route::match(['get', 'post'], '/filter', 'HomeController@filter')->name('shop.filter');
 Route::get('/product/{product}', 'HomeController@singleProduct')->name('product.single');
 
-Route::get('/cart', ['middleware' => 'cart', 'uses' => 'CartController@index'] )->name('cart');
 
+//Cart Routes
+Route::get('/cart', ['middleware' => 'cart', 'uses' => 'CartController@index'] )->name('cart');
 Route::match(['GET', 'POST'], '/add-to-cart/{product}', 'CartController@addToCart')->name('addToCart');
 Route::get('/remove-from-cart/{code}', 'CartController@removeFromCart')->name('removeFromCart');
 Route::post('/cart-update', 'CartController@cartUpdate')->name('cartUpdate');
+
+
+
+//Customer route
+Route::group(['prefix' => '/', 'middleware' => 'auth:web'], function () {
+    //Checkout Routes
+    Route::get('/checkout/{step?}', ['middleware' => 'cart', 'uses' => 'CartController@checkout'] )->name('checkout');
+    Route::post('/checkout/step1/store', 'CartController@checkoutStoreStep1')->name('checkout.store.step1');
+    Route::post('/checkout/step2/store', 'CartController@checkoutStoreStep2')->name('checkout.store.step2');
+    Route::post('/checkout/step3/store', 'CartController@checkoutStoreStep3')->name('checkout.store.step3');
+    Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
+    Route::post('/checkout/final/store', 'CartController@checkoutFinal')->name('checkout.final');
+
+});
 
 
 //Dashboard Routes
