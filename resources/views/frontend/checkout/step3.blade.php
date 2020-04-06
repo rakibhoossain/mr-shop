@@ -8,63 +8,51 @@
 </ul>
 <div class="tab-content">
   <div id="payment-method" class="tab-block">
-    <form action="{{route('checkout.store.step3')}}" method="POST" class="shipping-form">
+    <form action="{{route('checkout.store.step3')}}" method="POST" class="payment-form" id="payment-form" data-cc="false">
       @csrf
       <div id="accordion" role="tablist" aria-multiselectable="true">
         <div class="card">
           <div id="headingOne" role="tab" class="card-header">
-            <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Credit Card</a></h6>
+            <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">Stripe</a></h6>
           </div>
           <div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" class="collapse show">
             <div class="card-body">
-
-
-                <div class="row">
-                  <div class="form-group col-md-6">
-                    <label for="card-name" class="form-label">Name on Card</label>
-                    <input type="text" name="card-name" placeholder="Name on card" id="card-name" class="form-control">
-                  </div>
-                  <div class="form-group col-md-6">
-                    <label for="card-number" class="form-label">Card Number</label>
-                    <input type="text" name="card-number" placeholder="Card number" id="card-number" class="form-control">
-                  </div>
-                  <div class="form-group col-md-4">
-                    <label for="expiry-date" class="form-label">Expiry Date</label>
-                    <input type="text" name="expiry-date" placeholder="MM/YY" id="expiry-date" class="form-control">
-                  </div>
-                  <div class="form-group col-md-4">
-                    <label for="cvv" class="form-label">CVC/CVV</label>
-                    <input type="text" name="cvv" placeholder="123" id="cvv" class="form-control">
-                  </div>
-                  <div class="form-group col-md-4">
-                    <label for="zip" class="form-label">ZIP</label>
-                    <input type="text" name="zip" placeholder="123" id="zip" class="form-control">
-                  </div>
+              <div class="row">
+                <div class='form-group col-md-6'>
+                  <label for="card_name" class='form-label'>Name on Card</label> 
+                  <input id="card_name" class='form-control' size='4' type='text' name="card[name]" value="{{{ (isset($card['name'])) ? $card['name'] : '' }}}">
                 </div>
-
-
+                <div class='form-group col-md-6'>
+                  <label for="card_number" class='form-label'>Card Number</label> 
+                  <input id="card_number" autocomplete='off' class='form-control mask_input' size='20' type='text' data-inputmask="'mask': '9999 9999 9999 9999'" name="card[number]" value="{{{ (isset($card['number'])) ? $card['number'] : '' }}}">
+                </div>
+                <div class='form-group col-md-4'>
+                  <label for="card_cvc" class='form-label'>CVC</label> 
+                  <input id="card_cvc" autocomplete='off' class='form-control' placeholder='ex. 311' size='4' type='text' name="card[cvc]" value="{{{ (isset($card['cvc'])) ? $card['cvc'] : '' }}}">
+                </div>
+                <div class='form-group col-md-4'>
+                  <label for="card_exp_month" class='form-label'>Expiration Month</label> 
+                  <input id="card_exp_month" class='form-control mask_input' placeholder='MM' size='2' type='text' data-inputmask="'mask': '99'" name="card[month]" value="{{{ (isset($card['month'])) ? $card['month'] : '' }}}">
+                </div>
+                <div class='form-group col-md-4'>
+                  <label for="card_exp_year" class='form-label'>Expiration Year</label> 
+                  <input id="card_exp_year" class='form-control mask_input' placeholder='YYYY' size='4' type='text' data-inputmask="'mask': '9999'" name="card[year]" value="{{{ (isset($card['year'])) ? $card['year'] : '' }}}">
+                </div>
+                <input type="hidden" id="cc_token" name="card[token]" value="{{{ (isset($card['token'])) ? $card['token'] : '' }}}">
+              </div>
             </div>
           </div>
         </div>
-        <div class="card">
-          <div id="headingTwo" role="tab" class="card-header">
-            <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="collapsed">Paypal</a></h6>
-          </div>
-          <div id="collapseTwo" role="tabpanel" aria-labelledby="headingTwo" class="collapse">
-            <div class="card-body">
-              <input type="radio" name="shippping" id="payment-method-1" class="radio-template">
-              <label for="payment-method-1"><strong>Continue with Paypal</strong><br><span class="label-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span></label>
-            </div>
-          </div>
-        </div>
+
         <div class="card">
           <div id="headingThree" role="tab" class="card-header">
-            <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="collapsed">Pay on delivery</a></h6>
+            <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="collapsed">Cash on delivery</a></h6>
           </div>
           <div id="collapseThree" role="tabpanel" aria-labelledby="headingThree" class="collapse">
             <div class="card-body">
-              <input type="radio" name="shippping" id="payment-method-2" class="radio-template">
-              <label for="payment-method-2"><strong>Pay on Delivery</strong><br><span class="label-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span></label>
+              <input type="radio" id="payment-method-2" 
+              class="radio-template" name="payment[cash]" value="cash" @if(isset($payment['cash'])) checked @endif >
+              <label for="payment-method-2"><strong>Cash on Delivery</strong><br><span class="label-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</span></label>
             </div>
           </div>
         </div>
@@ -77,3 +65,49 @@
   </div>
 </div>
 @endsection
+
+@push('scripts')
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  var $form = $('#payment-form');
+  $('.mask_input').inputmask();
+
+  $form.bind('submit', function(e) {
+    if ($form.data('cc')) {
+      e.preventDefault();
+      var inputSelector = ['#card_name', '#card_number', '#card_cvc', '#card_exp_month', '#card_exp_year'].join(', '),
+      $inputs = $form.find(inputSelector),
+      token = "{{ env('STRIPE_KEY') }}";
+
+      $('.is-invalid').removeClass('is-invalid');
+      $inputs.each(function(i) {
+        if ($(this).val() === '') {
+          $(this).addClass('is-invalid');
+          return;
+        }
+      });
+
+      Stripe.setPublishableKey(token);
+      Stripe.createToken({
+        name: $('#card_name').val(),
+        number: $('#card_number').val(),
+        cvc: $('#card_cvc').val(),
+        exp_month: $('#card_exp_month').val(),
+        exp_year: $('#card_exp_year').val()
+      }, 
+      stripeResponseHandler);
+    }
+  });
+  
+  function stripeResponseHandler(status, response) {
+    if (response.error) {
+      toastr.error(response.error.message);
+    } else {
+      $('#cc_token').val(response.id);
+      $form.get(0).submit();
+    }
+  }
+})
+</script>
+@endpush

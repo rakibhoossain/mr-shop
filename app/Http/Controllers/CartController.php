@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Order;
 use Illuminate\Http\Request;
+use DB;
+use Stripe;
 
 class CartController extends Controller
 {
@@ -113,7 +115,14 @@ class CartController extends Controller
     public function checkout($step = 'step1'){
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
-        return view('frontend.checkout.'.$step, compact('invoice', 'shipping'));
+        $card = session()->get('checkout_card');
+        $payment = session()->get('checkout_payment');
+
+        if (\View::exists('frontend.checkout.'.$step)) {
+            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment'));
+        }else{
+            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment'));
+        }
     }
 
     public function checkoutStoreStep1(Request $request){
@@ -156,33 +165,84 @@ class CartController extends Controller
         return redirect(route('checkout', 'step3'));
     }
     public function checkoutStoreStep3(Request $request){
+
+        $request->validate([
+            'card.name'     => 'nullable|required_without:payment',
+            'card.number'   => 'nullable|required_without:payment',
+            'card.cvc'      => 'nullable|required_without:payment',
+            'card.month'    => 'nullable|required_without:payment',
+            'card.year'     => 'nullable|required_without:payment',
+            'card.token'     => 'nullable|required_without:payment',
+            'payment'       => 'nullable|required_without:card'
+        ]);
+
+        if($request->card && $request->card['token']){
+            session()->put('checkout_card', $request->card);
+
+            dd($request->card);
+        }else{
+            session()->put('checkout_card', null);
+        }
+
+
+
+// session()->put('checkout_payment', $request->payment);
+
+
+// dd(session()->get('checkout_payment'));
+
+
+
+
+
+
         return redirect(route('checkout', 'step4'));
     }
-    public function checkoutStoreStep4(Request $request){
-        return redirect(route('checkout', 'step5'));
-    }    
+    // public function checkoutStoreStep4(Request $request){
+    //     return redirect(route('checkout', 'step5'));
+    // }    
     public function checkoutFinal(){
 
+        
         $cart = session()->get('cart');
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
 
         if($cart && $invoice){
-            $order = auth()->user()->orders()->create($invoice);
-            if($shipping){
-                $order->update(['shipping_address' => json_encode(compact('shipping'))]);
-            }
-            foreach ($cart as $key => $item) {
-                $order->items()->create($item);
-            }
+            DB::beginTransaction();
+            try{
+                $order = auth()->user()->orders()->create($invoice);
+                if($shipping){
+                    $order->update(['shipping_address' => json_encode(compact('shipping'))]);
+                }
+                foreach ($cart as $key => $item) {
+                    $order->items()->create($item);
+                }
 
-            $order_url = route('order.view', [auth()->user()->id, $order->id]);
+                $card = session()->get('checkout_card');
+                if($card){
+                    Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+                    $result = Stripe\Charge::create ([
+                        "amount" => 100 * 100,
+                        "currency" => "usd",
+                        "source" => $card['token'],
+                        "description" => "Test payment from MR. Shop",
+                    ]);
+                    if(!$result->paid) throw new \Exception('Payment failed! Please try again!');
+                }
 
-            session()->put('cart', null);
-            // session()->put('checkout_invoice', null);
-            // session()->put('checkout_shipping', null);
-            
-            return view('frontend.checkout.final', compact('order_url'));
+                DB::commit();
+                $order_url = route('order.view', [auth()->user()->id, $order->id]);
+                session()->put('cart', null);
+                session()->put('checkout_card', null);
+                // session()->put('checkout_invoice', null);
+                // session()->put('checkout_shipping', null);
+                
+                return view('frontend.checkout.final', compact('order_url'));
+            }catch(\Exception $e){
+                DB::rollback();
+                return back()->withErrors($e->getMessage());
+            }
         }else{
             return redirect(route('shop'));
         }  

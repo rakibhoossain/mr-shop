@@ -48,7 +48,7 @@ Route::group(['prefix' => '/' ,'middleware' => 'auth:web'], function () {
         Route::post('/checkout/step1/store', 'CartController@checkoutStoreStep1')->name('checkout.store.step1');
         Route::post('/checkout/step2/store', 'CartController@checkoutStoreStep2')->name('checkout.store.step2');
         Route::post('/checkout/step3/store', 'CartController@checkoutStoreStep3')->name('checkout.store.step3');
-        Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
+        // Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
     });
     Route::get('/checkout/step/final', 'CartController@checkoutFinal')->name('checkout.final'); //kaj korte hbe
 

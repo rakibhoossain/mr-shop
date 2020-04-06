@@ -320,6 +320,7 @@
       
       
     </script>
+    <script src="{{asset('js/jquery.inputmask.bundle.js')}}"></script>
     <script src="{{asset('js/toastr.min.js')}}"></script>
     <!-- Main Template File-->
     <script src="{{asset('js/front.js')}}"></script>
