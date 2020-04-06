@@ -90,6 +90,12 @@
             <ul class="navbar-nav mx-auto">
               <li class="nav-item"><a href="{{route('home')}}" class="nav-link active">Home</a>
               <li class="nav-item"><a href="{{route('shop')}}" class="nav-link">Shop</a>
+
+                <!-- only for web gurd -->
+              <li class="nav-item"><a href="{{route('account.index')}}" class="nav-link">Account</a>
+
+
+                
               </li>
 
 
@@ -99,7 +105,24 @@
               <!-- Search Button-->
               <div class="search"><i class="icon-search"></i></div>
               <!-- User Not Logged - link to login page-->
-              <div class="user"> <a id="userdetails" href="customer-login.html" class="user-link"><i class="icon-profile">                   </i></a></div>
+              <div class="user dropdown"> 
+
+
+
+                <!-- <a id="userdetails" href="customer-login.html" class="user-link"><i class="icon-profile"></i></a> -->
+
+<!-- <li class="nav-item"> -->
+        <a class="nav-link" data-toggle="dropdown" href="#"><i class="icon-profile"></i></a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> {{ __('Logout') }}</a>
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;"> @csrf </form>
+        </div>
+      <!-- </li> -->
+
+
+
+
+              </div>
               <!-- Cart Dropdown-->
               <div class="cart dropdown show"><a id="cartdetails" href="https://example.com/" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="icon-cart"></i>
                   <div class="cart-no">{{Helper::totalCartItem()}}</div></a><a href="{{route('cart')}}" class="text-primary view-cart">View Cart</a>

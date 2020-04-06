@@ -23,4 +23,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function getTotalPriceAttribute()
+    {
+        return $this->price * $this->quantity;
+    }
 }

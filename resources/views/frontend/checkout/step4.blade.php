@@ -43,10 +43,7 @@
     </div>
     <div class="CTAs d-flex justify-content-between flex-column flex-lg-row">
       <a href="{{route('checkout','step3')}}" class="btn btn-template-outlined wide prev"><i class="fa fa-angle-left"></i>Back to payment method</a>
-      <form action="{{route('checkout.final')}}" method="POST" class="shipping-form">
-      @csrf
-        <button type="submit" class="btn btn-template wide next">Place an order<i class="fa fa-angle-right"></i></button>
-      </form>
+      <a href="{{route('checkout.final')}}" class="btn btn-template wide next">Place an order<i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 </div>

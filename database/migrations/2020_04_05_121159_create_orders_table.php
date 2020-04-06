@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('order_number', 170)->unique();
+            $table->string('code', 170)->unique();
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
 
