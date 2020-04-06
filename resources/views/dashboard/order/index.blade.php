@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title', 'Products')
+@section('title', 'Orders')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
@@ -8,7 +8,7 @@
       <div class="col-sm-6">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="{{route('admin')}}">Home</a></li>
-          <li class="breadcrumb-item active">Products</li>
+          <li class="breadcrumb-item active">Orders</li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->
@@ -22,22 +22,17 @@
       <div class="col-12">
         <div class="card">
           <div class="card-header">
-            <h3 class="card-title">Products Table</h3>
+            <h3 class="card-title">Orders Table</h3>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-bordered table-hover" id="product_table">
+              <table class="table table-bordered table-hover" id="order_table">
                 <thead>
                   <tr>
                     <th>Code</th>
-                    <th>Product Name</th>
-                    <th>Image</th>
-                    <th>Purchase Price</th>
-                    <th>Sell Price</th>
-                    <th>Offer Price</th>
-                    <th>Categories</th>
-                    <th>Brand</th>
-                    <th>Type</th>
+                    <th>Customer Name</th>
+                    <th>Price</th>
+                    <th>Status</th>
                     <th>Action</th>
                     <th>Created</th>
                   </tr>
@@ -56,7 +51,7 @@
 @push('scripts')
 <script type="text/javascript">
 $(document).ready(function() {
-  $('#product_table').delegate('.sweet_confirm', 'click', function(e){
+  $('#order_table').delegate('.sweet_confirm', 'click', function(e){
     e.preventDefault();
     let url = $(this).data('url');
     Swal.fire({
@@ -87,26 +82,21 @@ $(document).ready(function() {
     })
   });
 
-  $('#product_table').DataTable({
-    ajax: '{{route("api.product.collection")}}',
+  $('#order_table').DataTable({
+    ajax: '{{route("api.order.collection")}}',
     columns: [
       { data: 'code' },
       { data: 'name' },
-      { data: 'image', 'searchable': false, 'orderable': false },
-      { data: 'purchase_price' },
-      { data: 'sell_price' },
-      { data: 'offer_price' },
-      { data: 'categories' },
-      { data: 'brand' },
-      { data: 'type' },
+      { data: 'price' },
+      { data: 'status' },
       { data: 'action', 'searchable': false, 'orderable': false },
       { data: 'created_at' },
     ],
-    "order": [[ 10, "desc" ]],
+    "order": [[ 5, "desc" ]],
     "autoWidth": false,
     "lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
     'columnDefs': [
-      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [10] }
+      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [5] }
     ],
   });
 });

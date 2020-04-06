@@ -116,12 +116,12 @@ class CartController extends Controller
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
         $card = session()->get('checkout_card');
-        $payment = session()->get('checkout_payment');
+        $payment_type = session()->get('checkout_payment_type');
 
         if (\View::exists('frontend.checkout.'.$step)) {
-            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment'));
+            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type'));
         }else{
-            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment'));
+            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type'));
         }
     }
 
@@ -165,48 +165,31 @@ class CartController extends Controller
         return redirect(route('checkout', 'step3'));
     }
     public function checkoutStoreStep3(Request $request){
+        if(isset($request->payment['type'])) session()->put('checkout_payment_type', $request->payment['type']);
 
         $request->validate([
-            'card.name'     => 'nullable|required_without:payment',
-            'card.number'   => 'nullable|required_without:payment',
-            'card.cvc'      => 'nullable|required_without:payment',
-            'card.month'    => 'nullable|required_without:payment',
-            'card.year'     => 'nullable|required_without:payment',
-            'card.token'     => 'nullable|required_without:payment',
-            'payment'       => 'nullable|required_without:card'
+            'card.name'     => 'nullable|required_if:payment.type,card',
+            'card.number'   => 'nullable|required_if:payment.type,card',
+            'card.cvc'      => 'nullable|required_if:payment.type,card',
+            'card.month'    => 'nullable|required_if:payment.type,card',
+            'card.year'     => 'nullable|required_if:payment.type,card',
+            'card.token'    => 'nullable|required_if:payment.type,card',
         ]);
 
         if($request->card && $request->card['token']){
             session()->put('checkout_card', $request->card);
-
-            dd($request->card);
         }else{
             session()->put('checkout_card', null);
         }
 
-
-
-// session()->put('checkout_payment', $request->payment);
-
-
-// dd(session()->get('checkout_payment'));
-
-
-
-
-
-
         return redirect(route('checkout', 'step4'));
     }
-    // public function checkoutStoreStep4(Request $request){
-    //     return redirect(route('checkout', 'step5'));
-    // }    
+   
     public function checkoutFinal(){
-
-        
         $cart = session()->get('cart');
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
+        $payment_type = session()->get('checkout_payment_type');
 
         if($cart && $invoice){
             DB::beginTransaction();
@@ -220,13 +203,13 @@ class CartController extends Controller
                 }
 
                 $card = session()->get('checkout_card');
-                if($card){
+                if($card && $payment_type == 'card'){
                     Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
                     $result = Stripe\Charge::create ([
-                        "amount" => 100 * 100,
+                        "amount" => $order->total_price *100,
                         "currency" => "usd",
                         "source" => $card['token'],
-                        "description" => "Test payment from MR. Shop",
+                        "description" => "Order payment ".$order->code,
                     ]);
                     if(!$result->paid) throw new \Exception('Payment failed! Please try again!');
                 }
@@ -234,7 +217,7 @@ class CartController extends Controller
                 DB::commit();
                 $order_url = route('order.view', [auth()->user()->id, $order->id]);
                 session()->put('cart', null);
-                session()->put('checkout_card', null);
+                // session()->put('checkout_card', null);
                 // session()->put('checkout_invoice', null);
                 // session()->put('checkout_shipping', null);
                 

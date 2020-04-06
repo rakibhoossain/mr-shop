@@ -313,6 +313,14 @@ to get the desired effect
             </a>
           </li>
           @endcan
+
+          <li class="nav-item">
+            <a href="{{route('admin.order.index')}}" class="nav-link">
+              <i class="nav-icon fas fa-shopping-basket"></i>
+              <p>Order</p>
+            </a>
+          </li>
+
           @can('settings')
           <li class="nav-item">
             <a href="{{route('admin.settings.store')}}" class="nav-link">

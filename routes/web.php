@@ -48,9 +48,8 @@ Route::group(['prefix' => '/' ,'middleware' => 'auth:web'], function () {
         Route::post('/checkout/step1/store', 'CartController@checkoutStoreStep1')->name('checkout.store.step1');
         Route::post('/checkout/step2/store', 'CartController@checkoutStoreStep2')->name('checkout.store.step2');
         Route::post('/checkout/step3/store', 'CartController@checkoutStoreStep3')->name('checkout.store.step3');
-        // Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
     });
-    Route::get('/checkout/step/final', 'CartController@checkoutFinal')->name('checkout.final'); //kaj korte hbe
+    Route::get('/checkout/step/final', 'CartController@checkoutFinal')->name('checkout.final');
 
     //Account routes
     Route::resource('/account', 'AccountController', ['only' => ['index', 'edit']]);
@@ -87,7 +86,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
 
 
 
-
+    Route::resource('/order', 'OrderController', ['as' => 'admin']);
 
     Route::resource('/category', 'CategoryController', ['as' => 'admin']);
     Route::resource('/image', 'ImageController', ['as' => 'admin']);
@@ -109,6 +108,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
     Route::get('/collection/admins', 'AdminController@collection')->name('api.admin.collection');
     Route::get('/collection/products', 'ProductController@collection')->name('api.product.collection');
     Route::get('/collection/stocks', 'ProductController@stockCollection')->name('api.stock.collection');
+    Route::get('/collection/orders', 'OrderController@collection')->name('api.order.collection');
     Route::get('/collection/users', 'UserController@collection')->name('api.user.collection'); 
 
 });

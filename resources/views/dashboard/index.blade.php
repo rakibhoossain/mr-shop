@@ -1,4 +1,5 @@
 @extends('layouts/dashboard')
+@section('title', 'Settings')
 @section('content')
     <!-- Main content -->
     <div class="content">

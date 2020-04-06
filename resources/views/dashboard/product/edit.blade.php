@@ -1,4 +1,5 @@
 @extends('layouts.dashboard')
+@section('title', 'Product Edit')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
