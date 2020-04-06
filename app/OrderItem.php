@@ -24,6 +24,11 @@ class OrderItem extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function variation()
+    {
+        return $this->belongsTo(ProductVariation::class, 'variation_value_id', 'variation_value_id');
+    }
+
     public function getTotalPriceAttribute()
     {
         return $this->price * $this->quantity;

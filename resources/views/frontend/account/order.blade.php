@@ -41,14 +41,32 @@
                   <div class="item">
                     <div class="row d-flex align-items-center">
                       <div class="col-6">
-                        <div class="d-flex align-items-center"><img src="../../../d19m59y37dris4.cloudfront.net/hub/1-4-3/img/shirt.png" alt="..." class="img-fluid">
-                          <div class="title"><a href="detail.html">
-                              <h6>{{$item->product->name}}</h6><span class="text-muted">Size: Large</span></a></div>
+                        <div class="d-flex align-items-center">
+
+                          @php  $image = $item->product->image; @endphp
+                          @if($item->variation && $item->variation->image)
+                            @php  $image = $item->variation->image; @endphp
+                          @endif
+
+                          @if($image)
+                          <img src="{{asset($image)}}" alt="{{$item->product->name}}" class="img-fluid">
+                          @endif
+
+                          <div class="title">
+                            <a href="{{route('product.single', $item->product->slug)}}">
+                            <h6>{{$item->product->name}}</h6>
+                            @if($item->variation && $item->variation->variation && $item->variation->variation_value)
+                              <span class="text-muted">{{$item->variation->variation->name}}: {{$item->variation->variation_value->name}}</span>
+                            @endif
+                            </a>
+                          </div>
+
+
                         </div>
                       </div>
-                      <div class="col-2"><span>{{$item->price}}</span></div>
+                      <div class="col-2"><span>{{Helper::frontendPrice($item->price)}}</span></div>
                       <div class="col-2">{{$item->quantity}}</div>
-                      <div class="col-2 text-right"><span>{{$item->total_price}}</span></div>
+                      <div class="col-2 text-right"><span>{{Helper::frontendPrice($item->total_price)}}</span></div>
                     </div>
                   </div>
                   @endforeach
@@ -57,7 +75,7 @@
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Order subtotal</strong></div>
-                      <div class="col-2 text-right"><strong>{{$order->total_price}}</strong></div>
+                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->total_price)}}</strong></div>
                     </div>
                   </div>
                   <div class="item">
@@ -87,7 +105,7 @@
                   <h6 class="text-uppercase">Invoice address</h6>
                 </div>
                 <div class="block-body">
-                  <p>John Brown<br>					13/25 New Avenue<br>					New Heaven<br>					45Y 73J<br>					England<br>					Great Britain</p>
+                  <p>{{$order->first_name}} {{$order->first_name}}<br>{{$order->address}}<br>{{$order->city}}<br>{{$order->post_code}}<br>{{$order->country}}</p>
                 </div>
               </div>
               <div class="col-sm-6">
@@ -95,7 +113,14 @@
                   <h6 class="text-uppercase">Shipping address</h6>
                 </div>
                 <div class="block-body">
-                  <p>John Brown<br>					13/25 New Avenue<br>					New Heaven<br>					45Y 73J<br>					England<br>					Great Britain</p>
+                  @if($shipping)
+                  @foreach($shipping as $ship)
+                    <p>{{$ship->first_name}} {{$ship->first_name}}<br>{{$ship->address}}<br>{{$ship->city}}<br>{{$ship->post_code}}<br>{{$ship->country}}</p>
+                    @break
+                  @endforeach
+                  @else
+                  <p>{{$order->first_name}} {{$order->first_name}}<br>{{$order->address}}<br>{{$order->city}}<br>{{$order->post_code}}<br>{{$order->country}}</p>
+                  @endif
                 </div>
               </div>
             </div>

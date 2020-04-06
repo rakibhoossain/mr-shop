@@ -35,7 +35,8 @@ class AccountController extends Controller
     }
     //Order view 
     public function order(Request $request, User $user, Order $order){
-        return view('frontend.account.order', compact('order'));
+        $shipping = ($order->shipping_address)? json_decode($order->shipping_address) : null;
+        return view('frontend.account.order', compact('order', 'shipping'));
     }
 
     /**

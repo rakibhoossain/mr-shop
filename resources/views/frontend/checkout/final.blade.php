@@ -20,9 +20,9 @@
     <section class="checkout">
       <div class="container">
         <div class="confirmation-icon"><i class="fa fa-check"></i></div>
-        <h2>Thank you, Julie. Your order is confirmed.</h2>
+        <h2>Thank you, {{auth()->user()->name}}! Your order is confirmed.</h2>
         <p class="mb-5">Your order hasn't shipped yet but we will send you ane email when it does.</p>
-        <p> <a href="#" class="btn btn-template wide">View or manage your order</a></p>
+        <p> <a href="{{$order_url}}" class="btn btn-template wide">View or manage your order</a></p>
       </div>
     </section>
 @endsection

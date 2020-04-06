@@ -38,7 +38,7 @@
             <tbody>
               @foreach($orders as $order)
               <tr>
-                <th>{{$order->code}}</th>
+                <th>#{{$order->code}}</th>
                 <td>{{date('d/m/Y', strtotime($order->created_at))}}</td>
                 <td>{{$order->total_price}}</td>
                 <td>{!! Helper::getLabelByStatus($order->status, 'badge') !!}</td>

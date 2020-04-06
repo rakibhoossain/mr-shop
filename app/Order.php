@@ -24,8 +24,8 @@ class Order extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'status', 'payment_status', 'payment_method',
-        'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes'
+        'payment_method', 'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes', 'shipping_address', 'alternative_number'
+// 'status', 'payment_status', 
     ];
 
     public function user()
@@ -43,3 +43,4 @@ class Order extends Model
         return $this->items->sum('total_price');
     }
 }
+

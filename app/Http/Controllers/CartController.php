@@ -63,7 +63,7 @@ class CartController extends Controller
                 "sell_price" => $sell_price,
                 "thumb" => $thumb,
                 "product_id" => $product_id,
-                "varient_id" => $varient_id,
+                "variation_value_id" => $varient_id,
                 "max" => $max
             ];
             session()->put('cart', $cart);
@@ -162,7 +162,30 @@ class CartController extends Controller
         return redirect(route('checkout', 'step5'));
     }    
     public function checkoutFinal(){
-        return view('frontend.checkout.final');
+
+        $cart = session()->get('cart');
+        $invoice = session()->get('checkout_invoice');
+        $shipping = session()->get('checkout_shipping');
+
+        if($cart && $invoice){
+            $order = auth()->user()->orders()->create($invoice);
+            if($shipping){
+                $order->update(['shipping_address' => json_encode(compact('shipping'))]);
+            }
+            foreach ($cart as $key => $item) {
+                $order->items()->create($item);
+            }
+
+            $order_url = route('order.view', [auth()->user()->id, $order->id]);
+
+            session()->put('cart', null);
+            // session()->put('checkout_invoice', null);
+            // session()->put('checkout_shipping', null);
+            
+            return view('frontend.checkout.final', compact('order_url'));
+        }else{
+            return redirect(route('shop'));
+        }  
     }
 
 

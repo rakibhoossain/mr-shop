@@ -41,15 +41,18 @@ Route::post('/cart-update', 'CartController@cartUpdate')->name('cartUpdate');
 
 //Customer route
 Route::group(['prefix' => '/' ,'middleware' => 'auth:web'], function () {
+    
     //Checkout Routes
-    Route::get('/checkout/{step?}', ['middleware' => 'cart', 'uses' => 'CartController@checkout'] )->name('checkout');
-    Route::post('/checkout/step1/store', 'CartController@checkoutStoreStep1')->name('checkout.store.step1');
-    Route::post('/checkout/step2/store', 'CartController@checkoutStoreStep2')->name('checkout.store.step2');
-    Route::post('/checkout/step3/store', 'CartController@checkoutStoreStep3')->name('checkout.store.step3');
-    Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
+    Route::group(['prefix' => '/' ,'middleware' => 'cart'], function () {
+        Route::get('/checkout/{step?}', 'CartController@checkout' )->name('checkout');
+        Route::post('/checkout/step1/store', 'CartController@checkoutStoreStep1')->name('checkout.store.step1');
+        Route::post('/checkout/step2/store', 'CartController@checkoutStoreStep2')->name('checkout.store.step2');
+        Route::post('/checkout/step3/store', 'CartController@checkoutStoreStep3')->name('checkout.store.step3');
+        Route::post('/checkout/step4/store', 'CartController@checkoutStoreStep4')->name('checkout.store.step4');
+    });
     Route::get('/checkout/step/final', 'CartController@checkoutFinal')->name('checkout.final'); //kaj korte hbe
 
-
+    //Account routes
     Route::resource('/account', 'AccountController', ['only' => ['index', 'edit']]);
     Route::get('/account/{user}/orders', 'AccountController@orders')->name('orders');
     Route::get('/account/{user}/order/{order}/view', 'AccountController@order')->name('order.view');
