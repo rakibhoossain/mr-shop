@@ -8,7 +8,7 @@
 </ul>
 <div class="tab-content">
   <div id="payment-method" class="tab-block">
-    <form action="{{route('checkout.store.step3')}}" method="POST" class="payment-form" id="payment_form" data-type="{{$payment_type}}">
+    <form action="{{route('checkout.store.step3')}}" method="POST" class="payment-form" id="payment_form">
       @csrf
       <input type="hidden" id="payment_type" name="payment[type]" value="{{$payment_type}}">
       <div id="accordion" role="tablist" aria-multiselectable="true">
@@ -70,10 +70,17 @@
 <script type="text/javascript">
 $(document).ready(function(){
   var $form = $('#payment_form');
+  var selected_type = $('#payment_type').val() || 'card';
+
   $('.mask_input').inputmask();
 
   $form.bind('submit', function(e) {
-    if ($form.data('type') == 'card') {
+
+    if (selected_type === 'card') {
+
+
+
+
       e.preventDefault();
       var inputSelector = ['#card_name', '#card_number', '#card_cvc', '#card_exp_month', '#card_exp_year'].join(', '),
       $inputs = $form.find(inputSelector),
@@ -118,10 +125,10 @@ $(document).ready(function(){
   $('.collapse').on('shown.bs.collapse', function () {
     let type = $(this).data('type');
     $( ".collapse[data-type!='"+type+"']" ).collapse('hide');
+    selected_type = type;
     $('#payment_type').val(type);
   })
 
-  var selected_type = $('#payment_type').val() || 'card';
   $( ".collapse[data-type='"+selected_type+"']" ).collapse('show');
 
 

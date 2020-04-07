@@ -7,6 +7,7 @@ use App\Order;
 use Illuminate\Http\Request;
 use DB;
 use Stripe;
+use Session;
 
 class CartController extends Controller
 {
@@ -112,16 +113,30 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function checkout($step = 'step1'){
+    public function checkout(Request $request, $step = 'step1'){
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
         $card = session()->get('checkout_card');
         $payment_type = session()->get('checkout_payment_type');
+ 
+        $checkout_steps = (array)session()->get('checkout_steps');
+        print_r($checkout_steps);
 
-        if (\View::exists('frontend.checkout.'.$step)) {
-            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type'));
+
+
+        
+        if(\View::exists('frontend.checkout.'.$step) ) {
+
+          $step_n = (int)$step[strlen($step)-1];
+          if( ($step_n !== 1) && !array_key_exists($step_n, $checkout_steps) ){
+            return redirect()->back();
+          }
+
+
+
+            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
         }else{
-            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type'));
+            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
         }
     }
 
@@ -157,11 +172,16 @@ class CartController extends Controller
         }else{
             session()->put('checkout_shipping', null);
         }
-
+        $step = session()->get('checkout_steps');
+        $step[2] = 'step2';
+        session()->put('checkout_steps', $step);
         return redirect(route('checkout', 'step2'));
     }
 
     public function checkoutStoreStep2(Request $request){
+        $step = session()->get('checkout_steps');
+        $step[3] = 'step3';
+        session()->put('checkout_steps', $step);
         return redirect(route('checkout', 'step3'));
     }
     public function checkoutStoreStep3(Request $request){
@@ -181,7 +201,9 @@ class CartController extends Controller
         }else{
             session()->put('checkout_card', null);
         }
-
+        $step = session()->get('checkout_steps');
+        $step[4] = 'step4';
+        session()->put('checkout_steps', $step);
         return redirect(route('checkout', 'step4'));
     }
    
@@ -191,7 +213,7 @@ class CartController extends Controller
         $shipping = session()->get('checkout_shipping');
         $payment_type = session()->get('checkout_payment_type');
 
-        if($cart && $invoice){
+        if($cart && $invoice && $payment_type){
             DB::beginTransaction();
             try{
                 $order = auth()->user()->orders()->create($invoice);
@@ -217,7 +239,7 @@ class CartController extends Controller
                 DB::commit();
                 $order_url = route('order.view', [auth()->user()->id, $order->id]);
                 session()->put('cart', null);
-                // session()->put('checkout_card', null);
+                session()->put('checkout_card', null);
                 // session()->put('checkout_invoice', null);
                 // session()->put('checkout_shipping', null);
                 
