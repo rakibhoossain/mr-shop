@@ -1,11 +1,5 @@
 @extends('frontend.checkout.layout')
 @section('checkout-step')
-<ul class="nav nav-pills">
-  <li class="nav-item"><a href="{{route('checkout')}}" class="nav-link">Address</a></li>
-  <li class="nav-item"><a href="{{route('checkout','step2')}}" class="nav-link">Delivery Method </a></li>
-  <li class="nav-item"><a href="{{route('checkout','step3')}}" class="nav-link active">Payment Method </a></li>
-  <li class="nav-item"><a href="#" class="nav-link disabled">Order Review</a></li>
-</ul>
 <div class="tab-content">
   <div id="payment-method" class="tab-block">
     <form action="{{route('checkout.store.step3')}}" method="POST" class="payment-form" id="payment_form">

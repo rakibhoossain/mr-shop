@@ -119,21 +119,13 @@ class CartController extends Controller
         $card = session()->get('checkout_card');
         $payment_type = session()->get('checkout_payment_type');
  
-        $checkout_steps = (array)session()->get('checkout_steps');
-        print_r($checkout_steps);
+        $checkout_steps = (array)session()->get('checkout_steps'); //step history
 
-
-
-        
         if(\View::exists('frontend.checkout.'.$step) ) {
-
-          $step_n = (int)$step[strlen($step)-1];
-          if( ($step_n !== 1) && !array_key_exists($step_n, $checkout_steps) ){
-            return redirect()->back();
-          }
-
-
-
+            $step_n = (int)$step[strlen($step)-1];
+            if( ($step_n !== 1) && !array_key_exists($step_n, $checkout_steps) ){
+                return redirect()->back();
+            }
             return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
         }else{
             return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
@@ -239,6 +231,7 @@ class CartController extends Controller
                 DB::commit();
                 $order_url = route('order.view', [auth()->user()->id, $order->id]);
                 session()->put('cart', null);
+                session()->put('checkout_steps', null);
                 session()->put('checkout_card', null);
                 // session()->put('checkout_invoice', null);
                 // session()->put('checkout_shipping', null);

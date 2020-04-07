@@ -21,6 +21,12 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8">
+        <ul class="nav nav-pills">
+        <li class="nav-item"><a href="{{route('checkout')}}" class="nav-link {{request()->routeIs('checkout') ? 'active' : '' }} ">Address</a></li>
+        <li class="nav-item"><a href="{{route('checkout','step2')}}" class="nav-link {{request()->is('checkout/step2') ? 'active' : '' }} {{{!array_key_exists(2, $checkout_steps)? 'disabled' : ''}}} ">Delivery Method </a></li>
+        <li class="nav-item"><a href="{{route('checkout','step3')}}" class="nav-link {{request()->is('checkout/step3') ? 'active' : '' }} {{{!array_key_exists(3, $checkout_steps)? 'disabled' : ''}}} ">Payment Method </a></li>
+        <li class="nav-item"><a href="{{route('checkout','step4')}}" class="nav-link {{request()->is('checkout/step4') ? 'active' : '' }} {{{!array_key_exists(4, $checkout_steps)? 'disabled' : ''}}} ">Order Review</a></li>
+      </ul>
         @yield('checkout-step')
       </div>
       <div class="col-lg-4">
