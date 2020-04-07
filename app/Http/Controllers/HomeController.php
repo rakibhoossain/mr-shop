@@ -27,6 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         return view('frontend.index');
+    }    
+    public function contact()
+    {
+        return view('frontend.contact');
     }
 
     public function shop(Request $request){

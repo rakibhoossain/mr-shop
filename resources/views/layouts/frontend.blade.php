@@ -95,6 +95,9 @@
               <li class="nav-item"><a href="{{route('account.index')}}" class="nav-link">Account</a>
 
 
+              <li class="nav-item"><a href="{{route('contact')}}" class="nav-link">Contact</a>
+
+
                 
               </li>
 

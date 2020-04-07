@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\Order;
+use App\ShippingMethod;
 use Illuminate\Http\Request;
 use DB;
 use Stripe;
@@ -118,6 +119,7 @@ class CartController extends Controller
         $shipping = session()->get('checkout_shipping');
         $card = session()->get('checkout_card');
         $payment_type = session()->get('checkout_payment_type');
+        $shippping_method = session()->get('shippping_method');
  
         $checkout_steps = (array)session()->get('checkout_steps'); //step history
 
@@ -126,9 +128,9 @@ class CartController extends Controller
             if( ($step_n !== 1) && !array_key_exists($step_n, $checkout_steps) ){
                 return redirect()->back();
             }
-            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
+            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', $step);
         }else{
-            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps'));
+            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', 'step1');
         }
     }
 
@@ -171,10 +173,26 @@ class CartController extends Controller
     }
 
     public function checkoutStoreStep2(Request $request){
-        $step = session()->get('checkout_steps');
-        $step[3] = 'step3';
-        session()->put('checkout_steps', $step);
-        return redirect(route('checkout', 'step3'));
+        $request->validate([
+            'shippping_method' => 'required|exists:shipping_methods,id'
+        ]);
+
+        $shippping_method = ShippingMethod::find($request->shippping_method);
+
+        if($shippping_method){
+            session()->put('shippping_method', [
+                'id' => $shippping_method->id,
+                'charge' => $shippping_method->shipping_charge,
+                'name' => $shippping_method->name,
+            ]);
+
+            $step = session()->get('checkout_steps');
+            $step[3] = 'step3';
+            session()->put('checkout_steps', $step);
+            return redirect(route('checkout', 'step3'));            
+        }else{
+            return back()->with('error', 'Invalid delivary method!');
+        }
     }
     public function checkoutStoreStep3(Request $request){
         if(isset($request->payment['type'])) session()->put('checkout_payment_type', $request->payment['type']);
@@ -204,6 +222,7 @@ class CartController extends Controller
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
         $payment_type = session()->get('checkout_payment_type');
+        $shippping_method = session()->get('shippping_method');
 
         if($cart && $invoice && $payment_type){
             DB::beginTransaction();
@@ -216,11 +235,18 @@ class CartController extends Controller
                     $order->items()->create($item);
                 }
 
+                if($shippping_method && isset($shippping_method['id'])){
+                    $order->update(['shipping_method_id' => $shippping_method['id'] ]);
+                }else{
+                    throw new \Exception('Shipping method invalid! Please try again!');
+                }
+                
+
                 $card = session()->get('checkout_card');
                 if($card && $payment_type == 'card'){
                     Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
                     $result = Stripe\Charge::create ([
-                        "amount" => $order->total_price *100,
+                        "amount" => $order->grand_total_price *100,
                         "currency" => "usd",
                         "source" => $card['token'],
                         "description" => "Order payment ".$order->code,
@@ -233,6 +259,8 @@ class CartController extends Controller
                 session()->put('cart', null);
                 session()->put('checkout_steps', null);
                 session()->put('checkout_card', null);
+                session()->put('checkout_payment_type', null);
+                session()->put('shippping_method', null);
                 // session()->put('checkout_invoice', null);
                 // session()->put('checkout_shipping', null);
                 

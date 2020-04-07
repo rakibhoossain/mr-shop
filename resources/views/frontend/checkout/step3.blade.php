@@ -71,10 +71,6 @@ $(document).ready(function(){
   $form.bind('submit', function(e) {
 
     if (selected_type === 'card') {
-
-
-
-
       e.preventDefault();
       var inputSelector = ['#card_name', '#card_number', '#card_cvc', '#card_exp_month', '#card_exp_year'].join(', '),
       $inputs = $form.find(inputSelector),
@@ -110,8 +106,6 @@ $(document).ready(function(){
     }
   }
 
-
-
   $(document).on('focus', 'input.is-invalid', function(){
     $(this).removeClass('is-invalid');
   })
@@ -124,10 +118,6 @@ $(document).ready(function(){
   })
 
   $( ".collapse[data-type='"+selected_type+"']" ).collapse('show');
-
-
-
-
 })
 </script>
 @endpush

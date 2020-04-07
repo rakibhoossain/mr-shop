@@ -31,6 +31,10 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }    
+    public function shipping_method()
+    {
+        return $this->belongsTo(ShippingMethod::class);
     }
 
     public function items()
@@ -41,6 +45,23 @@ class Order extends Model
     public function getTotalPriceAttribute()
     {
         return $this->items->sum('total_price');
+    }
+
+    public function getChargeAttribute()
+    {
+        $charge = 0;
+        if($this->shipping_method){
+            if ($this->shipping_method->free_level !== null && $this->total_price >= $this->shipping_method->free_level) {
+              $charge = 0;
+            }
+            $charge = $this->shipping_method->price;
+        }
+        return $charge;
+    }
+
+    public function getGrandTotalPriceAttribute()
+    {
+        return number_format((float)($this->total_price + $this->charge), 2, '.', '');
     }
 }
 

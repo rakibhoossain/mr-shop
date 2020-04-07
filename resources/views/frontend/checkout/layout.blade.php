@@ -22,10 +22,10 @@
     <div class="row">
       <div class="col-lg-8">
         <ul class="nav nav-pills">
-        <li class="nav-item"><a href="{{route('checkout')}}" class="nav-link {{request()->routeIs('checkout') ? 'active' : '' }} ">Address</a></li>
-        <li class="nav-item"><a href="{{route('checkout','step2')}}" class="nav-link {{request()->is('checkout/step2') ? 'active' : '' }} {{{!array_key_exists(2, $checkout_steps)? 'disabled' : ''}}} ">Delivery Method </a></li>
-        <li class="nav-item"><a href="{{route('checkout','step3')}}" class="nav-link {{request()->is('checkout/step3') ? 'active' : '' }} {{{!array_key_exists(3, $checkout_steps)? 'disabled' : ''}}} ">Payment Method </a></li>
-        <li class="nav-item"><a href="{{route('checkout','step4')}}" class="nav-link {{request()->is('checkout/step4') ? 'active' : '' }} {{{!array_key_exists(4, $checkout_steps)? 'disabled' : ''}}} ">Order Review</a></li>
+        <li class="nav-item"><a href="{{route('checkout')}}" class="nav-link {{($step === 'step1') ? 'active' : '' }} ">Address</a></li>
+        <li class="nav-item"><a href="{{route('checkout','step2')}}" class="nav-link {{($step === 'step2') ? 'active' : '' }} {{{!array_key_exists(2, $checkout_steps)? 'disabled' : ''}}} ">Delivery Method </a></li>
+        <li class="nav-item"><a href="{{route('checkout','step3')}}" class="nav-link {{($step === 'step3') ? 'active' : '' }} {{{!array_key_exists(3, $checkout_steps)? 'disabled' : ''}}} ">Payment Method </a></li>
+        <li class="nav-item"><a href="{{route('checkout','step4')}}" class="nav-link {{($step === 'step4') ? 'active' : '' }} {{{!array_key_exists(4, $checkout_steps)? 'disabled' : ''}}} ">Order Review</a></li>
       </ul>
         @yield('checkout-step')
       </div>
@@ -35,9 +35,10 @@
           <p>Shipping and additional costs are calculated based on values you have entered</p>
           <ul class="order-menu list-unstyled">
             <li class="d-flex justify-content-between"><span>Order Subtotal </span><strong>{{Helper::totalCartPrice()}}</strong></li>
-            <li class="d-flex justify-content-between"><span>Shipping and handling</span><strong>$10.00</strong></li>
-            <li class="d-flex justify-content-between"><span>Tax</span><strong>$0.00</strong></li>
-            <li class="d-flex justify-content-between"><span>Total</span><strong class="text-primary price-total">$400.00</strong></li>
+            @if( isset($shippping_method['charge']))
+            <li class="d-flex justify-content-between"><span>Shipping and handling</span><strong>{{Helper::frontendPrice($shippping_method['charge'])}}</strong></li>
+            @endif
+            <li class="d-flex justify-content-between"><span>Total</span><strong class="text-primary price-total">{{Helper::getCartGrandPrice()}}</strong></li>
           </ul>
         </div>
       </div>

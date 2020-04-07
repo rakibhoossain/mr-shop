@@ -5,7 +5,7 @@
       <div class="container">
         <div class="row d-flex">
           <div class="col-lg-9 order-2 order-lg-1">
-            <h1>Order #{{$order->code}}</h1><p class="lead">Order #{{$order->code}} was placed on <strong>{{date('d/m/Y', strtotime($order->created_at))}}</strong> and is currently <strong>{{strtoupper($order->status)}}</strong>.</p><p class="text-muted">If you have any questions, please feel free to <a href="contact.html">contact us</a>, our customer service center is working for you 24/7.</p>
+            <h1>Order #{{$order->code}}</h1><p class="lead">Order #{{$order->code}} was placed on <strong>{{date('d/m/Y', strtotime($order->created_at))}}</strong> and is currently <strong>{{strtoupper($order->status)}}</strong>.</p><p class="text-muted">If you have any questions, please feel free to <a href="{{route('contact')}}">contact us</a>, our customer service center is working for you 24/7.</p>
           </div>
           <div class="col-lg-3 text-right order-1 order-lg-2">
             <ul class="breadcrumb justify-content-lg-end">
@@ -81,19 +81,13 @@
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Shipping and handling</strong></div>
-                      <div class="col-2 text-right"><strong>$10.00</strong></div>
-                    </div>
-                  </div>
-                  <div class="item">
-                    <div class="row">
-                      <div class="offset-md-6 col-4"> <strong>Tax</strong></div>
-                      <div class="col-2 text-right"><strong>$0.00</strong></div>
+                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->charge)}}</strong></div>
                     </div>
                   </div>
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Total</strong></div>
-                      <div class="col-2 text-right"><strong>$456.00</strong></div>
+                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->grand_total_price)}}</strong></div>
                     </div>
                   </div>
                 </div>

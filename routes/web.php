@@ -27,6 +27,7 @@ Auth::routes();
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/shop', 'HomeController@shop')->name('shop');
+Route::get('/contact', 'HomeController@contact')->name('contact');
 Route::match(['get', 'post'], '/filter', 'HomeController@filter')->name('shop.filter');
 Route::get('/product/{product}', 'HomeController@singleProduct')->name('product.single');
 
