@@ -18,17 +18,10 @@ class CreateOrdersTable extends Migration
             $table->string('code', 170)->unique();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('shipping_method_id')->nullable();
-            $table->unsignedInteger('transection_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('shipping_method_id')->references('id')->on('shipping_methods');
-            $table->foreign('transection_id')->references('id')->on('transections');
 
             $table->enum('status', ['pending', 'processing', 'completed', 'decline'])->default('pending');
-            // $table->decimal('grand_total', 20, 6);
-            // $table->unsignedInteger('item_count');
-
-            $table->boolean('payment_status')->default(1);
-            $table->string('payment_method')->nullable();
 
             $table->string('first_name');
             $table->string('last_name');

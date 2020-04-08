@@ -13,6 +13,18 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:order-list|order-edit|order-delete', ['only' => ['index','show', 'collection']]);
+        $this->middleware('permission:order-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:order-delete', ['only' => ['destroy']]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         return view('dashboard.order.index');
@@ -50,7 +62,7 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        //
+        return view('dashboard.order.invoice', compact('order'));
     }
 
     /**

@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-	/*
+    use SoftDeletes;
+
+    /*
 	|--------------------------------------------------------------------------
 	| FUNCTIONS
 	|--------------------------------------------------------------------------
@@ -21,12 +23,19 @@ class Order extends Model
 	    });
 	}
 
-    use SoftDeletes;
+    public function getRouteKeyName()
+    {
+        return 'code';
+    }
+
+
 
     protected $fillable = [
-        'payment_method', 'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes', 'shipping_address', 'alternative_number'
-// 'status', 'payment_status', 'shipping_method_id', 'transection_id'
+        'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes', 'shipping_address', 'alternative_number', 'shipping_method_id'
+// 'status',
     ];
+
+    protected $with = ['transections'];
 
     public function user()
     {
@@ -71,6 +80,11 @@ class Order extends Model
     public function getGrandTotalPriceAttribute()
     {
         return number_format((float)($this->total_price + $this->charge), 2, '.', '');
+    }
+
+    function getPaymentStatusAttribute(){
+        $paid = $this->transections()->where('status', 'paid')->sum('amount');
+        return ($this->grand_total_price <= $paid)? 'paid' : 'due';
     }
 }
 

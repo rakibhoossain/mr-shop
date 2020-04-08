@@ -46,6 +46,10 @@ class PermissionTableSeeder extends Seeder
       'stock',
       'barcode',
 
+      'order-list',
+      'order-edit',
+      'order-delete',
+
       'settings',
     ];
 

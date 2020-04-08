@@ -19,7 +19,7 @@ class CreateTransectionsTable extends Migration
             $table->integer('transectionable_id');
             $table->string("transectionable_type");
 
-            $table->enum('type', ['cash', 'bKash', 'rocket', 'card'])->default('cash');
+            $table->enum('type', ['stripe', 'cash', 'bKash', 'rocket', 'card'])->default('cash');
             $table->text('TxnId')->nullable();
             $table->decimal('amount', 20, 2)->nullable()->default(0);
             $table->enum('status', ['unpaid', 'processing', 'paid', 'decline'])->default('unpaid');

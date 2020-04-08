@@ -43,7 +43,7 @@
                 <td>{{date('d/m/Y', strtotime($order->created_at))}}</td>
                 <td>{{$order->total_price}}</td>
                 <td>{!! Helper::getLabelByStatus($order->status, 'badge') !!}</td>
-                <td><a href="{{route('order.view', [auth()->user()->id, $order->id])}}" class="btn btn-primary btn-sm">View</a></td>
+                <td><a href="{{route('order.view', [auth()->user()->id, $order->code])}}" class="btn btn-primary btn-sm">View</a></td>
               </tr>
               @endforeach
             </tbody>

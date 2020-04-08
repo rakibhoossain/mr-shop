@@ -117,7 +117,7 @@ class CartController extends Controller
     public function checkout(Request $request, $step = 'step1'){
         $invoice = session()->get('checkout_invoice');
         $shipping = session()->get('checkout_shipping');
-        $card = session()->get('checkout_card');
+        $stripe = session()->get('checkout_stripe');
         $payment_type = session()->get('checkout_payment_type');
         $shippping_method = session()->get('shippping_method');
  
@@ -128,9 +128,9 @@ class CartController extends Controller
             if( ($step_n !== 1) && !array_key_exists($step_n, $checkout_steps) ){
                 return redirect()->back();
             }
-            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', $step);
+            return view('frontend.checkout.'.$step, compact('invoice', 'shipping', 'stripe', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', $step);
         }else{
-            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'card', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', 'step1');
+            return view('frontend.checkout.step1', compact('invoice', 'shipping', 'stripe', 'payment_type', 'checkout_steps', 'shippping_method'))->with('step', 'step1');
         }
     }
 
@@ -195,21 +195,24 @@ class CartController extends Controller
         }
     }
     public function checkoutStoreStep3(Request $request){
-        if(isset($request->payment['type'])) session()->put('checkout_payment_type', $request->payment['type']);
+        $request->validate([
+            'payment.type' => 'required|in:stripe,cash,bKash,rocket,card',
+        ]);
+        session()->put('checkout_payment_type', $request->payment['type']);
 
         $request->validate([
-            'card.name'     => 'nullable|required_if:payment.type,card',
-            'card.number'   => 'nullable|required_if:payment.type,card',
-            'card.cvc'      => 'nullable|required_if:payment.type,card',
-            'card.month'    => 'nullable|required_if:payment.type,card',
-            'card.year'     => 'nullable|required_if:payment.type,card',
-            'card.token'    => 'nullable|required_if:payment.type,card',
+            'stripe.name'     => 'nullable|required_if:payment.type,stripe',
+            'stripe.number'   => 'nullable|required_if:payment.type,stripe',
+            'stripe.cvc'      => 'nullable|required_if:payment.type,stripe',
+            'stripe.month'    => 'nullable|required_if:payment.type,stripe',
+            'stripe.year'     => 'nullable|required_if:payment.type,stripe',
+            'stripe.token'    => 'nullable|required_if:payment.type,stripe',
         ]);
 
-        if($request->card && $request->card['token']){
-            session()->put('checkout_card', $request->card);
+        if($request->stripe && $request->stripe['token']){
+            session()->put('checkout_stripe', $request->stripe);
         }else{
-            session()->put('checkout_card', null);
+            session()->put('checkout_stripe', null);
         }
         $step = session()->get('checkout_steps');
         $step[4] = 'step4';
@@ -242,23 +245,30 @@ class CartController extends Controller
                 }
                 
 
-                $card = session()->get('checkout_card');
-                if($card && $payment_type == 'card'){
+                $stripe = session()->get('checkout_stripe');
+                if($stripe && $payment_type == 'stripe'){
                     Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
                     $result = Stripe\Charge::create ([
                         "amount" => $order->grand_total_price *100,
                         "currency" => "usd",
-                        "source" => $card['token'],
+                        "source" => $stripe['token'],
                         "description" => "Order payment ".$order->code,
                     ]);
                     if(!$result->paid) throw new \Exception('Payment failed! Please try again!');
+
+                    $order->transections()->create([
+                        'type' => $payment_type,
+                        'TxnId' => $result->balance_transaction,
+                        'amount' => $order->grand_total_price,
+                        'status' => 'paid'
+                    ]);
                 }
 
                 DB::commit();
-                $order_url = route('order.view', [auth()->user()->id, $order->id]);
+                $order_url = route('order.view', [auth()->user()->id, $order->code]);
                 session()->put('cart', null);
                 session()->put('checkout_steps', null);
-                session()->put('checkout_card', null);
+                session()->put('checkout_stripe', null);
                 session()->put('checkout_payment_type', null);
                 session()->put('shippping_method', null);
                 // session()->put('checkout_invoice', null);

@@ -32,8 +32,10 @@
                     <th>Code</th>
                     <th>Customer Name</th>
                     <th>Price</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>Charge</th>
+                    <th>Order Status</th>
+                    <th>Payment Status</th>
+                    <th style="width: 75px;">Action</th>
                     <th>Created</th>
                   </tr>
                 </thead>
@@ -88,15 +90,17 @@ $(document).ready(function() {
       { data: 'code' },
       { data: 'name' },
       { data: 'price' },
+      { data: 'charge' },
       { data: 'status' },
+      { data: 'payment_status' },
       { data: 'action', 'searchable': false, 'orderable': false },
       { data: 'created_at' },
     ],
-    "order": [[ 5, "desc" ]],
+    "order": [[ 7, "desc" ]],
     "autoWidth": false,
     "lengthMenu": [[50, 100, 500, -1], [50, 100, 500, "All"]],
     'columnDefs': [
-      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [5] }
+      { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [7] }
     ],
   });
 });

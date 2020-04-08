@@ -9,7 +9,7 @@ class Transection extends Model
 {
 	use SoftDeletes;
 	
-    protected $fillable = ['type', 'TxnId', 'amount'];
+    protected $fillable = ['type', 'TxnId', 'amount', 'status'];
 
     /**
      * Get all of the owning transectionable models.

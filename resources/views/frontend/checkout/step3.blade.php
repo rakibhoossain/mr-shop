@@ -10,30 +10,30 @@
           <div id="headingOne" role="tab" class="card-header">
             <h6><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Stripe</a></h6>
           </div>
-          <div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" class="collapse" data-type="card">
+          <div id="collapseOne" role="tabpanel" aria-labelledby="headingOne" class="collapse" data-type="stripe">
             <div class="card-body">
               <div class="row">
                 <div class='form-group col-md-6'>
-                  <label for="card_name" class='form-label'>Name on Card</label> 
-                  <input id="card_name" class="form-control name @error('card.name') is-invalid @enderror " size='4' type='text' name="card[name]" value="{{{ (isset($card['name'])) ? $card['name'] : '' }}}">
+                  <label for="stripe_name" class='form-label'>Name on Card</label> 
+                  <input id="stripe_name" class="form-control name @error('stripe.name') is-invalid @enderror " size='4' type='text' name="stripe[name]" value="{{{ (isset($stripe['name'])) ? $stripe['name'] : '' }}}">
                 </div>
                 <div class='form-group col-md-6'>
-                  <label for="card_number" class='form-label'>Card Number</label> 
-                  <input id="card_number" autocomplete='off' class="form-control number mask_input @error('card.number') is-invalid @enderror " size='20' type='text' data-inputmask="'mask': '9999 9999 9999 9999'" name="card[number]" value="{{{ (isset($card['number'])) ? $card['number'] : '' }}}">
+                  <label for="stripe_number" class='form-label'>Card Number</label> 
+                  <input id="stripe_number" autocomplete='off' class="form-control number mask_input @error('stripe.number') is-invalid @enderror " size='20' type='text' data-inputmask="'mask': '9999 9999 9999 9999'" name="stripe[number]" value="{{{ (isset($stripe['number'])) ? $stripe['number'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
-                  <label for="card_cvc" class='form-label'>CVC</label> 
-                  <input id="card_cvc" autocomplete='off' class="form-control cvc @error('card.cvc') is-invalid @enderror " placeholder='ex. 311' size='4' type='text' name="card[cvc]" value="{{{ (isset($card['cvc'])) ? $card['cvc'] : '' }}}">
+                  <label for="stripe_cvc" class='form-label'>CVC</label> 
+                  <input id="stripe_cvc" autocomplete='off' data-inputmask="'mask': '999'" class="form-control cvc mask_input @error('stripe.cvc') is-invalid @enderror " placeholder='ex. 311' size='4' type='text' name="stripe[cvc]" value="{{{ (isset($stripe['cvc'])) ? $stripe['cvc'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
-                  <label for="card_exp_month" class='form-label'>Expiration Month</label> 
-                  <input id="card_exp_month" class="form-control exp_month mask_input @error('card.month') is-invalid @enderror " placeholder='MM' size='2' type='text' data-inputmask="'mask': '99'" name="card[month]" value="{{{ (isset($card['month'])) ? $card['month'] : '' }}}">
+                  <label for="stripe_exp_month" class='form-label'>Expiration Month</label> 
+                  <input id="stripe_exp_month" class="form-control exp_month mask_input @error('stripe.month') is-invalid @enderror " placeholder='MM' size='2' type='text' data-inputmask="'mask': '99'" name="stripe[month]" value="{{{ (isset($stripe['month'])) ? $stripe['month'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
-                  <label for="card_exp_year" class='form-label'>Expiration Year</label> 
-                  <input id="card_exp_year" class="form-control exp_year mask_input @error('card.year') is-invalid @enderror " placeholder='YYYY' size='4' type='text' data-inputmask="'mask': '9999'" name="card[year]" value="{{{ (isset($card['year'])) ? $card['year'] : '' }}}">
+                  <label for="stripe_exp_year" class='form-label'>Expiration Year</label> 
+                  <input id="stripe_exp_year" class="form-control exp_year mask_input @error('stripe.year') is-invalid @enderror " placeholder='YYYY' size='4' type='text' data-inputmask="'mask': '9999'" name="stripe[year]" value="{{{ (isset($stripe['year'])) ? $stripe['year'] : '' }}}">
                 </div>
-                <input type="hidden" id="cc_token" name="card[token]" value="{{{ (isset($card['token'])) ? $card['token'] : '' }}}">
+                <input type="hidden" id="cc_token" name="stripe[token]" value="{{{ (isset($stripe['token'])) ? $stripe['token'] : '' }}}">
               </div>
             </div>
           </div>
@@ -64,15 +64,15 @@
 <script type="text/javascript">
 $(document).ready(function(){
   var $form = $('#payment_form');
-  var selected_type = $('#payment_type').val() || 'card';
+  var selected_type = $('#payment_type').val() || 'stripe';
 
   $('.mask_input').inputmask();
 
   $form.bind('submit', function(e) {
 
-    if (selected_type === 'card') {
+    if (selected_type === 'stripe') {
       e.preventDefault();
-      var inputSelector = ['#card_name', '#card_number', '#card_cvc', '#card_exp_month', '#card_exp_year'].join(', '),
+      var inputSelector = ['#stripe_name', '#stripe_number', '#stripe_cvc', '#stripe_exp_month', '#stripe_exp_year'].join(', '),
       $inputs = $form.find(inputSelector),
       token = "{{ env('STRIPE_KEY') }}";
 
@@ -86,11 +86,11 @@ $(document).ready(function(){
 
       Stripe.setPublishableKey(token);
       Stripe.createToken({
-        name: $('#card_name').val(),
-        number: $('#card_number').val(),
-        cvc: $('#card_cvc').val(),
-        exp_month: $('#card_exp_month').val(),
-        exp_year: $('#card_exp_year').val()
+        name: $('#stripe_name').val(),
+        number: $('#stripe_number').val(),
+        cvc: $('#stripe_cvc').val(),
+        exp_month: $('#stripe_exp_month').val(),
+        exp_year: $('#stripe_exp_year').val()
       }, 
       stripeResponseHandler);
     }
