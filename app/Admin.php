@@ -47,4 +47,12 @@ class Admin extends Authenticatable
     public function posts(){
         return $this->hasMany(Post::class);
     }
+
+    /**
+     * Get all of the order's transections.
+     */
+    public function transections()
+    {
+        return $this->morphMany(Transection::class, 'transectionable');
+    }
 }

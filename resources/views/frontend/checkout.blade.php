@@ -1,4 +1,5 @@
 @extends('layouts/frontend')
+@section('title', 'Checkout')
 @section('content')
 <link rel="stylesheet" type="text/css" href="{{asset('css/smart_wizard.min.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('css/smart_wizard_theme_arrows.min.css')}}">

@@ -1,4 +1,5 @@
 @extends('layouts/frontend')
+@section('title', 'Order details')
 @section('content')
     <!-- Hero Section-->
     <section class="hero hero-page gray-bg padding-small">

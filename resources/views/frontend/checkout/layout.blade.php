@@ -1,4 +1,5 @@
 @extends('layouts/frontend')
+@section('title', 'Checkout')
 @section('content')
 <!-- Hero Section-->
 <section class="hero hero-page gray-bg padding-small">
@@ -10,7 +11,7 @@
       <div class="col-lg-3 text-right order-1 order-lg-2">
         <ul class="breadcrumb justify-content-lg-end">
           <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-          <li class="breadcrumb-item active">Checkout</li> step
+          <li class="breadcrumb-item active">Checkout</li>
         </ul>
       </div>
     </div>

@@ -43,4 +43,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    /**
+     * Get all of the order's transections.
+     */
+    public function transections()
+    {
+        return $this->morphMany(Transection::class, 'transectionable');
+    }
 }

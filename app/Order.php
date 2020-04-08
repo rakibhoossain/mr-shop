@@ -25,7 +25,7 @@ class Order extends Model
 
     protected $fillable = [
         'payment_method', 'first_name', 'last_name', 'address', 'city', 'country', 'post_code', 'phone_number', 'notes', 'shipping_address', 'alternative_number'
-// 'status', 'payment_status', 
+// 'status', 'payment_status', 'shipping_method_id', 'transection_id'
     ];
 
     public function user()
@@ -41,6 +41,15 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    /**
+     * Get all of the order's transections.
+     */
+    public function transections()
+    {
+        return $this->morphMany(Transection::class, 'transectionable');
+    }
+    
 
     public function getTotalPriceAttribute()
     {
