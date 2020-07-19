@@ -41,6 +41,16 @@ class LoginController extends Controller
     }
 
     /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard('admin');
+    }
+
+    /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function showLoginForm()
@@ -50,31 +60,13 @@ class LoginController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function login(Request $request)
-    {
-        $this->validate($request, [
-            'email'   => 'required|email',
-            'password' => 'required|min:6'
-        ]);
-        if (Auth::guard('admin')->attempt([
-            'email' => $request->email,
-            'password' => $request->password
-        ], $request->get('remember'))) {
-            return redirect()->intended(route('admin'));
-        }
-        return back()->withInput($request->only('email', 'remember'));
-    }
-    /**
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function logout(Request $request)
     {
-        Auth::guard('admin')->logout();
+        $this->guard()->logout();
         $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return redirect()->route('admin.login');
     }
 
