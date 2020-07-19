@@ -25,15 +25,15 @@
                     <h6>{{$details['name']}}</h6>  @if($details['varient_label'])<span class="text-muted">{{$details['varient_label']}}</span> @endif </a></div>
               </div>
             </div>
-            <div class="col-2"><span>{{Helper::frontendPrice($details['price'])}}</span></div>
+            <div class="col-2"><span>{{Shop::frontendPrice($details['price'])}}</span></div>
             <div class="col-2"><span>{{$details['quantity']}}</span></div>
-            <div class="col-2"><span>{{Helper::frontendPrice($details['quantity'] * $details['price'])}}</span></div>
+            <div class="col-2"><span>{{Shop::frontendPrice($details['quantity'] * $details['price'])}}</span></div>
           </div>
           @endforeach
           @endif
         </div>
       </div>
-      <div class="total row"><span class="col-md-10 col-2">Total</span><span class="col-md-2 col-10 text-primary">{{Helper::totalCartPrice()}}</span></div>
+      <div class="total row"><span class="col-md-10 col-2">Total</span><span class="col-md-2 col-10 text-primary">{{Shop::frontendPrice(Shop::totalCartPrice())}}</span></div>
     </div>
     <div class="CTAs d-flex justify-content-between flex-column flex-lg-row">
       <a href="{{route('checkout','step3')}}" class="btn btn-template-outlined wide prev"><i class="fa fa-angle-left"></i>Back to payment method</a>

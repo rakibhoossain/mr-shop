@@ -65,9 +65,9 @@
 
                         </div>
                       </div>
-                      <div class="col-2"><span>{{Helper::frontendPrice($item->price)}}</span></div>
+                      <div class="col-2"><span>{{Shop::frontendPrice($item->price)}}</span></div>
                       <div class="col-2">{{$item->quantity}}</div>
-                      <div class="col-2 text-right"><span>{{Helper::frontendPrice($item->total_price)}}</span></div>
+                      <div class="col-2 text-right"><span>{{Shop::frontendPrice($item->total_price)}}</span></div>
                     </div>
                   </div>
                   @endforeach
@@ -76,19 +76,19 @@
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Order subtotal</strong></div>
-                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->total_price)}}</strong></div>
+                      <div class="col-2 text-right"><strong>{{Shop::frontendPrice($order->total_price)}}</strong></div>
                     </div>
                   </div>
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Shipping and handling</strong></div>
-                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->charge)}}</strong></div>
+                      <div class="col-2 text-right"><strong>{{Shop::frontendPrice($order->charge)}}</strong></div>
                     </div>
                   </div>
                   <div class="item">
                     <div class="row">
                       <div class="offset-md-6 col-4"> <strong>Total</strong></div>
-                      <div class="col-2 text-right"><strong>{{Helper::frontendPrice($order->grand_total_price)}}</strong></div>
+                      <div class="col-2 text-right"><strong>{{Shop::frontendPrice($order->grand_total_price)}}</strong></div>
                     </div>
                   </div>
                 </div>

@@ -6,7 +6,7 @@
       <div class="container">
         <div class="row d-flex">
           <div class="col-lg-9 order-2 order-lg-1">
-            <h1>Shopping cart</h1><p class="lead text-muted">You currently have {{Helper::totalCartItem()}} items in your shopping cart</p>
+            <h1>Shopping cart</h1><p class="lead text-muted">You currently have {{Shop::totalCartItem()}} items in your shopping cart</p>
           </div>
           <div class="col-lg-3 text-right order-1 order-lg-2">
             <ul class="breadcrumb justify-content-lg-end">
@@ -50,7 +50,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-2"><span>{{Helper::frontendPrice($details['price'])}}</span></div>
+                  <div class="col-2"><span>{{Shop::frontendPrice($details['price'])}}</span></div>
                   <div class="col-2">
                     <div class="d-flex align-items-center">
                       <div class="quantity d-flex align-items-center">
@@ -60,7 +60,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-2"><span class="cart_price">{{Helper::frontendPrice($details['quantity'] * $details['price'])}}</span></div>
+                  <div class="col-2"><span class="cart_price">{{Shop::frontendPrice($details['quantity'] * $details['price'])}}</span></div>
                   <div class="col-1 text-center"><a href="{{route('removeFromCart', $id)}}" class="delete"><i class="delete fa fa-trash"></i></a></div>
                 </div>
               </div>

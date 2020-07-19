@@ -6,7 +6,7 @@
   <div class="container">
     <div class="row d-flex">
       <div class="col-lg-9 order-2 order-lg-1">
-        <h1>Checkout</h1><p class="lead text-muted">You currently have {{Helper::totalCartItem()}} items in your shopping cart</p>
+        <h1>Checkout</h1><p class="lead text-muted">You currently have {{Shop::totalCartItem()}} items in your shopping cart</p>
       </div>
       <div class="col-lg-3 text-right order-1 order-lg-2">
         <ul class="breadcrumb justify-content-lg-end">
@@ -35,11 +35,11 @@
           <h6 class="text-uppercase">Order Summary</h6>
           <p>Shipping and additional costs are calculated based on values you have entered</p>
           <ul class="order-menu list-unstyled">
-            <li class="d-flex justify-content-between"><span>Order Subtotal </span><strong>{{Helper::totalCartPrice()}}</strong></li>
+            <li class="d-flex justify-content-between"><span>Order Subtotal </span><strong>{{Shop::frontendPrice(Shop::totalCartPrice())}}</strong></li>
             @if( isset($shippping_method['charge']))
-            <li class="d-flex justify-content-between"><span>Shipping and handling</span><strong>{{Helper::frontendPrice($shippping_method['charge'])}}</strong></li>
+            <li class="d-flex justify-content-between"><span>Shipping and handling</span><strong>{{Shop::frontendPrice($shippping_method['charge'])}}</strong></li>
             @endif
-            <li class="d-flex justify-content-between"><span>Total</span><strong class="text-primary price-total">{{Helper::getCartGrandPrice()}}</strong></li>
+            <li class="d-flex justify-content-between"><span>Total</span><strong class="text-primary price-total">{{Shop::getCartGrandPrice()}}</strong></li>
           </ul>
         </div>
       </div>

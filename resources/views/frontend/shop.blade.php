@@ -48,10 +48,10 @@
             </div>
             <div class="block">
               <h6 class="text-uppercase">Filter By Price  </h6>
-              <div id="slider-snap" data-min="{{Helper::productMinPrice()}}" data-max="{{Helper::productMaxPrice()}}" data-start="@if(!empty($_GET['price'])){{$_GET['price']}}@endif"></div>
+              <div id="slider-snap" data-min="{{Shop::productMinPrice()}}" data-max="{{Shop::productMaxPrice()}}" data-start="@if(!empty($_GET['price'])){{$_GET['price']}}@endif"></div>
               <div class="value d-flex justify-content-between">
-                <div class="min">From <span id="slider-snap-value-lower" class="example-val"></span>$c</div>
-                <div class="max">To <span id="slider-snap-value-upper" class="example-val"></span>$c</div>
+                <div class="min">From <span id="slider-snap-value-lower" class="example-val"></span>{!!Shop::currency()!!}</div>
+                <div class="max">To <span id="slider-snap-value-upper" class="example-val"></span>{!!Shop::currency()!!}</div>
               </div>
               <input type="hidden" name="price_range" id="range_price" value="@if(!empty($_GET['price'])){{$_GET['price']}}@endif">
               <button type="submit" class="filter-submit">Filter</button>
@@ -115,7 +115,7 @@
                     </div>
                   </div>
                   <div class="title"><small class="text-muted">{{$product->categories->implode('name', ',')}}</small>
-                    <a href="{{route('product.single', $product->slug)}}"><h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">${{$product->price}}</span>
+                    <a href="{{route('product.single', $product->slug)}}"><h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">{{Shop::frontendItemPrice($product, 'current')}} @if($product->sell_price) <del>{{Shop::frontendItemPrice($product, 'original')}}@endif</del></span>
                   </div>
                 </div>
               </div>

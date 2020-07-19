@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Helper;
+use Shop;
 
 class CartEmpty
 {
@@ -16,7 +16,7 @@ class CartEmpty
      */
     public function handle($request, Closure $next)
     {
-        if(!(Helper::totalCartItem() > 0)){
+        if(!(Shop::totalCartItem() > 0)){
             return redirect(route('shop'));
         }
         return $next($request);

@@ -10,7 +10,7 @@
           <input type="radio" name="shippping_method" id="shipping_method_{{$loop->index}}" class="radio-template"
            value="{{$ship_item->id}}" {{{ (isset($shippping_method['id']) && $shippping_method['id'] == $ship_item->id ) ? 'checked' : '' }}} >
           <label for="shipping_method_{{$loop->index}}">
-            <strong>{{$ship_item->name}} {{{ ($ship_item->shipping_charge>0)? '('.Helper::frontendPrice($ship_item->shipping_charge).')' : ''}}}</strong>
+            <strong>{{$ship_item->name}} {{{ ($ship_item->shipping_charge>0)? '('.Shop::frontendPrice($ship_item->shipping_charge).')' : ''}}}</strong>
             <br><span class="label-description">{{$ship_item->description}}</span>
           </label>
         </div>        

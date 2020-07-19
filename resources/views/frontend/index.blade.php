@@ -93,7 +93,7 @@
                 </div>
               </div>
               <div class="title"><a href="{{route('product.single', $product->slug)}}">
-                  <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">${{$product->price}}</span></div>
+                  <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">{{Shop::frontendItemPrice($product, 'current')}} @if($product->sell_price) <del>{{Shop::frontendItemPrice($product, 'original')}}@endif</del></span></div>
             </div>
           </div>
           @endforeach
@@ -139,7 +139,7 @@
                 </div>
               </div>
               <div class="title"><a href="{{route('product.single', $product->slug)}}">
-                  <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">${{$product->price}}</span></div>
+                  <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price text-muted">{{Shop::frontendItemPrice($product, 'current')}} @if($product->sell_price) <del>{{Shop::frontendItemPrice($product, 'original')}}@endif</del></span></div>
             </div>
           </div>
           @endforeach

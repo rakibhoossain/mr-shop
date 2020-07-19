@@ -8,8 +8,8 @@
   <div class="details col-lg-7" id="details" data-max="{{$product->quantity}}" data-price="{{$product->price}}" data-sell="{{$product->sell_price}}" data-img="{{$product->image}}">
     <h2>{{$product->name}}</h2>
     <ul class="price list-inline">
-      <li class="list-inline-item current">${{$product->price}}</li>
-      <li class="list-inline-item original">$90.00</li>
+      <li class="list-inline-item current">{{Shop::frontendItemPrice($product, 'current')}}</li>
+      <li class="list-inline-item original">{{Shop::frontendItemPrice($product, 'original')}}</li>
     </ul>
     <p>{{$product->sort_description}}</p>
     <form action="{{route('addToCart', $product->slug)}}" method="POST">

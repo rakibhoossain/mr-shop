@@ -235,6 +235,7 @@ return [
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
 
         'Helper' => App\Helpers\Helper::class,
+        'Shop' => App\Helpers\Shop::class,
         'Image' => Intervention\Image\Facades\Image::class,
 
     ],

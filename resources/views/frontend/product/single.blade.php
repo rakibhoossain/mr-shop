@@ -50,8 +50,8 @@
           <div id="details" class="details col-lg-6" data-max="{{$product->quantity}}" data-price="{{$product->price}}" data-sell="{{$product->sell_price}}">
             <div class="d-flex align-items-center justify-content-between flex-column flex-sm-row">
               <ul class="price list-inline no-margin">
-                <li class="list-inline-item current">{{Helper::frontendItemPrice($product)}}</li>
-                <li class="list-inline-item original">{{Helper::frontendItemPrice($product, 'original')}}</li>
+                <li class="list-inline-item current">{{Shop::frontendItemPrice($product, 'current')}}</li>
+                <li class="list-inline-item original">{{Shop::frontendItemPrice($product, 'original')}}</li>
               </ul>
               <div class="review d-flex align-items-center">
                 <ul class="rate list-inline">
@@ -205,7 +205,7 @@
                 </div>
               </div>
               <div class="title"><a href="{{route('product.single', $product->slug)}}">
-                <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price">${{$product->price}}</span></div>
+                <h3 class="h6 text-uppercase no-margin-bottom">{{$product->name}}</h3></a><span class="price">{{Shop::frontendItemPrice($product, 'current')}} @if($product->sell_price) <del>{{Shop::frontendItemPrice($product, 'original')}}@endif</del></span></div>
             </div>
           </div>
           @endforeach
