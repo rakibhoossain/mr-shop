@@ -19,7 +19,7 @@ $(document).ready(function() {
   @endif
 
   @if (session('error'))
-    toastr.error("{{ session('status') }}");
+    toastr.error("{{ session('error') }}");
   @endif
   @if (session('info'))
     toastr.info("{{ session('info') }}");

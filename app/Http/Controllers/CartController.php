@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use DB;
 use Stripe;
 use Session;
+use Shop;
 
 class CartController extends Controller
 {
@@ -38,7 +39,6 @@ class CartController extends Controller
         //     $product_code = $codeArr[0];
         //     $varient_id = $codeArr[1];
         // }
-
         $variation = ($request->varient)? $product->variation_values()->where('variation_values.id', $request->varient)->first() : null;
 
         $cart = session()->get('cart');
@@ -46,25 +46,38 @@ class CartController extends Controller
 
         $name = ($variation)? $product->name.' ('.$variation->name.')' : $product->name;
         $varient_label = ($variation)? $variation->variation->name.': '.$variation->name : '';
-        $price = ($variation)? ($variation->pivot->price > 0)? $variation->pivot->price : $product->price : $product->price;
+
+        $product_price = ($variation)? ($variation->pivot->price > 0)? $variation->pivot->price : $product->price : $product->price;
         $sell_price = ($variation)? ($variation->pivot->sell_price > 0)? $variation->pivot->sell_price : $product->sell_price : $product->sell_price;
+
+        $price = ($sell_price > 0)? $sell_price : $product_price;
+
         $thumb = ($variation)? ($variation->pivot->image)? $variation->pivot->image : $product->image : $product->image;
         $product_id = $product->id;
         $varient_id = ($variation)? $variation->id : null;
+
         $max = ($variation)? ($variation->pivot->quantity) : $product->quantity;
+        $busket_qty = Shop::totalCartItem($id);
+        $avaliable_quantity = ($max - $busket_qty);
+        $single_cart_quantity = (isset($request->quantity))? $request->quantity : 1;
+
+        if($single_cart_quantity <= 0) return back()->withError('Invalid quantity!');
+        if($avaliable_quantity <= 0) return back()->withError($name .' not avaliable!');
+        if($single_cart_quantity > $avaliable_quantity) return back()->with('warning', $name .' only '.$single_cart_quantity. ' items avaliavbe!');
 
         if(isset($cart[$id])) {
-            $cart[$id]['quantity'] += ($request->quantity)? $request->quantity : 1;
+            $cart[$id]['quantity'] += $single_cart_quantity;
             session()->put('cart', $cart);
         }else{
             // if item not exist in cart then add to cart with quantity
             $cart[$id] = [
+                "id" => $id,
                 "name" => $name,
                 "slug" => $product->slug,
                 "varient_label" => $varient_label,
-                "quantity" => ($request->quantity)? $request->quantity : 1,
+                "quantity" => $single_cart_quantity,
                 "price" => $price,
-                "sell_price" => $sell_price,
+                // "sell_price" => $sell_price,
                 "thumb" => $thumb,
                 "product_id" => $product_id,
                 "variation_value_id" => $varient_id,
@@ -72,22 +85,30 @@ class CartController extends Controller
             ];
             session()->put('cart', $cart);
         }
-        return back();
+        return back()->with('success', $name .' added to cart!.');
     }
 
 
     public function cartUpdate(Request $request)
     {
         if($request->carts){
+            $errors = [];
             $cart = session()->get('cart');
             foreach($request->carts as $id => $quantity){
                 if(isset($cart[$id])) {
-                    $cart[$id]['quantity'] = $quantity;
+                    $max = Shop::cartItemMaxAvailable($id);
+                    $selected = $cart[$id]['quantity'];
+                    if( $max >= ($quantity -$selected) ){
+                        $cart[$id]['quantity'] = $quantity;
+                    }else{
+                        $errors[$id] = $cart[$id]['name'].' only '.( $max + $selected). ' items avaliavbe!';
+                    }
                     session()->put('cart', $cart);
                 }
             }
+            if(count($errors)) return back()->withErrors($errors);
         }
-        return back();
+        return back()->with('Cart update success!.');
     }
 
 
@@ -105,7 +126,7 @@ class CartController extends Controller
             }
             return back()->with('success', 'Product removed successfully!');
         }
-        return back()->withErrors('Invalid action');
+        return back()->withError('Invalid action');
     }
 
 

@@ -29,15 +29,24 @@ class Shop{
 		}
 		return $price;
 	}
-	public static function totalCartItem(){
-		$total = 0;
-		$cart = session()->get('cart');
-		if($cart){
-			foreach ($cart as $item) {
-				$total += $item['quantity'];
-			}
+	public static function totalCartItem($id = null){
+		$cart = collect(session()->get('cart'));
+		if(!is_null($id)){
+			$cart = $cart->where('id', $id);
 		}
-		return $total;
+		return $cart->sum('quantity');
+		// $total = 0;
+		// $cart = session()->get('cart');
+		// if($cart){
+		// 	foreach ($cart as $item) {
+		// 		$total += $item['quantity'];
+		// 	}
+		// }
+		// return $total;
+	}
+	public static function cartItemMaxAvailable($id){
+		$max = collect(session()->get('cart'))->where('id', $id)->sum('max');
+		return $max - self::totalCartItem($id);
 	}
 	public static function getCartGrandPrice(){
 		$cart_price = self::totalCartPrice(false);
