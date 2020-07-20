@@ -29,7 +29,7 @@
                 </li>
                 @foreach(\App\Order::select('status')->distinct()->get()->toArray() as $status)
                 <li class="nav-item">
-                  <a class="nav-link order-filter-link" href="#" data-url="{{route('api.order.collection')}}?status={{$status['status']}}">{{\Str::title($status['status'])}}</a>
+                  <a class="nav-link order-filter-link" href="#" data-url="{{route('api.order.collection')}}?status={{$status['status']}}">{!!Helper::getLabelByStatus($status['status'], 'badge')!!}</a>
                 </li>
                 @endforeach
             </ul>
