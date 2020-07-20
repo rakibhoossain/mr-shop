@@ -43,7 +43,7 @@
                     <div class="row d-flex align-items-center">
                       <div class="col-6">
                         <div class="d-flex align-items-center">
-
+                          @if($item->product)
                           @php  $image = $item->product->image; @endphp
                           @if($item->variation && $item->variation->image)
                             @php  $image = $item->variation->image; @endphp
@@ -61,6 +61,7 @@
                             @endif
                             </a>
                           </div>
+                          @endif
 
 
                         </div>
