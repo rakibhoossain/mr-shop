@@ -19,19 +19,19 @@
                 </div>
                 <div class='form-group col-md-6'>
                   <label for="stripe_number" class='form-label'>Card Number</label> 
-                  <input id="stripe_number" autocomplete='off' class="form-control number mask_input @error('stripe.number') is-invalid @enderror " size='20' type='text' data-inputmask="'mask': '9999 9999 9999 9999'" name="stripe[number]" value="{{{ (isset($stripe['number'])) ? $stripe['number'] : '' }}}">
+                  <input id="stripe_number" autocomplete='off' class="form-control payment_input number mask_input @error('stripe.number') is-invalid @enderror " size='19' type='text' data-inputmask="'mask': '9999 9999 9999 9999'" name="stripe[number]" value="{{{ (isset($stripe['number'])) ? $stripe['number'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
                   <label for="stripe_cvc" class='form-label'>CVC</label> 
-                  <input id="stripe_cvc" autocomplete='off' data-inputmask="'mask': '999'" class="form-control cvc mask_input @error('stripe.cvc') is-invalid @enderror " placeholder='ex. 311' size='4' type='text' name="stripe[cvc]" value="{{{ (isset($stripe['cvc'])) ? $stripe['cvc'] : '' }}}">
+                  <input id="stripe_cvc" autocomplete='off' data-inputmask="'mask': '999'" class="form-control payment_input cvc mask_input @error('stripe.cvc') is-invalid @enderror " placeholder='ex. 311' size='3' type='text' name="stripe[cvc]" value="{{{ (isset($stripe['cvc'])) ? $stripe['cvc'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
                   <label for="stripe_exp_month" class='form-label'>Expiration Month</label> 
-                  <input id="stripe_exp_month" class="form-control exp_month mask_input @error('stripe.month') is-invalid @enderror " placeholder='MM' size='2' type='text' data-inputmask="'mask': '99'" name="stripe[month]" value="{{{ (isset($stripe['month'])) ? $stripe['month'] : '' }}}">
+                  <input id="stripe_exp_month" class="form-control payment_input exp_month mask_input @error('stripe.month') is-invalid @enderror " placeholder='MM' size='2' type='text' data-inputmask="'mask': '99'" name="stripe[month]" value="{{{ (isset($stripe['month'])) ? $stripe['month'] : '' }}}">
                 </div>
                 <div class='form-group col-md-4'>
                   <label for="stripe_exp_year" class='form-label'>Expiration Year</label> 
-                  <input id="stripe_exp_year" class="form-control exp_year mask_input @error('stripe.year') is-invalid @enderror " placeholder='YYYY' size='4' type='text' data-inputmask="'mask': '9999'" name="stripe[year]" value="{{{ (isset($stripe['year'])) ? $stripe['year'] : '' }}}">
+                  <input id="stripe_exp_year" class="form-control payment_input exp_year mask_input @error('stripe.year') is-invalid @enderror " placeholder='YYYY' size='4' type='text' data-inputmask="'mask': '9999'" name="stripe[year]" value="{{{ (isset($stripe['year'])) ? $stripe['year'] : '' }}}">
                 </div>
                 <input type="hidden" id="cc_token" name="stripe[token]" value="{{{ (isset($stripe['token'])) ? $stripe['token'] : '' }}}">
               </div>
@@ -118,6 +118,17 @@ $(document).ready(function(){
   })
 
   $( ".collapse[data-type='"+selected_type+"']" ).collapse('show');
+
+  $(document).on('keyup', '.payment_input', function () {
+    if (this.value.replace(/_/g, '').length == this.size) {
+      var $next = $(this).parents('.form-group').next('.form-group').find('.payment_input');
+      var v = $next.val();
+      if ($next.length)
+        $next.focus().val('').val(v);
+      else
+        $(this).blur();
+    }
+  });
 })
 </script>
 @endpush
