@@ -88,6 +88,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth:admin'], function () {
 
 
     Route::resource('/order', 'OrderController', ['as' => 'admin']);
+    Route::post('/order-preview/{order}', 'OrderController@preview')->name('admin.order.preview');
 
     Route::resource('/category', 'CategoryController', ['as' => 'admin']);
     Route::resource('/image', 'ImageController', ['as' => 'admin']);

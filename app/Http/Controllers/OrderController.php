@@ -29,8 +29,12 @@ class OrderController extends Controller
     {
         return view('dashboard.order.index');
     }
-    public function collection(){
-        return OrderResource::collection(Order::latest()->get());
+    public function collection(Request $request){
+        $orders = Order::latest();
+        if($request->status){
+            $orders = $orders->where('status', $request->status);
+        }
+        return OrderResource::collection($orders->get());
     }
 
     /**
@@ -63,6 +67,20 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         return view('dashboard.order.invoice', compact('order'));
+    }    
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Order  $order
+     * @return \Illuminate\Http\Response
+     */
+    public function preview(Order $order)
+    {
+        return response()->json([
+            'success'   =>  true,
+            'html'      =>  view('dashboard.order.overview', compact('order'))->render()
+        ]);
     }
 
     /**

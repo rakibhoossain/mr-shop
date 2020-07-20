@@ -23,6 +23,16 @@
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Orders Table</h3>
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                  <a class="nav-link order-filter-link" href="#" data-url="{{route('api.order.collection')}}">All Order</a>
+                </li>
+                @foreach(\App\Order::select('status')->distinct()->get()->toArray() as $status)
+                <li class="nav-item">
+                  <a class="nav-link order-filter-link" href="#" data-url="{{route('api.order.collection')}}?status={{$status['status']}}">{{\Str::title($status['status'])}}</a>
+                </li>
+                @endforeach
+            </ul>
           </div>
           <div class="card-body">
             <div class="table-responsive">
@@ -48,6 +58,9 @@
   </div><!-- /.container-fluid -->
 </div>
 <!-- /.content -->
+
+<!-- Order overview modal -->
+<div class="modal fade" id="orderPreviewModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true"></div>
 
 @endsection
 @push('scripts')
@@ -84,7 +97,7 @@ $(document).ready(function() {
     })
   });
 
-  $('#order_table').DataTable({
+  var order_table = $('#order_table').DataTable({
     ajax: '{{route("api.order.collection")}}',
     columns: [
       { data: 'code' },
@@ -103,6 +116,27 @@ $(document).ready(function() {
       { 'sortable': true, 'searchable': false, 'visible': false, 'type': 'num', 'targets': [7] }
     ],
   });
+
+  $(document).on('click', '.order-filter-link', function(e){
+    e.preventDefault();
+    var url = $(this).data('url');
+    order_table.ajax.url(url).load();
+  })  
+
+  $(document).on('click', 'td:first-child', function(){
+    var url = "{{route('admin')}}/order-preview/"+$(this).text();
+    $.ajax({
+      type: "POST",
+      url,
+      success: function(response) {
+        if (response.success) {
+          $('#orderPreviewModal').html(response.html);
+          $('#orderPreviewModal').modal('show');
+        }
+      }
+    });
+  })
+
 });
 </script>
 @endpush
