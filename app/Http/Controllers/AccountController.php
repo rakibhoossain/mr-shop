@@ -31,7 +31,8 @@ class AccountController extends Controller
 
     //Order list
     public function orders(Request $request, User $user ){
-        return view('frontend.account.orders')->with(['orders' => $user->orders->sortByDesc('created_at')]);
+        $orders = Order::where('user_id', $user->id)->latest()->paginate(10);
+        return view('frontend.account.orders', compact('orders'));
     }
     //Order view 
     public function order(Request $request, User $user, Order $order){

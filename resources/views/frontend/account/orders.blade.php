@@ -48,9 +48,13 @@
               @endforeach
             </tbody>
           </table>
+          <nav aria-label="page navigation example" class="d-flex justify-content-center">
+            {!!$orders->links()!!}
+          </nav>          
           @endif
         </div>
       </div>
     </div>
+
   </section>
 @endsection
