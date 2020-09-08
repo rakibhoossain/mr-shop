@@ -16,7 +16,7 @@ class CreateShippingMethodsTable extends Migration
         Schema::create('shipping_methods', function (Blueprint $table) {
             $table->id();
             $table->string('name', 170);
-            $table->string('slug', 185);
+            $table->string('slug', 185)->index();
             $table->text('description')->nullable();
             $table->decimal('price', 9, 2)->default(0);
             // This column allows us to add a 

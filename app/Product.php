@@ -95,7 +95,7 @@ class Product extends Model
   }
 
   public function getSortDescriptionAttribute(){
-    return ($this->excerpt)? $this->excerpt : ($this->description)? Str::words(strip_tags($this->description), 15, '...') : '';
+    return ($this->excerpt)? $this->excerpt : (($this->description)? Str::words(strip_tags($this->description), 15, '...') : '');
   }
 
 }

@@ -16,7 +16,7 @@ class CreateVariationsTable extends Migration
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
             $table->string('name', 170);
-            $table->string('slug', 190);
+            $table->string('slug', 190)->index();
             $table->softDeletes();
             $table->timestamps();
         });
