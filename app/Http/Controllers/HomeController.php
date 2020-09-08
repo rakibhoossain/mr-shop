@@ -35,9 +35,18 @@ class HomeController extends Controller
 
     public function shop(Request $request){
         // $sizes = Size::has('products')->latest()->get();
-        $brands = Brand::has('products')->latest()->get();
+        $brands = Brand::has('products')->select('name', 'slug')->withCount('products')->orderBy('products_count', 'desc')->get();
+        // dd($brands);
 
-        $query = Product::query();
+        $query = Product::with(['categories' => function($ctegory){
+            $ctegory->select('name', 'slug');
+        }, 'images' => function($image){
+            $image->select('image');
+        }, 'tags' => function($tag){
+            $tag->select('name', 'slug');
+        }, 'variation_values' => function($variation_value){
+            $variation_value->select('name');
+        }]);
 
         // if(!empty($_GET['category'])){
         //     $slugs = explode(',', $_GET['category']);
@@ -89,7 +98,7 @@ class HomeController extends Controller
 
 
 
-        $products = $query->paginate(10);
+        $products = $query->select('id', 'name', 'slug', 'price', 'sell_price')->paginate(10);
         return view('frontend.shop', compact('products', 'brands'));
     }
     public function singleProduct(Request $request, Product $product){
