@@ -24,28 +24,27 @@
         <div class="row">
           <!-- Sidebar-->
           <div class="sidebar col-xl-3 col-lg-4 sidebar">
+
+            @if($categories)
             <div class="block">
               <h6 class="text-uppercase">Product Categories</h6>
               <ul class="list-unstyled">
-                @foreach(App\ProductCategory::whereNull('product_category_id')->has('products')->select('name')->withCount('products')->latest()->get() as $category)
-
-
+                @foreach($categories as $category)
                 <li @if($loop->index == 0) class="active" @endif >
                   <a href="#" class="d-flex justify-content-between align-items-center"><span>{{$category->name}}</span><small>{{$category->products_count}}</small></a>
                   @if(count($category->children))
                   <ul class="list-unstyled">
-                    @foreach($category->children()->has('products')->select('name')->withCount('products')->get() as $child_category)
+                    @foreach($category->children as $child_category)
                     <li> <a href="#" class="d-flex justify-content-between align-items-center"><span>{{$child_category->name}}</span><small>{{$child_category->products_count}}</small></a></li>
                     @endforeach
                   </ul>
                   @endif
                 </li>
-
-
-
                 @endforeach
               </ul>
             </div>
+            @endif
+
             <div class="block">
               <h6 class="text-uppercase">Filter By Price  </h6>
               <div id="slider-snap" data-min="{{Shop::productMinPrice()}}" data-max="{{Shop::productMaxPrice()}}" data-start="@if(!empty($_GET['price'])){{$_GET['price']}}@endif"></div>
@@ -69,11 +68,12 @@
               
             </div>
 
-             @if(!empty($_GET['varient'])) @php $filter_varient = explode(',', $_GET['varient']); @endphp @endif
-            @foreach(App\Variation::has('variation_values')->select('id', 'name')->get() as $variation)
+            @if(!empty($_GET['varient'])) @php $filter_varient = explode(',', $_GET['varient']); @endphp @endif
+            @if($variations)
+            @foreach($variations as $variation)
             <div class="block"> 
               <h6 class="text-uppercase">{{$variation->name}}</h6>
-              @foreach($variation->values()->has('products')->select('id', 'name')->withCount('products')->get() as $value)
+              @foreach($variation->values as $value)
               <div class="form-group mb-1">
                 <input id="{{$value->name}}{{$loop->index}}" type="checkbox" name="varient[]" value="{{$value->id}}" @if(!empty($filter_varient) && in_array($value->id, $filter_varient)) checked @endif onchange="this.form.submit();" class="checkbox-template">
                 <label for="{{$value->name}}{{$loop->index}}">{{$value->name}} <small>({{$value->products_count}})</small></label>
@@ -81,6 +81,7 @@
               @endforeach
             </div>
             @endforeach
+            @endif
           </div>
           <!-- /Sidebar end-->
           <!-- Grid -->

@@ -24,3 +24,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 // Route::get('/users', ['middleware' => 'auth:admin-api', 'uses' => 'UserController@collection'] )->name('api.user.collection');
 // Route::get('/admins', ['middleware' => 'auth:admin-api', 'uses' => 'AdminController@collection'] )->name('api.admin.collection');
+
+
+
+
+
+Route::get('/shop', ['uses' => 'API\ShopController@index']);
+Route::get('/shop-filter-data', ['uses' => 'API\ShopController@shopFilterData']);

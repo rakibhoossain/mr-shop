@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Size;
 use App\Brand;
+use App\ProductCategory;
+use App\Variation;
 
 class HomeController extends Controller
 {
@@ -36,7 +38,14 @@ class HomeController extends Controller
     public function shop(Request $request){
         // $sizes = Size::has('products')->latest()->get();
         $brands = Brand::has('products')->select('name', 'slug')->withCount('products')->orderBy('products_count', 'desc')->get();
-        // dd($brands);
+        
+        $categories = ProductCategory::whereNull('product_category_id')->with(['children' => function($child_cat){
+            $child_cat->has('products')->select('id', 'name', 'slug', 'product_category_id')->withCount('products');
+        }])->has('products')->select('id', 'name')->withCount('products')->orderBy('products_count', 'desc')->get();
+
+        $variations = Variation::with(['values'  => function($value){
+            $value->has('products')->has('products')->select('id', 'variation_id', 'name')->withCount('products');
+        }])->without('variation_values')->has('variation_values')->select('id', 'name')->get();
 
         $query = Product::with(['categories' => function($ctegory){
             $ctegory->select('name', 'slug');
@@ -96,10 +105,8 @@ class HomeController extends Controller
             $query->whereBetween('price', $price);
         }
 
-
-
         $products = $query->select('id', 'name', 'slug', 'price', 'sell_price')->paginate(10);
-        return view('frontend.shop', compact('products', 'brands'));
+        return view('frontend.shop', compact('products', 'brands', 'categories', 'variations'));
     }
     public function singleProduct(Request $request, Product $product){
 
