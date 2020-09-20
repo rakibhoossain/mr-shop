@@ -78,7 +78,8 @@ class ShopController extends Controller
             $query->whereBetween('price', $price);
         }
 
-        return $query->select('id', 'name', 'slug', 'price', 'sell_price')->paginate(10);
+        $products = $query->select('id', 'name', 'slug', 'price', 'sell_price')->paginate(10);
+        return response()->json($products);
     }
 
 
