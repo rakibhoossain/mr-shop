@@ -41,4 +41,10 @@ class Post extends Model
 	{
 	   return $this->morphToMany(Image::class, 'imageable');
 	}
+
+	//comments
+	public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
 }

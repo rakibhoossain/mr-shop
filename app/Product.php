@@ -98,4 +98,10 @@ class Product extends Model
     return ($this->excerpt)? $this->excerpt : (($this->description)? Str::words(strip_tags($this->description), 15, '...') : '');
   }
 
+  //comments
+  public function comments()
+  {
+    return $this->morphMany(Comment::class, 'commentable');
+  }
+
 }
