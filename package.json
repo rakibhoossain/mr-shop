@@ -23,7 +23,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "chart.js": "^2.9.3",
+        "chart.js": "^2.9.4",
         "jquery-validation": "^1.19.1",
         "toastr": "^2.1.4",
         "vue-tables-2": "^2.0.14"
